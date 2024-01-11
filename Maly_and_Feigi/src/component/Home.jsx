@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 function Home() 
 {
     return( <>
-        <Link to="/">log out</Link>
+    <h1>welcome home</h1>
+        {/* <Link to="/">log out</Link> */}
     </>);
 }
 

@@ -8,6 +8,7 @@ function Login() {
 
     function onSubmit(event) {
         event.preventDefault();
+        
         const { name, password } = event.target;
         const arrUsers = JSON.parse(localStorage.getItem('Users')) || [];
         if (arrUsers.find(user => (user.name === name.value && user.password === password.value)))
@@ -31,7 +32,7 @@ function Login() {
 
     return (<>
         <form onSubmit={onSubmit}>
-            <label htmlFor='name' >name</label>
+            <label htmlFor='name' >user name</label>
             <input name='name' type='text' required></input>
             <label htmlFor='password' >password</label>
             <input name='password' type='password' required></input>
