@@ -17,6 +17,7 @@ function App() {
     <Router>
       <div className='App'>
         <Routes>
+        {/* OUTLET ולהשתמש ב HEADER לעשות */}
           <Route path="/" element={<Application />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup setUserDetails={setUserDetails} />} />
