@@ -50,7 +50,7 @@ function Register({ userDetails, nextId, setNextId }) {//Search Params / Link st
             setNextId(prevId => prevId + 1)
             //local storage
             const arrUsers = JSON.parse(localStorage.getItem('Users')) || [];
-            arrUsers.push({ name: name, password: password });
+            arrUsers.push({ name: userDetails.username, password: userDetails.website });
             localStorage.setItem('Users', JSON.stringify(arrUsers));
             navigate('/home');
         } catch (ex) { alert(ex); }
