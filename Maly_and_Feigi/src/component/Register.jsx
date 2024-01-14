@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, Link, useParams, useLocation, Route } from 'react-router-dom';
-function Register({ userDetails, nextId, setNextId }) {
+function Register({ userDetails, nextId, setNextId }) {//Search Params / Link state and useLocation in scrimba for user detiles
     const navigate = useNavigate();
     // const { username, website } = useParams();
     // async function nextId(){
