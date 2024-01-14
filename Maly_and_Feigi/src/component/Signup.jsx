@@ -11,18 +11,13 @@ function Signup({ nextId, setNextId }) {
         const { name, password, verifyPassword } = event.target;
         userName = name.value;
         website = password.value;
-        const arrUsers = JSON.parse(localStorage.getItem('Users')) || [];
         if (website != verifyPassword.value)
             alert("verify failed");
-        else if (arrUsers.find(user => (user.name === userName && user.password === website)))
-            alert("existing user, please login");//מאובטח?
         else
-            //try{
-            getUser();
-        //}catch (ex) { alert(ex); } 
+            checkUser();
     }
 
-    async function getUser() {////ולהחליף שם לבדוק אם מותר
+    async function checkUser() {
         const response = await fetch(`http://localhost:3000/users?username=${userName}&&website=${website}`);
         const user = await response.json();
         // if (!response.ok)
@@ -36,7 +31,6 @@ function Signup({ nextId, setNextId }) {
     function onSubmitFillingDetails(event) {
         const { name, email, street, suite, city, zipcode, lat, lng, phone,
             companyName, catchPhrase, bs } = event.target;
-        // console.log(event.target.elements.map(prop=>prop.value));
         try {
             fetch('http://localhost:3000/users', {
                 method: 'POST',
@@ -71,13 +65,10 @@ function Signup({ nextId, setNextId }) {
                     throw 'Error' + response.status + ': ' + response.statusText;
                 }
                 else {
-                    alert("user successfully added")
                     setNextId(prevId => prevId + 1)
-                    //local storage
-                    const arrUsers = JSON.parse(localStorage.getItem('Users')) || [];
-                    arrUsers.push({ name: userName, password: website });
-                    localStorage.setItem('Users', JSON.stringify(arrUsers));
-                    navigate('/home');
+                    localStorage.setItem('currentUser', JSON.stringify(response.json()[0]));
+                    alert("user successfully added");
+                    navigate(`/home/users/${response.json()[0].id}`);
                 }
             });
 

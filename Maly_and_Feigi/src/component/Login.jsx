@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import {Link,  useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 function Login() {
@@ -8,27 +8,28 @@ function Login() {
 
     function onSubmit(event) {
         event.preventDefault();
-        
         const { name, password } = event.target;
-        //const arrUsers = JSON.parse(localStorage.getItem('Users')) || [];
-        // if (arrUsers.find(user => (user.name === name.value && user.password === password.value)))
-        //     navigate('/home');
-        // else
-            getUser(name.value, password.value);
+        checkUser(name.value, password.value);
     }
 
-    async function getUser(name, password) {////ולהחליף שם לבדוק אם מותר
+    async function checkUser(name, password) {
         const response = await fetch(`http://localhost:3000/users?username=${name}&&website=${password}`);
         const user = await response.json();
-        if (!response.ok) {
+        if (!user[0]) {
             alert("incorrect data, you have to signup");
         }
         else {
-            //arrUsers.push({ name: name, password: password });
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            navigate('/home');
+            console.log(user[0])
+            localStorage.setItem('currentUser',JSON.stringify(user[0]) );
+            navigate(`/home/users/${user[0].id}`);
         }
     }
+
+    useEffect(() => {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+        if (currentUser != null)
+            navigate(`/home/users/${currentUser.id}`);
+    }, [])
 
     return (<>
         <form onSubmit={onSubmit}>
