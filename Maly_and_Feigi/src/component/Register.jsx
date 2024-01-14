@@ -49,6 +49,9 @@ function Register({ userDetails, nextId, setNextId }) {//Search Params / Link st
             alert("user successfully added")
             setNextId(prevId => prevId + 1)
             //local storage
+            const arrUsers = JSON.parse(localStorage.getItem('Users')) || [];
+            arrUsers.push({ name: name, password: password });
+            localStorage.setItem('Users', JSON.stringify(arrUsers));
             navigate('/home');
         } catch (ex) { alert(ex); }
     }
