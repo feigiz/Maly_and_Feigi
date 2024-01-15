@@ -29,6 +29,7 @@ function Signup({ nextId, setNextId }) {
     }
 
     function onSubmitFillingDetails(event) {
+        event.preventDefault();
         const { name, email, street, suite, city, zipcode, lat, lng, phone,
             companyName, catchPhrase, bs } = event.target;
         try {

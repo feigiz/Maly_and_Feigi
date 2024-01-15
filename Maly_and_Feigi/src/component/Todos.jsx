@@ -9,11 +9,13 @@ function Todos() {
 
     const userDetailes = useLocation();
     // const [loading, setLoading] = useState();
+    const [getTodos, setGetTodos] = useState(true);
     const [userTodos, setUserTodos] = useState([]);
     const [showForms, setShowForms] = useState({ addition: false, update: false });
     const [editable, setEditable] = useState([])
 
     function addingTask(event) {
+        event.preventDefault();
         const newTask = {
             userId: userDetailes.state.id, id: `${userTodos.length + 1}`,
             title: event.target[0].value, completed: false
@@ -46,31 +48,29 @@ function Todos() {
     }
 
     useEffect(() => {
-        try {
-            // setLoading(true);
-            fetch(`http://localhost:3000/todos?userId=${userDetailes.state.id}`)
-                .then(response => {
-                    if (!response.ok)
-                        throw 'Error' + response.status + ': ' + response.statusText;
-                    // setLoading(false);
-                    return response.json();
-                })
-                .then(data => {
-
-                    setEditable((prev) => {
-                        for (let i = 0; i < userTodos.length; i++)
-                            prev.push(false)
-                        console.log("done")
-                        return prev;
+        console.log(`get todos: ${getTodos}`)
+        if (getTodos)
+            try {
+                // setLoading(true);
+                fetch(`http://localhost:3000/todos?userId=${userDetailes.state.id}`)
+                    .then(response => {
+                        if (!response.ok)
+                            throw 'Error' + response.status + ': ' + response.statusText;
+                        // setLoading(false);
+                        return response.json();
                     })
-                    setUserTodos(data);
-                    // setUserTodos(data.map(todo => { return { ...todo, editable: false } }));
-
-                })
-        } catch (ex) { alert(ex); }
+                    .then(data => {
+                        setUserTodos(data);
+                        // setUserTodos(data.map(todo => { return { ...todo, editable: false } }));
+                        let temp=[]
+                        for (let i = 0; i < data.length; i++)
+                                temp.push(false)
+                        setEditable(temp);
+                    })
+                setGetTodos(false)
+            } catch (ex) { alert(ex); }
 
     }, [])
-    console.log(userTodos)
 
     // if (loading)
     // return (<><h1>Loading...</h1></>)//
@@ -85,25 +85,17 @@ function Todos() {
             <input name='title' type='text' required></input>
             <button type="submit">Add</button>
         </form>}
-        {showForms.update && <form onSubmit={(event) => updateTask(event, i)}>
-            <label htmlFor='title' >task title</label>
-            <input name='title' type='text' required></input>
-            <button type="submit">update</button>
-        </form>}
         <br />
         {userTodos.length == 0 ? <h2>There are no tasks</h2> :
             userTodos.map((todo, i) => {
-                // const [isAditable,setIsAditable]=useState(false);
-                return (<div key={i}>
+                return (
+                <div key={i}>
                     <span>{i + 1}. </span>
                     {editable[i] && <input type="text" defaultValue={todo.title} style={{ width: 300 }} />}
                     {!editable[i] && <span>{todo.title} </span>}
                     <input type="checkbox" defaultChecked={todo.completed} onChange={() => changeCheckBox(i)} />
-                    <img src={edit} onClick={() => { setEditable(prev =>{ prev[i] = !prev[i]; return prev}) }} />
-                    {console.log(editable)}
+                    <img src={edit} onClick={() => { setEditable([...editable.splice(0,i),true,...editable.splice(i+1,editable.length)])}} />
                     <img src={trash} />
-                    {/* <button onClick={() => (setShowForms(prev => { return { ...prev, update: !prev.update } }))} >yyy</button> */}
-                    {/* <button onClick={() => deleteTask(i)}><img src="../icons/trash.png"></img></button> */}
                     <br /><br />
                 </div>)
             })
