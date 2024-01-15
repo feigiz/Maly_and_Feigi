@@ -28,7 +28,34 @@ function Signup({ nextId, setNextId }) {
             alert("existing user, please login");
     }
 
+    function getNextId() {
+        fetch("http://localhost:3000/nextUserID", {
+            method: 'GET'
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json)
+                return json[0].nextId
+            });
+    }
+
+    function setNextId(id) {
+        fetch("http://localhost:3000/nextUserID/1", {
+            method: "PATCH",
+            body: JSON.stringify({
+                "nextId": id
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+            },
+        })
+            .then((response) => response.json())
+            .then((json) => console.log(json));
+
+    }
+
     function onSubmitFillingDetails(event) {
+        const id = getNextId();
         event.preventDefault();
         const { name, email, street, suite, city, zipcode, lat, lng, phone,
             companyName, catchPhrase, bs } = event.target;
@@ -36,7 +63,7 @@ function Signup({ nextId, setNextId }) {
             fetch('http://localhost:3000/users', {
                 method: 'POST',
                 body: JSON.stringify({
-                    id: nextId,
+                    id: id,
                     name: name.value,
                     username: userName,
                     email: email.value,
@@ -66,11 +93,14 @@ function Signup({ nextId, setNextId }) {
                     throw 'Error' + response.status + ': ' + response.statusText;
                 }
                 else {
-                    setNextId(prevId => prevId + 1)
-                    localStorage.setItem('currentUser', JSON.stringify(response.json()[0]));
-                    alert("user successfully added");
-                    navigate(`/home/users/${response.json()[0].id}`);
+                    return response.json();
+
                 }
+            }).then(data => {
+                setNextId(data.id);
+                localStorage.setItem('currentUser', JSON.stringify(data));
+                alert("user successfully added");
+                navigate(`/home/users/${data.id}`);
             });
 
         } catch (ex) { alert(ex); }
