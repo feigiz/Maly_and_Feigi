@@ -24,6 +24,32 @@ function Todos() {
     }
 
     function submitChanges() {
+        try{
+            fetch(`http://localhost:3000/todos?userId=${userDetailes.state.id}`,{
+            method: 'PUT',
+            body: JSON.stringify({
+                userTodos
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        }).then(response => {
+            if (!response.ok) {
+                throw 'Error' + response.status + ': ' + response.statusText;
+            }
+            else {
+                return response.json();
+
+            }
+        }).then(data => {
+            setNextId(data.id);
+            localStorage.setItem('currentUser', JSON.stringify(data));
+            alert("user successfully added");
+            navigate(`/home/users/${data.id}`);
+        });
+
+        } catch (ex) { alert(ex); }
+        
 
     }
 
@@ -73,6 +99,11 @@ function Todos() {
         <br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add task</button>
         <button onClick={submitChanges}>Submit changes</button>
+        <label htmlFor='sort' >order by</label>
+        <select name="sort">
+            <option value="alphabet">alphabet</option>
+
+        </select>
 
         {showAdditionForm && <form onSubmit={addingTask}>
             <label htmlFor='title' >task title</label>
