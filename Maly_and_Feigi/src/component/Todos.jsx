@@ -105,6 +105,9 @@ function Todos() {
         event.preventDefault()
         let foundIndex
         switch (event.target.value) {
+            case "all":
+                setTodos(userTodos.map((t, i) => { return { ...t, i: i, editable: false } }));
+                break;
             case "id":
                 foundIndex = userTodos.findIndex(t => t.id == stringSearch)
                 setTodos([{ ...userTodos[foundIndex], i: foundIndex, editable: false }])
@@ -135,10 +138,10 @@ function Todos() {
                 .then(data => {
                     setUserTodos(data);
                     // setUserTodos(data.map(todo => { return { ...todo, editables: false } }));
-                    let todosArr = []
-                    for (let i = 0; i < data.length; i++)
-                        todosArr.push({ ...data[i], i: i, editable: false })
-                    setTodos(todosArr);
+                    // let todosArr = []
+                    // for (let i = 0; i < data.length; i++)
+                    //     todosArr.push({ ...data[i], i: i, editable: false })
+                    setTodos(userTodos.map((t, i) => { return { ...t, i: i, editable: false } }));
                 })
             // setGetTodos(false)
         } catch (ex) { alert(ex); }
@@ -176,7 +179,7 @@ function Todos() {
         <input type="text" name="search" onChange={event => setStringSearch(event.target.value)} />
         <label htmlFor='search' >by</label>
         <select onChange={searchTodo} name="search">
-            <option value="all"> </option>
+            <option value="all"></option>
             <option value="id">id</option>
             <option value="title">title</option>
             <option value="completed">completed</option>
