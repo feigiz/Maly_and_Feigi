@@ -28,8 +28,8 @@ function Signup({ nextId, setNextId }) {
             alert("existing user, please login");
     }
 
-    function getNextId() {
-        fetch("http://localhost:3000/nextUserID", {
+    async function getNextId() {
+       await fetch("http://localhost:3000/nextUserID", {
             method: 'GET'
         })
             .then((response) => response.json())
@@ -54,13 +54,13 @@ function Signup({ nextId, setNextId }) {
 
     }
 
-    function onSubmitFillingDetails(event) {
-        const id = getNextId();
+    async function onSubmitFillingDetails(event) {
         event.preventDefault();
+        const id =  getNextId();
         const { name, email, street, suite, city, zipcode, lat, lng, phone,
             companyName, catchPhrase, bs } = event.target;
         try {
-            fetch('http://localhost:3000/users', {
+            await fetch('http://localhost:3000/users', {
                 method: 'POST',
                 body: JSON.stringify({
                     id: id,
