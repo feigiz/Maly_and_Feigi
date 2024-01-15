@@ -2,7 +2,7 @@
   "nextUserID": [
     {
       "id": "1",
-      "nextId": "11"
+      "nextId": {}
     }
   ],
   "users": [
