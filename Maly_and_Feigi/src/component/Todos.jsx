@@ -11,8 +11,9 @@ function Todos() {
     // const [getTodos, setGetTodos] = useState(true);
     const [userTodos, setUserTodos] = useState([]);
     const [showAdditionForm, setShowAdditionForm] = useState(false);
-    const [editables, seteditables] = useState([]);
-    const [todo, setTodo] = useState(null);
+    // const [editables, setEditables] = useState([]);
+    const [todos, setTodos] = useState(null);//הוספתי: המשימה שנמצאה
+    const [stringSearch, setStringSearch] = useState();//הוספתי: המחרוזת לחיפוש
 
     function addingTask(event) {
         event.preventDefault();
@@ -21,6 +22,7 @@ function Todos() {
             title: event.target[0].value, completed: false
         }
         setUserTodos(prev => [...prev, newTask])
+        setTodos(prev => [...prev, { ...newTask, i: userTodos.length - 1, editable: false }])
         setShowAdditionForm(false)
     }
 
@@ -55,36 +57,67 @@ function Todos() {
         } catch (ex) { alert(ex); }
     }
 
-    function changeCheckBox(i) {
-        setUserTodos(prev => [...prev.slice(0, i), { ...prev[i], completed: !prev[i].completed }, ...prev.slice(i + 1, prev.length)])
+    function changeCheckBox(userIndex, i) {
+        setUserTodos(prev => [...prev.slice(0, userIndex), { ...prev[userIndex], completed: !prev[userIndex].completed }, ...prev.slice(userIndex + 1, prev.length)])
+        // הוספתי: עדכון המשימה
+        setTodos(prev => [...prev.slice(0, i), { ...prev[i], completed: !prev[i].completed }, ...prev.slice(i + 1, prev.length)])
     }
 
-    function deleteTask(i) {
-        setUserTodos((prev) => [...prev.slice(0, i), ...prev.slice(i + 1, prev.length)])
+    function changeTitle(event, userIndex, i) {
+        setUserTodos(prev => [...prev.slice(0, userIndex), { ...prev[userIndex], title: event.target.value }, ...prev.slice(userIndex + 1, prev.length)])
+        // הוספתי: עדכון המשימה 
+        setTodos(prev => [...prev.slice(0, i), { ...prev[i], title: event.target.value }, ...prev.slice(i + 1, prev.length)])
+    }
+
+    function deleteTask(userIndex, i) {
+        setUserTodos((prev) => [...prev.slice(0, userIndex), ...prev.slice(userIndex + 1, prev.length)])
+        // הוספתי: עדכון המשימה 
+        setTodos((prev) => [...prev.slice(0, i), ...prev.slice(i + 1, prev.length)])
     }
 
     function allowEditing(i) {
-        seteditabless(prev => [...prev.slice(0, i), !prev[i], ...prev.slice(i + 1, prev.length)])
+        setTodos(prev => [...prev.slice(0, i), { ...prev[i], editable: !prev[i].editable }, ...prev.slice(i + 1, prev.length)])
     }
 
     function sortTodos(event) {
         event.preventDefault()
-        let sortArr = userTodos.slice()
+        let sortArr = todos.slice()
         switch (event.target.value) {
             case "id":
-                setUserTodos(sortArr.sort((a, b) => a.id - b.id))
+                setTodos(sortArr.sort((a, b) => a.id - b.id))
                 break;
             case "alphabet":
-                setUserTodos(sortArr.sort((a, b) => a.title > b.title ? 1 : -1))
+                setTodos(sortArr.sort((a, b) => a.title > b.title ? 1 : -1))
                 break;
             case "completed":
-                setUserTodos(sortArr.sort(a => a.completed ? -1 : 1))
+                setTodos(sortArr.sort(a => a.completed ? -1 : 1))
                 break;
             case "random":
-                setUserTodos(sortArr.sort(() => Math.random() > 0.5 ? -1 : 1))
+                setTodos(sortArr.sort(() => Math.random() > 0.5 ? -1 : 1))
                 break;
         }
         console.log(userTodos)
+    }
+
+
+    //הוספתי : פונקצית החיפוש 
+    function searchTodo(event) {
+        event.preventDefault()
+        let foundIndex
+        switch (event.target.value) {
+            case "id":
+                foundIndex = userTodos.findIndex(t => t.id == stringSearch)
+                setTodos([{ ...userTodos[foundIndex], i: foundIndex, editable: false }])
+                break;
+            case "title":
+                foundIndex = userTodos.findIndex(t => t.title == stringSearch)
+                setTodos([{ ...userTodos[foundIndex], i: foundIndex, editable: false }])
+                break;
+            case "completed":
+                const foundsArr = userTodos.map((t, i) => { if (`${t.completed}` == stringSearch) return { ...t, i: i, editable: false } })
+                setTodos(foundsArr.filter(t => t != undefined))
+                break;
+        }
     }
 
 
@@ -102,10 +135,10 @@ function Todos() {
                 .then(data => {
                     setUserTodos(data);
                     // setUserTodos(data.map(todo => { return { ...todo, editables: false } }));
-                    let temp = []
+                    let todosArr = []
                     for (let i = 0; i < data.length; i++)
-                        temp.push(false)
-                    seteditables(temp);
+                        todosArr.push({ ...data[i], i: i, editable: false })
+                    setTodos(todosArr);
                 })
             // setGetTodos(false)
         } catch (ex) { alert(ex); }
@@ -117,57 +150,59 @@ function Todos() {
 
     // else {
     return (<>
-        {console.log(userTodos)}
+        {console.log(todos)}
         <br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add task</button>
         <button onClick={submitChanges}>Submit changes</button>
         <br />
+        {showAdditionForm && <form onSubmit={addingTask}>
+            <label htmlFor='title' >task title</label>
+            <input name='title' type='text' required></input>
+            <button type="submit">Add</button>
+        </form>}
+        <br />
         <label htmlFor='sort' >order by</label>
         <select onChange={sortTodos} name="sort">
+            <option value="all"> </option>
             <option value="id">id</option>
             <option value="alphabet">alphabet</option>
             <option value="completed">completed</option>
             <option value="random">random</option>
         </select>
 
-        <select onChange={searchTodo} name="sort">
+
+        {/* הוספתי : אינפוט וסלקט לחיפוש */}
+        <label htmlFor='search' >search</label>
+        <input type="text" name="search" onChange={event => setStringSearch(event.target.value)} />
+        <label htmlFor='search' >by</label>
+        <select onChange={searchTodo} name="search">
+            <option value="all"> </option>
             <option value="id">id</option>
             <option value="title">title</option>
             <option value="completed">completed</option>
-            <option value="all">all</option>
+
         </select>
 
-        {showAdditionForm && <form onSubmit={addingTask}>
-            <label htmlFor='title' >task title</label>
-            <input name='title' type='text' required></input>
-            <button type="submit">Add</button>
-        </form>}
 
         <br />
 
-        {todo == null ? (userTodos.length == 0 ? <h2>There are no tasks</h2> :
-            userTodos.map((todo, i) => {
+        {userTodos.length == 0 ? <h2>There are no tasks</h2>
+            : todos.map((todo, i) => {
                 return (
-                    <div key={i}>
-                        <span>{i + 1}. </span>
-                        {editables[i] && <input type="text" defaultValue={todo.title} style={{ width: 300 }} />}
-                        {!editables[i] && <span>{todo.title} </span>}
-                        <input type="checkbox" disabled={!editables[i]} checked={todo.completed} onChange={() => changeCheckBox(i)} />
-                        {/* <input type="checkbox" disabled={!editables[i]} defaultChecked={todo.completed} onChange={() => changeCheckBox(i)} /> */}
-                        <img src={edit} onClick={() => allowEditing(i)} />
-                        <img onClick={() => deleteTask(i)} src={trash} />
-                        <br /><br />
-                    </div>)
-            }))
-            : <div>
-                {editables[i] && <input type="text" defaultValue={todo.title} style={{ width: 300 }} />}
-                {!editables[i] && <span>{todo.title} </span>}
-                <input type="checkbox" disabled={!editables[i]} checked={todo.completed} onChange={() => changeCheckBox(i)} />
-                {/* <input type="checkbox" disabled={!editables[i]} defaultChecked={todo.completed} onChange={() => changeCheckBox(i)} /> */}
-                <img src={edit} onClick={() => allowEditing(i)} />
-                <img onClick={() => deleteTask(i)} src={trash} />
-                <br /><br />
-            </div>
+                    todo.i != -1 ?
+                        <div key={i}>
+                            <span>{todo.i + 1}. </span>
+                            {todo.editable &&
+                                <input type="text" defaultValue={todo.title} style={{ width: 300 }} onChange={(event) => changeTitle(event, todo.i, i)} />}
+                            {!todo.editable &&
+                                <span>{todo.title} </span>}
+                            <input type="checkbox" disabled={!todo.editable} checked={todo.completed} onChange={() => changeCheckBox(todo.i, i)} />
+                            {/* <input type="checkbox" disabled={!editables[i]} defaultChecked={todo.completed} onChange={() => changeCheckBox(i)} /> */}
+                            <img src={edit} onClick={() => allowEditing(i)} />
+                            <img onClick={() => deleteTask(todo.i, i)} src={trash} />
+                            <br /><br />
+                        </div> : <h4 key={i}>not found</h4>)
+            })
         }</>)
     // }
 }
