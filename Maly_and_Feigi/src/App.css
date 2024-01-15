@@ -36,3 +36,17 @@ button:hover {
   border-color: rgb(0, 0, 0);
   background-color: rgb(180, 229, 201);
 }
+
+/* #nn{
+  height: 60px;
+  width: 60px;
+} */
+
+img{
+  margin-right: 20px;
+   opacity: 0.5; 
+}
+
+img:hover{
+  opacity: 1; 
+}

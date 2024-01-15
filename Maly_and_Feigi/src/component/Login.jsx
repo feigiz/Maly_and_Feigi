@@ -20,7 +20,7 @@ function Login() {
         }
         else {
             console.log(user[0])
-            localStorage.setItem('currentUser',JSON.stringify(user[0]) );
+            localStorage.setItem('currentUser', JSON.stringify(user[0]));
             navigate(`/home/users/${user[0].id}`);
         }
     }
@@ -32,6 +32,7 @@ function Login() {
     }, [])
 
     return (<>
+        {/* <i id='nn' className='fi fi-rr-edit'></i> */}
         <form onSubmit={onSubmit}>
             <label htmlFor='name' >user name</label>
             <input name='name' type='text' required></input>
