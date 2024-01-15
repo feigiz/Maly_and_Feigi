@@ -138,10 +138,10 @@ function Todos() {
                 .then(data => {
                     setUserTodos(data);
                     // setUserTodos(data.map(todo => { return { ...todo, editables: false } }));
-                    // let todosArr = []
-                    // for (let i = 0; i < data.length; i++)
-                    //     todosArr.push({ ...data[i], i: i, editable: false })
-                    setTodos(userTodos.map((t, i) => { return { ...t, i: i, editable: false } }));
+                    let todosArr = []
+                    for (let i = 0; i < data.length; i++)
+                        todosArr.push({ ...data[i], i: i, editable: false })
+                    setTodos(todosArr);
                 })
             // setGetTodos(false)
         } catch (ex) { alert(ex); }
@@ -196,7 +196,7 @@ function Todos() {
                         <div key={i}>
                             <span>{todo.i + 1}. </span>
                             {todo.editable &&
-                                <input type="text" defaultValue={todo.title} style={{ width: 300 }} onChange={(event) => changeTitle(event, todo.i, i)} />}
+                                <input type="text" defaultValue={todo.title}  style={{ width: 300 }} onChange={(event) => changeTitle(event, todo.i, i)} />}
                             {!todo.editable &&
                                 <span>{todo.title} </span>}
                             <input type="checkbox" disabled={!todo.editable} checked={todo.completed} onChange={() => changeCheckBox(todo.i, i)} />
