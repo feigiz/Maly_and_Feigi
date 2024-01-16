@@ -28,31 +28,32 @@ function Todos() {
 
     function submitChanges() {
         try {
+            userTodos.map(todo =>
+                fetch(`http://localhost:3000/todos`, {
+                    method: 'POST',
+                    // body: JSON.stringify({userTodos}),
+                    body: JSON.stringify(todo),
+                    // body: userTodos,
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    },
+                }).then(response => {
+                    if (!response.ok) {
+                        throw 'Error' + response.status + ': ' + response.statusText;
+                    }
+                    // alert("todos successfully updated");
+                    // }).then(data => {
+
+                    //     // navigate(`/home/users/${data.id}`);
+                }));
             // fetch(`http://localhost:3000/todos?userId=${userDetailes.state.id}`, {
-            //     method: 'PUT',
-            //     // body: JSON.stringify({userTodos}),
-            //     body: JSON.stringify(userTodos),
-            //     // body: userTodos,
-            //     headers: {
-            //         'Content-type': 'application/json; charset=UTF-8',
-            //     },
+            //     // method: 'DELETE',
             // }).then(response => {
             //     if (!response.ok) {
             //         throw 'Error' + response.status + ': ' + response.statusText;
             //     }
-            //     alert("todos successfully updated");
-            //     // }).then(data => {
-
-            //     //     // navigate(`/home/users/${data.id}`);
+            //     alert("todos successfully deleted");
             // });
-            fetch(`http://localhost:3000/todos?userId=${userDetailes.state.id}`, {
-                // method: 'DELETE',
-            }).then(response => {
-                if (!response.ok) {
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                }
-                alert("todos successfully deleted");
-            });
 
         } catch (ex) { alert(ex); }
     }
@@ -153,7 +154,7 @@ function Todos() {
 
     // else {
     return (<>
-        {console.log(todos)}
+        {console.log(userTodos)}
         <br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add task</button>
         <button onClick={submitChanges}>Submit changes</button>
@@ -196,7 +197,7 @@ function Todos() {
                         <div key={i}>
                             <span>{todo.i + 1}. </span>
                             {todo.editable &&
-                                <input type="text" defaultValue={todo.title}  style={{ width: 300 }} onChange={(event) => changeTitle(event, todo.i, i)} />}
+                                <input type="text" defaultValue={todo.title} style={{ width: 300 }} onChange={(event) => changeTitle(event, todo.i, i)} />}
                             {!todo.editable &&
                                 <span>{todo.title} </span>}
                             <input type="checkbox" disabled={!todo.editable} checked={todo.completed} onChange={() => changeCheckBox(todo.i, i)} />

@@ -13,7 +13,7 @@ import Todos from './component/Todos';
 
 function App() {
   // const [userDetails,setUserDetails]=useState({});
-  const [nextId, setNextId] = useState(15)
+  // const [nextId, setNextId] = useState(15)
   // ואם יש בדטה בייס יותר?
   return (
     <Router>
@@ -22,7 +22,8 @@ function App() {
           {/* OUTLET ולהשתמש ב HEADER לעשות */}
           <Route path="/" element={<Header />} >
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup nextId={nextId} setNextId={setNextId} />} />
+            <Route path="/signup" element={<Signup  />} />
+            {/* nextId={nextId} setNextId={setNextId} */}
           </Route>
           <Route path="/home/users/:id" element={<Home />} >
             <Route path="info" element={<Info />} />

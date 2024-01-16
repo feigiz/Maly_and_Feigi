@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
-
-function Signup({ nextId, setNextId }) {
+// { nextId, setNextId }
+function Signup() {
     const navigate = useNavigate();
     const [isFillingDetails, setIsFillingDetails] = useState(false);
+    const nextId = useRef( ()=>{
+        fetch("http://localhost:3000/nextIDs?type=user")
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json[0].nextId)
+                return json[0].nextId
+            });
+    })
     let userName, website;
 
     function onSubmitSignUp(event) {
@@ -28,42 +36,35 @@ function Signup({ nextId, setNextId }) {
             alert("existing user, please login");
     }
 
-    async function getNextId() {
-       await fetch("http://localhost:3000/nextUserID", {
-            method: 'GET'
-        })
-            .then((response) => response.json())
-            .then((json) => {
-                console.log(json)
-                return json[0].nextId
-            });
-    }
+    // function getNextId() {
+        
+    // }
 
-    function setNextId(id) {
-        fetch("http://localhost:3000/nextUserID/1", {
-            method: "PATCH",
-            body: JSON.stringify({
-                "nextId": id
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-            },
-        })
-            .then((response) => response.json())
-            .then((json) => console.log(json));
-
-    }
+    useEffect(() => {
+        if (nextId.current != null)
+            fetch("http://localhost:3000/nextIDs/1", {
+                method: "PATCH",
+                body: JSON.stringify({
+                    "nextId": nextId.current()
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            })
+                .then((response) => response.json())
+                .then((json) => console.log(json));
+    }, [nextId])
 
     async function onSubmitFillingDetails(event) {
         event.preventDefault();
-        const id =  getNextId();
+        // const id = getNextId();
         const { name, email, street, suite, city, zipcode, lat, lng, phone,
             companyName, catchPhrase, bs } = event.target;
         try {
             await fetch('http://localhost:3000/users', {
                 method: 'POST',
                 body: JSON.stringify({
-                    id: id,
+                    id: nextId.current(),
                     name: name.value,
                     username: userName,
                     email: email.value,
@@ -97,7 +98,8 @@ function Signup({ nextId, setNextId }) {
 
                 }
             }).then(data => {
-                setNextId(data.id);
+                // setNextId(data.id);
+                nextId.current = nextId.current + 1;
                 localStorage.setItem('currentUser', JSON.stringify(data));
                 alert("user successfully added");
                 navigate(`/home/users/${data.id}`);
@@ -107,6 +109,7 @@ function Signup({ nextId, setNextId }) {
     }
 
     return (<>
+        {console.log(nextId.current)}
         <form onSubmit={onSubmitSignUp}>
             <label htmlFor='name' >user name</label>
             <input name='name' type='text' required></input>

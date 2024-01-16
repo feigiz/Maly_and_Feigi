@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 function Login() {
@@ -32,7 +32,6 @@ function Login() {
     }, [])
 
     return (<>
-        {/* <i id='nn' className='fi fi-rr-edit'></i> */}
         <form onSubmit={onSubmit}>
             <label htmlFor='name' >user name</label>
             <input name='name' type='text' required></input>

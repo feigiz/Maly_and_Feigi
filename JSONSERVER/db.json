@@ -1,8 +1,14 @@
 {
-  "nextUserID": [
+  "nextIDs": [
     {
       "id": "1",
-      "nextId": {}
+      "type": "user",
+      "nextId": "11"
+    },
+    {
+      "id": "2",
+      "type": "todo",
+      "nextId": "201"
     }
   ],
   "users": [
@@ -237,13 +243,13 @@
       }
     },
     {
-      "id": "9231",
-      "name": "Bret",
-      "email": "m@m",
+      "id": "2509",
+      "name": "feigiz",
+      "email": "pz@pz",
       "address": {
-        "street": "bar iakr",
-        "suite": "feigi",
-        "city": "jerusalem",
+        "street": "vino",
+        "suite": "mali",
+        "city": "yerushalaim",
         "zipcode": "123-456",
         "geo": {
           "lat": "lat",
@@ -252,19 +258,19 @@
       },
       "phone": "0583270933",
       "company": {
-        "name": "project",
-        "catchPhrase": "boring",
-        "bs": "all day"
+        "name": "zaks",
+        "catchPhrase": "jungel",
+        "bs": "order"
       }
     },
     {
-      "id": "353b",
-      "name": "a a",
-      "email": "m@m",
+      "id": "f187",
+      "name": "feigiz",
+      "email": "pz@pz",
       "address": {
-        "street": "bar iakr",
-        "suite": "feigi",
-        "city": "jerusalem",
+        "street": "vino",
+        "suite": "mali",
+        "city": "yerushalaim",
         "zipcode": "123-456",
         "geo": {
           "lat": "lat",
@@ -273,19 +279,19 @@
       },
       "phone": "0583270933",
       "company": {
-        "name": "project",
-        "catchPhrase": "boring",
-        "bs": "all day"
+        "name": "zaks",
+        "catchPhrase": "jungel",
+        "bs": "order"
       }
     },
     {
-      "id": "8531",
-      "name": "nn",
-      "email": "m@m",
+      "id": "b598",
+      "name": "pz",
+      "email": "pz@pz",
       "address": {
-        "street": "bar iakr",
-        "suite": "feigi",
-        "city": "jerusalem",
+        "street": "vino",
+        "suite": "mali",
+        "city": "yerushalaim",
         "zipcode": "123-456",
         "geo": {
           "lat": "lat",
@@ -294,19 +300,19 @@
       },
       "phone": "0583270933",
       "company": {
-        "name": "project",
-        "catchPhrase": "boring",
-        "bs": "all day"
+        "name": "zaks",
+        "catchPhrase": "jungel",
+        "bs": "order"
       }
     },
     {
-      "id": "499e",
-      "name": "nn",
-      "email": "m@m",
+      "id": "9250",
+      "name": "pz",
+      "email": "pz@pz",
       "address": {
-        "street": "bar iakr",
-        "suite": "feigi",
-        "city": "jerusalem",
+        "street": "vino",
+        "suite": "mali",
+        "city": "yerushalaim",
         "zipcode": "123-456",
         "geo": {
           "lat": "lat",
@@ -315,198 +321,9 @@
       },
       "phone": "0583270933",
       "company": {
-        "name": "project",
-        "catchPhrase": "boring",
-        "bs": "all day"
-      }
-    },
-    {
-      "id": "bd7d",
-      "name": "Bret",
-      "email": "m@m",
-      "address": {
-        "street": "bar iakr",
-        "suite": "feigi",
-        "city": "jerusalem",
-        "zipcode": "123-456",
-        "geo": {
-          "lat": "lat",
-          "lng": "lng"
-        }
-      },
-      "phone": "0583270933",
-      "company": {
-        "name": "project",
-        "catchPhrase": "boring",
-        "bs": "all day"
-      }
-    },
-    {
-      "id": "10f8",
-      "name": "Bret",
-      "email": "m@m",
-      "address": {
-        "street": "bar iakr",
-        "suite": "feigi",
-        "city": "jerusalem",
-        "zipcode": "123-456",
-        "geo": {
-          "lat": "lat",
-          "lng": "lng"
-        }
-      },
-      "phone": "0583270933",
-      "company": {
-        "name": "project",
-        "catchPhrase": "boring",
-        "bs": "all day"
-      }
-    },
-    {
-      "id": {},
-      "name": "nn",
-      "email": "m@m",
-      "address": {
-        "street": "bar iakr",
-        "suite": "feigi",
-        "city": "jerusalem",
-        "zipcode": "123-456",
-        "geo": {
-          "lat": "lat",
-          "lng": "lng"
-        }
-      },
-      "phone": "0583270933",
-      "company": {
-        "name": "project",
-        "catchPhrase": "boring",
-        "bs": "all day"
-      }
-    },
-    {
-      "id": {},
-      "name": "Bret",
-      "email": "m@m",
-      "address": {
-        "street": "bar iakr",
-        "suite": "feigi",
-        "city": "jerusalem",
-        "zipcode": "123-456",
-        "geo": {
-          "lat": "lat",
-          "lng": "lng"
-        }
-      },
-      "phone": "0583270933",
-      "company": {
-        "name": "project",
-        "catchPhrase": "boring",
-        "bs": "all day"
-      }
-    },
-    {
-      "id": {},
-      "name": "Bret",
-      "email": "m@m",
-      "address": {
-        "street": "bar iakr",
-        "suite": "feigi",
-        "city": "jerusalem",
-        "zipcode": "123-456",
-        "geo": {
-          "lat": "lat",
-          "lng": "lng"
-        }
-      },
-      "phone": "0583270933",
-      "company": {
-        "name": "project",
-        "catchPhrase": "boring",
-        "bs": "all day"
-      }
-    },
-    {
-      "id": {},
-      "name": "Bret",
-      "email": "m@m",
-      "address": {
-        "street": "bar iakr",
-        "suite": "feigi",
-        "city": "jerusalem",
-        "zipcode": "123-456",
-        "geo": {
-          "lat": "lat",
-          "lng": "lng"
-        }
-      },
-      "phone": "0583270933",
-      "company": {
-        "name": "project",
-        "catchPhrase": "boring",
-        "bs": "all day"
-      }
-    },
-    {
-      "id": {},
-      "name": "Bret",
-      "email": "m@m",
-      "address": {
-        "street": "bar iakr",
-        "suite": "feigi",
-        "city": "jerusalem",
-        "zipcode": "123-456",
-        "geo": {
-          "lat": "lat",
-          "lng": "lng"
-        }
-      },
-      "phone": "0583270933",
-      "company": {
-        "name": "project",
-        "catchPhrase": "boring",
-        "bs": "all day"
-      }
-    },
-    {
-      "id": {},
-      "name": "shuki",
-      "email": "m@tfyrd",
-      "address": {
-        "street": "d",
-        "suite": "s",
-        "city": "s",
-        "zipcode": "s",
-        "geo": {
-          "lat": "s",
-          "lng": "s"
-        }
-      },
-      "phone": "0772122002",
-      "company": {
-        "name": "s",
-        "catchPhrase": "s",
-        "bs": "s"
-      }
-    },
-    {
-      "id": {},
-      "name": "michal",
-      "email": "k0772122002@gmail.com",
-      "address": {
-        "street": "d",
-        "suite": "s",
-        "city": "s",
-        "zipcode": "s",
-        "geo": {
-          "lat": "s",
-          "lng": "s"
-        }
-      },
-      "phone": "0772122002",
-      "company": {
-        "name": "s",
-        "catchPhrase": "s",
-        "bs": "s"
+        "name": "zaks",
+        "catchPhrase": "jungel",
+        "bs": "order"
       }
     }
   ],
