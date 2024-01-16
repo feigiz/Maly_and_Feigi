@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, Outlet, useNavigate, useLocation, Form } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import trash from "../icons/trash.png"
 import edit from "../icons/edit.png"
 
@@ -14,16 +14,42 @@ function Todos() {
     // const [editables, setEditables] = useState([]);
     const [todos, setTodos] = useState(null);//הוספתי: המשימה שנמצאה
     const [stringSearch, setStringSearch] = useState();//הוספתי: המחרוזת לחיפוש
+    const [nextId, setNextId] = useState();//הוספתי: נקסט אי די
+
+    useEffect(() => {
+        fetch("http://localhost:3000/nextIDs/2")
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json.nextId)
+                setNextId(json.nextId)
+            });
+    }, [])
+
+    useEffect(() => {
+        if (nextId != null)
+            fetch("http://localhost:3000/nextIDs/2", {
+                method: "PATCH",
+                body: JSON.stringify({
+                    "nextId": nextId
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            })
+                .then((response) => response.json())
+                .then((json) => console.log(json));
+    }, [nextId])
 
     function addingTask(event) {
         event.preventDefault();
         const newTask = {
-            userId: userDetailes.state.id, id: `${userTodos.length + 1}`,
+            userId: userDetailes.state.id, id: nextId,
             title: event.target[0].value, completed: false
         }
         setUserTodos(prev => [...prev, newTask])
-        setTodos(prev => [...prev, { ...newTask, i: userTodos.length - 1, editable: false }])
+        setTodos(prev => [...prev, { ...newTask, i: userTodos.length, editable: false }])
         setShowAdditionForm(false)
+        setNextId(prev => prev + 1)
     }
 
     function submitChanges() {
@@ -71,7 +97,7 @@ function Todos() {
     }
 
     function deleteTask(userIndex, i) {
-        setUserTodos((prev) => [...prev.slice(0, userIndex), ...prev.slice(userIndex + 1, prev.length)])
+        setUserTodos((prev) => [...prev.slice(0, userIndex), null, ...prev.slice(userIndex + 1, prev.length)])
         // הוספתי: עדכון המשימה 
         setTodos((prev) => [...prev.slice(0, i), ...prev.slice(i + 1, prev.length)])
     }
@@ -105,20 +131,22 @@ function Todos() {
     function searchTodo(event) {
         event.preventDefault()
         let foundIndex
+        let foundsArr
         switch (event.target.value) {
             case "all":
-                setTodos(userTodos.map((t, i) => { return { ...t, i: i, editable: false } }));
+                foundsArr = userTodos.map((t, i) => { if (t != null) return { ...t, i: i, editable: false } })
+                setTodos(foundsArr.filter(t => t != undefined));
                 break;
             case "id":
-                foundIndex = userTodos.findIndex(t => t.id == stringSearch)
+                foundIndex = userTodos.findIndex(t => t != null && t.id == stringSearch)
                 setTodos([{ ...userTodos[foundIndex], i: foundIndex, editable: false }])
                 break;
             case "title":
-                foundIndex = userTodos.findIndex(t => t.title == stringSearch)
+                foundIndex = userTodos.findIndex(t => t != null && t.title == stringSearch)
                 setTodos([{ ...userTodos[foundIndex], i: foundIndex, editable: false }])
                 break;
             case "completed":
-                const foundsArr = userTodos.map((t, i) => { if (`${t.completed}` == stringSearch) return { ...t, i: i, editable: false } })
+                foundsArr = userTodos.map((t, i) => { if (t != null && `${t.completed}` == stringSearch) return { ...t, i: i, editable: false } })
                 setTodos(foundsArr.filter(t => t != undefined))
                 break;
         }
@@ -154,7 +182,8 @@ function Todos() {
 
     // else {
     return (<>
-        {console.log(userTodos)}
+        {/* {console.log(userTodos)}
+        {console.log(todos)} */}
         <br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add task</button>
         <button onClick={submitChanges}>Submit changes</button>
@@ -184,7 +213,6 @@ function Todos() {
             <option value="id">id</option>
             <option value="title">title</option>
             <option value="completed">completed</option>
-
         </select>
 
 
@@ -193,7 +221,7 @@ function Todos() {
         {userTodos.length == 0 ? <h2>There are no tasks</h2>
             : todos.map((todo, i) => {
                 return (
-                    todo.i != -1 ?
+                    (todo.i != -1 ?
                         <div key={i}>
                             <span>{todo.i + 1}. </span>
                             {todo.editable &&
@@ -205,7 +233,7 @@ function Todos() {
                             <img src={edit} onClick={() => allowEditing(i)} />
                             <img onClick={() => deleteTask(todo.i, i)} src={trash} />
                             <br /><br />
-                        </div> : <h4 key={i}>not found</h4>)
+                        </div> : <h4 key={i}>not found</h4>))
             })
         }</>)
     // }

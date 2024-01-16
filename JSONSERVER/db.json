@@ -3,12 +3,12 @@
     {
       "id": "1",
       "type": "user",
-      "nextId": "11"
+      "nextId": 13
     },
     {
       "id": "2",
       "type": "todo",
-      "nextId": "201"
+      "nextId": 203
     }
   ],
   "users": [
@@ -240,90 +240,6 @@
         "name": "Hoeger LLC",
         "catchPhrase": "Centralized empowering task-force",
         "bs": "target end-to-end models"
-      }
-    },
-    {
-      "id": "2509",
-      "name": "feigiz",
-      "email": "pz@pz",
-      "address": {
-        "street": "vino",
-        "suite": "mali",
-        "city": "yerushalaim",
-        "zipcode": "123-456",
-        "geo": {
-          "lat": "lat",
-          "lng": "lng"
-        }
-      },
-      "phone": "0583270933",
-      "company": {
-        "name": "zaks",
-        "catchPhrase": "jungel",
-        "bs": "order"
-      }
-    },
-    {
-      "id": "f187",
-      "name": "feigiz",
-      "email": "pz@pz",
-      "address": {
-        "street": "vino",
-        "suite": "mali",
-        "city": "yerushalaim",
-        "zipcode": "123-456",
-        "geo": {
-          "lat": "lat",
-          "lng": "lng"
-        }
-      },
-      "phone": "0583270933",
-      "company": {
-        "name": "zaks",
-        "catchPhrase": "jungel",
-        "bs": "order"
-      }
-    },
-    {
-      "id": "b598",
-      "name": "pz",
-      "email": "pz@pz",
-      "address": {
-        "street": "vino",
-        "suite": "mali",
-        "city": "yerushalaim",
-        "zipcode": "123-456",
-        "geo": {
-          "lat": "lat",
-          "lng": "lng"
-        }
-      },
-      "phone": "0583270933",
-      "company": {
-        "name": "zaks",
-        "catchPhrase": "jungel",
-        "bs": "order"
-      }
-    },
-    {
-      "id": "9250",
-      "name": "pz",
-      "email": "pz@pz",
-      "address": {
-        "street": "vino",
-        "suite": "mali",
-        "city": "yerushalaim",
-        "zipcode": "123-456",
-        "geo": {
-          "lat": "lat",
-          "lng": "lng"
-        }
-      },
-      "phone": "0583270933",
-      "company": {
-        "name": "zaks",
-        "catchPhrase": "jungel",
-        "bs": "order"
       }
     }
   ],

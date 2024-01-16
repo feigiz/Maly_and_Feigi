@@ -13,16 +13,19 @@ function Login() {
     }
 
     async function checkUser(name, password) {
-        const response = await fetch(`http://localhost:3000/users?username=${name}&&website=${password}`);
-        const user = await response.json();
-        if (!user[0]) {
-            alert("incorrect data, you have to signup");
-        }
-        else {
-            console.log(user[0])
-            localStorage.setItem('currentUser', JSON.stringify(user[0]));
-            navigate(`/home/users/${user[0].id}`);
-        }
+        try {
+            const response = await fetch(`http://localhost:3000/users?username=${name}&&website=${password}`);
+            const user = await response.json();
+            if (!response.ok)
+                throw 'Error' + response.status + ': ' + response.statusText;
+            if (!user[0]) 
+                alert("incorrect data, you have to signup");
+            else {
+                console.log(user[0])
+                localStorage.setItem('currentUser', JSON.stringify(user[0]));
+                navigate(`/home/users/${user[0].id}`);
+            }
+        }catch (ex) { alert(ex) }
     }
 
     useEffect(() => {

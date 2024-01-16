@@ -7,9 +7,10 @@ function Home() {
 
     function logout() {
         localStorage.clear()
+        // window.location.replace("/")
         navigate("/")
     }
-    
+
     return (<>
         <h1>welcome {userDetailes.name}</h1>
         <Link to="./info" state={userDetailes}>Info</Link>
