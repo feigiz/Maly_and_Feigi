@@ -6,6 +6,12 @@ function Login() {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+        if (currentUser != null)
+            navigate(`/home/users/${currentUser.id}`);
+    }, [])
+
     function onSubmit(event) {
         event.preventDefault();
         const { name, password } = event.target;
@@ -27,12 +33,6 @@ function Login() {
             }
         }catch (ex) { alert(ex) }
     }
-
-    useEffect(() => {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'))
-        if (currentUser != null)
-            navigate(`/home/users/${currentUser.id}`);
-    }, [])
 
     return (<>
         <form onSubmit={onSubmit}>

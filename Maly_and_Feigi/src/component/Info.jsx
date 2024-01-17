@@ -5,6 +5,7 @@ function Info() {
     const userDetailes = useLocation();
     console.log(userDetailes.state)
     return (<>
+    {/* map */}
         <h1>information</h1>
         <p><b>name:</b> {userDetailes.state.name}</p>
         <p><b>user name:</b> {userDetailes.state.username}</p>
@@ -18,7 +19,6 @@ function Info() {
         <p><b>suite:</b> {userDetailes.state.address.suite}</p>
         <p><b>zipcode:</b> {userDetailes.state.address.zipcode}</p>
         <h4>geo</h4>
-        {/* {console.log(userDetailes.state.geo)} */}
         <p><b>lat:</b> {userDetailes.state.address.geo.lat}</p>
         <p><b>lng:</b> {userDetailes.state.address.geo.lng}</p>
         <br />
@@ -26,9 +26,6 @@ function Info() {
         <p><b>name:</b> {userDetailes.state.company.name}</p>
         <p><b>catch phrase:</b> {userDetailes.state.company.catchPhrase}</p>
         <p><b>bs:</b> {userDetailes.state.company.bs}</p>
-
-
-        {/* לכתוב את כל הפרטים */}
     </>);
 }
 
