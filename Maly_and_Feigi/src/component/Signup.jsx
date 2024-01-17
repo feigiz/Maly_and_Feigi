@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 // { nextId, setNextId }
 
@@ -31,16 +31,17 @@ function Signup() {
     //             .then((response) => response.json())
     //             .then((json) => console.log(json));
     // }, [nextId])
+    const [userIdentifying, setUserIdentifying] = useState();
 
 
-    let userName, website;
 
     function onSubmitSignUp(event) {
         event.preventDefault();
+        {console.log(userIdentifying)}        
         const { name, password, verifyPassword } = event.target;
-        userName = name.value;
-        website = password.value;
-        if (website != verifyPassword.value)
+        setUserIdentifying(prev=>{return{ username: name.value, website: password.value }})
+        console.log(userIdentifying)
+        if (userIdentifying.website != verifyPassword.value)
             alert("verify failed");
         else
             checkUser();
@@ -48,7 +49,7 @@ function Signup() {
 
     async function checkUser() {
         try {
-            const response = await fetch(`http://localhost:3000/users?username=${userName}`);
+            const response = await fetch(`http://localhost:3000/users?username=${userIdentifying.username}`);
             const user = await response.json();
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
@@ -65,6 +66,8 @@ function Signup() {
         const { name, email, street, suite, city, zipcode, lat, lng, phone,
             companyName, catchPhrase, bs } = event.target;
         let Id;
+        console.log(userIdentifying.username)
+        console.log(userIdentifying.website)
         await fetch("http://localhost:3000/nextIDs/1")
             .then((response) => response.json())
             .then((json) => {
@@ -76,7 +79,7 @@ function Signup() {
             body: JSON.stringify({
                 id: `${Id}`,
                 name: name.value,
-                username: userName,
+                username: userIdentifying.username,
                 email: email.value,
                 address: {
                     street: street.value,
@@ -89,7 +92,7 @@ function Signup() {
                     }
                 },
                 phone: phone.value,
-                website: website,
+                website: userIdentifying.website,
                 company: {
                     name: companyName.value,
                     catchPhrase: catchPhrase.value,
@@ -117,6 +120,7 @@ function Signup() {
             })
                 .then((res) => res.json())
                 .then((json) => console.log(json));
+            console.log(data)
             localStorage.setItem('currentUser', JSON.stringify(data));
             alert("user successfully added");
             navigate(`/home/users/${data.id}`);
@@ -125,6 +129,7 @@ function Signup() {
     }
 
     return (<>
+
         {/* {console.log(nextId)} */}
         <form onSubmit={onSubmitSignUp}>
             <label htmlFor='name' >user name</label>
