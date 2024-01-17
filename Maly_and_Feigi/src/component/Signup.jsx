@@ -1,43 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import Register from "./Register";
 
 //להחליף ל2 קומפוננטות ואם לא למחוק את הרגיסטר
 function Signup() {
     const navigate = useNavigate();
     const [isFillingDetails, setIsFillingDetails] = useState(false);
-    const userIdentifying = useRef();
-    // const [userIdentifying, setUserIdentifying] = useState(); 
+    const userIdentifyDetails = useRef();
+    const nextId = useRef();
 
-    const [nextId, setNextId] = useState();
-
-    // useEffect(() => {
-    //     //fech next id
-    //     fetch("http://localhost:3000/nextIDs/1")
-    //         .then(response => {
-    //             if (!response.ok)
-    //                 throw 'Error' + response.status + ': ' + response.statusText;
-    //             return response.json();
-    //         })
-    //         .then((json) => {
-    //             setNextId(json.nextId)
-    //         }).catch(ex => alert(ex))
-    // }, [])
-
-    // useEffect(() => {
-    //     if (nextId != null)
-    //         fetch("http://localhost:3000/nextIDs/1", {
-    //             method: "PATCH",
-    //             body: JSON.stringify({
-    //                 "nextId": nextId
-    //             }),
-    //             headers: {
-    //                 "Content-type": "application/json; charset=UTF-8",
-    //             },
-    //         })
-    //             .then((response) => response.json())
-    //             .then((json) => console.log(json));
-    // }, [nextId])
-
+    useEffect(() => {
+        fetch("http://localhost:3000/nextIDs/1")
+            .then(response => {
+                if (!response.ok)
+                    throw 'Error' + response.status + ': ' + response.statusText;
+                return response.json();
+            }).then((json) => {
+                nextId.current = json.nextId
+            }).catch(ex => alert(ex))
+    }, [])
 
     function onSubmitSignUp(event) {
         event.preventDefault();
@@ -45,15 +26,15 @@ function Signup() {
         if (password.value != verifyPassword.value)
             alert("verify failed");
         else {
-            userIdentifying.current = { username: name.value, website: password.value }
-            console.log(userIdentifying.current)
+            userIdentifyDetails.current = { username: name.value, website: password.value }
+            console.log(userIdentifyDetails.current)
             checkUser();
         }
     }
 
     async function checkUser() {
         try {
-            const response = await fetch(`http://localhost:3000/users?username=${userIdentifying.current.username}`);
+            const response = await fetch(`http://localhost:3000/users?username=${userIdentifyDetails.current.username}`);
             const user = await response.json();
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
@@ -64,28 +45,19 @@ function Signup() {
         } catch (ex) { alert(ex) }
     }
 
-    async function onSubmitFullDetails(event) {
+    function onSubmitFullDetails(event) {
         event.preventDefault();
         const { name, email, street, suite, city, zipcode, lat, lng, phone,
             companyName, catchPhrase, bs } = event.target;
-        let Id;
-        await fetch("http://localhost:3000/nextIDs/1")
-            .then((response) => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            })
-            .then((json) => Id = json.nextId)
-            .catch(ex => alert(ex));
         fetch('http://localhost:3000/users', {
             method: 'POST',
             body: JSON.stringify({
-                id: `${Id}`, name: name.value, username: userIdentifying.current.username, email: email.value,
+                id: `${nextId.current}`, name: name.value, username: userIdentifyDetails.current.username, email: email.value,
                 address: {
                     street: street.value, suite: suite.value, city: city.value, zipcode: zipcode.value,
                     geo: { lat: lat.value, lng: lng.value }
                 },
-                phone: phone.value, website: userIdentifying.current.website,
+                phone: phone.value, website: userIdentifyDetails.current.website,
                 company: { name: companyName.value, catchPhrase: catchPhrase.value, bs: bs.value }
             }),
             headers: { 'Content-type': 'application/json; charset=UTF-8' },
@@ -94,25 +66,29 @@ function Signup() {
                 throw 'Error' + response.status + ': ' + response.statusText;
             return response.json();
         }).then(data => {
-            fetch("http://localhost:3000/nextIDs/1", {
-                method: "PATCH",
-                body: JSON.stringify({ "nextId": Id + 1 }),
-                headers: { "Content-type": "application/json; charset=UTF-8"},
-            }).then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            }).catch((ex) => alert(ex));
-            setNextId(prev => prev + 1)
             localStorage.setItem('currentUser', JSON.stringify(data));
+            updateNextId()
             alert("user successfully added");
             navigate(`/home/users/${data.id}`);
         }).catch((ex) => alert(ex));
     }
 
+    function updateNextId() {
+        nextId.current = nextId.current + 1;
+        fetch("http://localhost:3000/nextIDs/1", {
+            method: "PATCH",
+            body: JSON.stringify({ "nextId": nextId.current }),
+            headers: { "Content-type": "application/json; charset=UTF-8" },
+        }).then(response => {
+            if (!response.ok)
+                throw 'Error' + response.status + ': ' + response.statusText;
+            return response.json();
+        }).catch((ex) => alert(ex));
+    }
+    
     return (<>
-        {/* {!isFillingDetails ?  */}
-        <form onSubmit={onSubmitSignUp}>
+        {!isFillingDetails && <form onSubmit={onSubmitSignUp}>
+
             <label htmlFor='name' >user name</label>
             <input name='name' type='text' required></input>
 
@@ -122,45 +98,175 @@ function Signup() {
             <label htmlFor='verifyPassword' >verify password</label>
             <input name='verifyPassword' type='password' required></input>
 
-            {!isFillingDetails && <button type='submit'>continue</button>}
-        </form>
-        {/*   : */}
-        {isFillingDetails && <form onSubmit={(event) => { onSubmitFullDetails(event) }}>
-            <label htmlFor='name' >name</label>
-            <input name='name' type='text' required defaultValue={null}></input>
-
-            <label htmlFor='email' >email</label>
-            <input name='email' type='email' required defaultValue={null}></input>
-
-            <h4>address:</h4>
-            <label htmlFor='street' >street</label>
-            <input name='street' type='text' required></input>
-            <label htmlFor='suite' >suite</label>
-            <input name='suite' type='text' required></input>
-            <label htmlFor='city' >city</label>
-            <input name='city' type='text' required></input>
-            <label htmlFor='zipcode' >zipcode</label>
-            <input name='zipcode' type='text' required></input>
-            <h4>geo:</h4>
-            <label htmlFor='lat' >lat</label>
-            <input name='lat' type='text' required></input>
-            <label htmlFor='lng' >lng</label>
-            <input name='lng' type='text' required></input>
-
-            <label htmlFor='phone' >phone</label>
-            <input name='phone' type='text' pattern="[0-9\-\+\s]{7,14}" required></input>
-
-            <h4>company:</h4>
-            <label htmlFor='companyName' >name</label>
-            <input name='companyName' type='text' required></input>
-            <label htmlFor='catchPhrase' >catch phrase</label>
-            <input name='catchPhrase' type='text' required></input>
-            <label htmlFor='bs' >bs</label>
-            <input name='bs' type='text' required></input>
-
-            <button type='submit'>register</button>
+            <button type='submit'>continue</button>
         </form>}
+        {isFillingDetails && <Register onSubmitFullDetails={onSubmitFullDetails}/>}
     </>);
 }
 
 export default Signup;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const navigate = useNavigate();
+// const [isFillingDetails, setIsFillingDetails] = useState(false);
+// const userIdentifying = useRef();
+// // const [userIdentifying, setUserIdentifying] = useState();
+
+// // const [nextId, setNextId] = useState();
+
+// const nextId = useRef();
+
+
+// useEffect(() => {
+//     fetch("http://localhost:3000/nextIDs/1")
+//         .then(response => {
+//             if (!response.ok)
+//                 throw 'Error' + response.status + ': ' + response.statusText;
+//             return response.json();
+//         })
+//         .then((json) => {
+//             // setNextId(json.nextId)
+//             nextId.current=json.nextId
+//         }).catch(ex => alert(ex))
+// }, [])
+
+// // useEffect(() => {
+// //     if (nextId.current != null)
+// //         fetch("http://localhost:3000/nextIDs/1", {
+// //             method: "PATCH",
+// //             body: JSON.stringify({ "nextId": nextId.current }),
+// //             headers: { "Content-type": "application/json; charset=UTF-8" },
+// //         })
+// //             .then((response) => response.json())
+// //             .then((json) => console.log(json));
+// // }, [nextId])
+
+// // useEffect(() => {
+// //     if (nextId != null)
+// //         fetch("http://localhost:3000/nextIDs/1", {
+// //             method: "PATCH",
+// //             body: JSON.stringify({ "nextId": nextId }),
+// //             headers: { "Content-type": "application/json; charset=UTF-8" },
+// //         })
+// //             .then((response) => response.json())
+// //             .then((json) => console.log(json));
+// // }, [nextId])
+
+
+// function onSubmitSignUp(event) {
+//     event.preventDefault();
+//     const { name, password, verifyPassword } = event.target;
+//     if (password.value != verifyPassword.value)
+//         alert("verify failed");
+//     else {
+//         userIdentifying.current = { username: name.value, website: password.value }
+//         console.log(userIdentifying.current)
+//         checkUser();
+//     }
+// }
+
+// async function checkUser() {
+//     try {
+//         const response = await fetch(`http://localhost:3000/users?username=${userIdentifying.current.username}`);
+//         const user = await response.json();
+//         if (!response.ok)
+//             throw 'Error' + response.status + ': ' + response.statusText;
+//         if (!user[0])
+//             setIsFillingDetails(true);//when false?
+//         else
+//             alert("existing user, please login");
+//     } catch (ex) { alert(ex) }
+// }
+
+// function onSubmitFullDetails(event) {
+//     event.preventDefault();
+//     const { name, email, street, suite, city, zipcode, lat, lng, phone,
+//         companyName, catchPhrase, bs } = event.target;
+//     // let Id;
+//     // await fetch("http://localhost:3000/nextIDs/1")
+//     //     .then((response) => {
+//     //         if (!response.ok)
+//     //             throw 'Error' + response.status + ': ' + response.statusText;
+//     //         return response.json();
+//     //     })
+//     //     .then((json) => Id = json.nextId)
+//     //     .catch(ex => alert(ex));
+//     fetch('http://localhost:3000/users', {
+//         method: 'POST',
+//         body: JSON.stringify({
+//             id: `${nextId.current}`, name: name.value, username: userIdentifying.current.username, email: email.value,
+//             address: {
+//                 street: street.value, suite: suite.value, city: city.value, zipcode: zipcode.value,
+//                 geo: { lat: lat.value, lng: lng.value }
+//             },
+//             phone: phone.value, website: userIdentifying.current.website,
+//             company: { name: companyName.value, catchPhrase: catchPhrase.value, bs: bs.value }
+//         }),
+//         headers: { 'Content-type': 'application/json; charset=UTF-8' },
+//     }).then(response => {
+//         if (!response.ok)
+//             throw 'Error' + response.status + ': ' + response.statusText;
+//         return response.json();
+//     }).then(data => {
+//         // fetch("http://localhost:3000/nextIDs/1", {
+//         //     method: "PATCH",
+//         //     body: JSON.stringify({ "nextId": Id + 1 }),
+//         //     headers: { "Content-type": "application/json; charset=UTF-8"},
+//         // }).then(response => {
+//         //     if (!response.ok)
+//         //         throw 'Error' + response.status + ': ' + response.statusText;
+//         //     return response.json();
+//         // }).catch((ex) => alert(ex));
+//         // setNextId(prev => prev + 1)
+//         localStorage.setItem('currentUser', JSON.stringify(data));
+//         // setNextId(prev => (prev + 1))
+//         nextId.current=nextId.current+1;
+
+//         fetch("http://localhost:3000/nextIDs/1", {
+//             method: "PATCH",
+//             body: JSON.stringify({ "nextId": nextId.current }),
+//             headers: { "Content-type": "application/json; charset=UTF-8" },
+//         })
+//             .then((response) => response.json())
+//             .then((json) => console.log(json));
+//         alert("user successfully added");
+//         navigate(`/home/users/${data.id}`);
+//     }).catch((ex) => alert(ex));
+// }
