@@ -152,7 +152,7 @@ function Todos() {
         }
     }
 
-
+//אפשר לאחד עם השני?
     useEffect(() => {
         // if (getTodos)
         try {

@@ -161,10 +161,8 @@ function Signup() {
             <label htmlFor='lng' >lng</label>
             <input name='lng' type='text' required></input>
 
-            {/* <label htmlFor='phone' >phone</label>
-            <input name='phone' type='tel' minLength="9" maxlength="10" required></input> */}
             <label htmlFor='phone' >phone</label>
-            <input name='phone' type='text' required></input>
+            <input name='phone' type='text' pattern="[0-9\-\+\s]{7,13}" required></input>
 
             <h4>company:</h4>
             <label htmlFor='companyName' >name</label>
@@ -180,3 +178,5 @@ function Signup() {
 }
 
 export default Signup;
+
+{/* <input pattern=".{5,10}" required title="5 to 10 characters"></input> */ }
