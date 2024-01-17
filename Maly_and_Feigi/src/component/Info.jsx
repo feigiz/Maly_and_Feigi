@@ -1,12 +1,36 @@
 import React from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 
+
+// const Info = () => {
+//     const {currentUser,} = useContext(UserContext);
+
+//     return (
+//         <>
+//             <div>
+//                 {print(currentUser)}
+//             </div>
+//         </>
+//     )
+// }
+
 function Info() {
     const userDetailes = useLocation();
-    console.log(userDetailes.state)
+    const print = (myObject) => {
+        return Object.keys(myObject).map((key) => (typeof myObject[key] === 'object' ?
+            <div key={key} ><br /><p><ins><strong>{key + ":"}</strong></ins></p> {print(myObject[key])}</div> :
+            <p key={key}><b>{key}:</b> {myObject[key]}</p>))
+    }
+
     return (<>
-    {/* map */}
-        <h1>information</h1>
+    <br /><br />
+        <div>
+            {print(userDetailes.state)}
+        </div>
+
+
+        {/* map */}
+        {/* <h1>information</h1>
         <p><b>name:</b> {userDetailes.state.name}</p>
         <p><b>user name:</b> {userDetailes.state.username}</p>
         <p><b>email:</b> {userDetailes.state.email}</p>
@@ -25,7 +49,7 @@ function Info() {
         <h4>company</h4>
         <p><b>name:</b> {userDetailes.state.company.name}</p>
         <p><b>catch phrase:</b> {userDetailes.state.company.catchPhrase}</p>
-        <p><b>bs:</b> {userDetailes.state.company.bs}</p>
+        <p><b>bs:</b> {userDetailes.state.company.bs}</p> */}
     </>);
 }
 
