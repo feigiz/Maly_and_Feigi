@@ -15,7 +15,7 @@ function Home() {
         <h1>welcome {userDetailes.name}</h1>
         <Link to="./info" state={userDetailes}>Info</Link>
         <Link to="./todos" state={userDetailes}>Todos</Link>
-        <Link to="./posts">Posts</Link>
+        <Link to="./posts" state={userDetailes}>Posts</Link>
         <Link to="./albums">Albums</Link>
         <button onClick={logout}>Logout</button>
         <Outlet />

@@ -262,7 +262,7 @@ function Todos() {
                 <input type="radio" name="searchBycompleted" value="false" onChange={event => searchTodos(event)} />
             </> : <input type="text" name={searchType} onChange={event => searchTodos(event)} />)
             : <></>}
-
+        <h2> <ins>todos list</ins></h2>
         {todos.length == 0 ? <h2>There are no tasks</h2>
             : todos.map((todo, i) => {
                 return (
