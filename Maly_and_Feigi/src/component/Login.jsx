@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
+import { AppContext } from "../App";
 
 
 function Login() {
+    const { userDetailes, setUserDetails } = useContext(AppContext)
 
     const navigate = useNavigate();
 
     useEffect(() => {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'))
-        if (currentUser != null)
+        if (currentUser != null) {
             navigate(`/home/users/${currentUser.id}`);
+            setUserDetails(currentUser)
+        }
     }, [])
 
     const {
@@ -43,6 +47,7 @@ function Login() {
                 console.log(user[0])
                 localStorage.setItem('currentUser', JSON.stringify(user[0]));
                 navigate(`/home/users/${user[0].id}`);
+                setUserDetails(currentUser)
             }
         } catch (ex) { alert(ex) }
     }

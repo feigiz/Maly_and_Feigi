@@ -9,6 +9,16 @@
       "id": "2",
       "type": "todo",
       "nextId": 202
+    },
+    {
+      "id": "3",
+      "type": "post",
+      "nextId": 101
+    },
+    {
+      "id": "4",
+      "type": "comment",
+      "nextId": 501
     }
   ],
   "users": [

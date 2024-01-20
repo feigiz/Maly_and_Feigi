@@ -1,5 +1,6 @@
-import React from "react";
+import React,{useContext} from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { AppContext } from "../App";
 
 
 // const Info = () => {
@@ -15,7 +16,9 @@ import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 // }
 
 function Info() {
-    const userDetailes = useLocation();
+    const {userDetailes} =useContext(AppContext)
+   
+    // const userDetailes = useLocation();
     const print = (myObject) => {
         return Object.keys(myObject).map((key) => (typeof myObject[key] === 'object' ?
             <div key={key} ><br /><p><ins><strong>{key + ":"}</strong></ins></p> {print(myObject[key])}</div> :
@@ -25,7 +28,7 @@ function Info() {
     return (<>
     <br /><br />
         <div>
-            {print(userDetailes.state)}
+            {print(userDetailes)}
         </div>
 
 

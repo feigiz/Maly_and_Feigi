@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
 import trash from "../icons/trash.png"
 import edit from "../icons/edit.png"
+import { useContext } from "react";
+import { AppContext } from "../App";
 
 function Todos() {
 
     //לקצר את הפונקציה בסינאפ
     //לקצר מערך טודו קטן
     // IהI פייגי רוצה לסדר את עניני    
-    const { state } = useLocation();
+    // const { state } = useLocation();
     const [userTodos, setUserTodos] = useState([]);
     const [showAdditionForm, setShowAdditionForm] = useState(false);
     // const [editables, setEditables] = useState([]);
@@ -16,6 +18,7 @@ function Todos() {
     // const [stringSearch, setStringSearch] = useState();
     const [nextId, setNextId] = useState();
     const [searchType, setSearchType] = useState();
+    const {userDetailes}=useContext(AppContext)
 
     useEffect(() => {
         //fech next id
@@ -30,7 +33,7 @@ function Todos() {
             }).catch(ex => alert(ex))
 
         //fech todos
-        fetch(`http://localhost:3000/todos?userId=${state.id}`)
+        fetch(`http://localhost:3000/todos?userId=${userDetailes.id}`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -63,7 +66,7 @@ function Todos() {
 
     function addingTask(event) {
         event.preventDefault();
-        const newTask = { userId: userDetailes.state.id, id: `${nextId}`, title: event.target[0].value, completed: false }
+        const newTask = { userId: userDetailes.id, id: `${nextId}`, title: event.target[0].value, completed: false }
         fetch('http://localhost:3000/todos', {
             method: 'POST',
             body: JSON.stringify(newTask),

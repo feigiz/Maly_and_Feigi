@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { useLocation, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import trash from "../icons/trash.png"
 import edit from "../icons/edit.png"
 import arrowDown from "../icons/angle-small-down.png"
 // import arrowUp from "../icons/angle-small-up.png"
 import SinglePost from "./SinglePost";
+import { AppContext } from "../App";
 
 
 function Posts() {
-    const { state } = useLocation();
+    const navigate = useNavigate();
     const [userPosts, setUserPosts] = useState([]);
     const [showAdditionForm, setShowAdditionForm] = useState(false);
     // const [editables, setEditables] = useState([]);
@@ -16,6 +17,7 @@ function Posts() {
     // const [stringSearch, setStringSearch] = useState();
     const [nextId, setNextId] = useState();
     const [searchType, setSearchType] = useState();
+    const {userDetailes}=useContext(AppContext)
 
     useEffect(() => {
         //fech next id
@@ -30,7 +32,7 @@ function Posts() {
             }).catch(ex => alert(ex))
 
         //fech posts
-        fetch(`http://localhost:3000/posts?userId=${state.id}`)
+        fetch(`http://localhost:3000/posts?userId=${userDetailes.id}`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -99,8 +101,9 @@ function Posts() {
         setPosts(prev => [...prev.slice(0, i), { ...prev[i], editable: !prev[i].editable }, ...prev.slice(i + 1, prev.length)])
     }
 
-    function changePostDetailsView(i) {
+    function changePostDetailsView(i, post) {
         setPosts(prev => [...prev.slice(0, i), { ...prev[i], postDetailsView: !prev[i].postDetailsView }, ...prev.slice(i + 1, prev.length)])
+        // navigate(`./${post.id}`, {post:post,changeEditable:changeEditable,i:i})
     }
 
     function sortPosts(event) {
@@ -226,20 +229,21 @@ function Posts() {
         <h2><ins>posts list</ins></h2>
         {posts.length == 0 ? <h2>There are no posts</h2>
             : posts.map((post, i) => {
-                return (<>
-                    <form style={post.postDetailsView ? { backgroundColor: "rgb(180, 229, 201)", borderRadius: 10, padding: 20 } : {}} key={i} onSubmit={(event) => updatePost(event, post.i, i, post.id)}>
+                return (
+                    <form  style={post.postDetailsView ? { backgroundColor: "rgb(180, 229, 201)", borderRadius: 10, padding: 20 } : {}} key={i} onSubmit={(event) => updatePost(event, post.i, i, post.id)}>
                         {!post.postDetailsView && <span style={{ marginRight: 10 }}>{post.id}: </span>}
                         {!post.postDetailsView && <span>{post.title} </span>}
+                        {/* {post.postDetailsView && <Outlet />} */}
                         {post.postDetailsView && <SinglePost post={post} i={i} changeEditable={changeEditable} />}
                         <img onClick={() => deletePost(post.i, i, post.id)} src={trash} />
-                         <img src={arrowDown} onClick={() => changePostDetailsView(i)} />
+                        <img src={arrowDown} onClick={() => changePostDetailsView(i, post)} />
                         {/* {!post.postDetailsView && <img src={arrowDown} onClick={() => changePostDetailsView(i)} />} */}
-                         {/* {post.postDetailsView && <img src={arrowUp} onClick={() => changePostDetailsView(i)} />} */}
+                        {/* {post.postDetailsView && <img src={arrowUp} onClick={() => changePostDetailsView(i)} />} */}
                         <br /><br />
                         {post.editable && <button type="submit" >update</button>}
                     </form>
 
-                </>)
+                )
             })}
     </>);
 }
