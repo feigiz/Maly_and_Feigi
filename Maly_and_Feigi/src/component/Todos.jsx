@@ -82,50 +82,6 @@ function Todos() {
         }).catch((ex) => alert(ex));
     }
 
-    // function submitChanges() {
-    //     try {
-    //         userTodos.map(todo =>
-    //             fetch(`http://localhost:3000/todos`, {
-    //                 method: 'POST',
-    //                 // body: JSON.stringify({userTodos}),
-    //                 body: JSON.stringify(todo),
-    //                 // body: userTodos,
-    //                 headers: {
-    //                     'Content-type': 'application/json; charset=UTF-8',
-    //                 },
-    //             }).then(response => {
-    //                 if (!response.ok) {
-    //                     throw 'Error' + response.status + ': ' + response.statusText;
-    //                 }
-    //                 // alert("todos successfully updated");
-    //                 // }).then(data => {
-
-    //                 //     // navigate(`/home/users/${data.id}`);
-    //             }));
-    //         // fetch(`http://localhost:3000/todos?userId=${userDetailes.state.id}`, {
-    //         //     // method: 'DELETE',
-    //         // }).then(response => {
-    //         //     if (!response.ok) {
-    //         //         throw 'Error' + response.status + ': ' + response.statusText;
-    //         //     }
-    //         //     alert("todos successfully deleted");
-    //         // });
-
-    //     } catch (ex) { alert(ex); }
-    // }
-
-    // function changeCheckBox(userIndex, i) {
-    //     setUserTodos(prev => [...prev.slice(0, userIndex), { ...prev[userIndex], completed: !prev[userIndex].completed }, ...prev.slice(userIndex + 1, prev.length)])
-    //     // הוספתי: עדכון המשימה
-    //     setTodos(prev => [...prev.slice(0, i), { ...prev[i], completed: !prev[i].completed }, ...prev.slice(i + 1, prev.length)])
-    // }
-
-    // function changeTitle(event, userIndex, i) {
-    //     setUserTodos(prev => [...prev.slice(0, userIndex), { ...prev[userIndex], title: event.target.value }, ...prev.slice(userIndex + 1, prev.length)])
-    //     // הוספתי: עדכון המשימה 
-    //     setTodos(prev => [...prev.slice(0, i), { ...prev[i], title: event.target.value }, ...prev.slice(i + 1, prev.length)])
-    // }
-
     function deleteTask(userIndex, i, id) {
         if (confirm('Are you sure you want to delete this todo from the database?')) {
             fetch(`http://localhost:3000/todos/${id}`, {
@@ -206,11 +162,7 @@ function Todos() {
                 break;
             case "searchBycompleted":
                 foundsArr = userTodos.slice()
-                    .map((t, i) => { if (t != null && t.completed) return { ...t, i: i, editable: false } })
-                setTodos(foundsArr.filter(t => t != null))
-                break;
-            case "notComplete":
-                foundsArr = userTodos.map((t, i) => { if (t != null && !t.completed) return { ...t, i: i, editable: false } })
+                    .map((t, i) => { if (t != null && `${t.completed}`==event.target.value) return { ...t, i: i, editable: false } })
                 setTodos(foundsArr.filter(t => t != null))
                 break;
         }
@@ -230,7 +182,6 @@ function Todos() {
     return (<>
         <br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add task</button>
-        {/* <button onClick={submitChanges}>Submit changes</button> */}
         <br />
 
         {showAdditionForm && <form onSubmit={addingTask}>

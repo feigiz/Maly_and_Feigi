@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate, Link, useParams, useLocation, Route } from 'react-router-dom';
 function Register({ onSubmitFullDetails }) //Search Params / Link state and useLocation in scrimba for user detiles
 {
+    return(
     <form onSubmit={(event) => { onSubmitFullDetails(event) }}>
             <label htmlFor='name'>name</label>
             <input name='name' type='text' required ></input>
@@ -36,6 +37,6 @@ function Register({ onSubmitFullDetails }) //Search Params / Link state and useL
             <input name='bs' type='text' required></input>
 
             <button type='submit'>register</button>
-        </form>
+        </form>)
 }
 export default Register;

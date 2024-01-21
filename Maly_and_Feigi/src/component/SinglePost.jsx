@@ -21,10 +21,10 @@ function SinglePost({ post, changeEditable, i }) {
                 {/* <br /> */}
                 <p>body: {post.body} </p>
             </div>}
-            <button onClick={()=>navigate(`./comments`)}>show comments</button>
-        {/* <Link to="./comments" state={{ userDetailes, post }}>show comments</Link> */}
+            {/* <button onClick={()=>navigate(`./comments`)}>show comments</button> */}
+        <Link to="./comments" state={{ userDetailes, post }}>show comments</Link>
         <img src={edit} onClick={() => changeEditable(i)} />
-        {/* <Outlet/> */}
+        <Outlet/>
     </>);
 }
 

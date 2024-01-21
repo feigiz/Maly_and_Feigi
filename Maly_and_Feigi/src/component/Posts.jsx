@@ -230,7 +230,7 @@ function Posts() {
         {posts.length == 0 ? <h2>There are no posts</h2>
             : posts.map((post, i) => {
                 return (
-                    <form  style={post.postDetailsView ? { backgroundColor: "rgb(180, 229, 201)", borderRadius: 10, padding: 20 } : {}} key={i} onSubmit={(event) => updatePost(event, post.i, i, post.id)}>
+                    <form  style={post.postDetailsView ? { backgroundColor: "rgb(180, 229, 201)", borderRadius: 10, padding: 20, margin:20 } : {}} key={i} onSubmit={(event) => updatePost(event, post.i, i, post.id)}>
                         {!post.postDetailsView && <span style={{ marginRight: 10 }}>{post.id}: </span>}
                         {!post.postDetailsView && <span>{post.title} </span>}
                         {/* {post.postDetailsView && <Outlet />} */}
@@ -242,7 +242,6 @@ function Posts() {
                         <br /><br />
                         {post.editable && <button type="submit" >update</button>}
                     </form>
-
                 )
             })}
     </>);

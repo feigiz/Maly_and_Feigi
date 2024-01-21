@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import Register from "./Register";
+import { AppContext } from "../App";
 
 //להחליף ל2 קומפוננטות ואם לא למחוק את הרגיסטר
 function Signup() {
+    const { setUserDetails } = useContext(AppContext)
     const navigate = useNavigate();
     const [isFillingDetails, setIsFillingDetails] = useState(false);
     const userIdentifyDetails = useRef();
@@ -68,6 +70,7 @@ function Signup() {
         }).then(data => {
             localStorage.setItem('currentUser', JSON.stringify(data));
             updateNextId()
+            setUserDetails(data)
             alert("user successfully added");
             navigate(`/home/users/${data.id}`);
         }).catch((ex) => alert(ex));
@@ -85,7 +88,7 @@ function Signup() {
             return response.json();
         }).catch((ex) => alert(ex));
     }
-    
+
     return (<>
         {!isFillingDetails && <form onSubmit={onSubmitSignUp}>
 
@@ -100,7 +103,7 @@ function Signup() {
 
             <button type='submit'>continue</button>
         </form>}
-        {isFillingDetails && <Register onSubmitFullDetails={onSubmitFullDetails}/>}
+        {isFillingDetails && <Register onSubmitFullDetails={onSubmitFullDetails} />}
     </>);
 }
 

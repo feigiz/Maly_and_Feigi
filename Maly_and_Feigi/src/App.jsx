@@ -26,7 +26,7 @@ function App() {
       <AppContext.Provider value={{ userDetailes, setUserDetails }}>
         <Router>
           <Routes>
-          <Route path="comments" element={<Comments />} />
+          {/* <Route path="comments" element={<Comments />} /> */}
             {/* OUTLET ולהשתמש ב HEADER לעשות */}
             <Route path="/" element={<Header />} >
               <Route path="/login" element={<Login />} />
@@ -37,9 +37,9 @@ function App() {
               <Route path="info" element={<Info />} />
               <Route path="todos" element={<Todos />} />
               <Route path="posts" element={<Posts />} >
-                <Route path=":id" element={<SinglePost />}>
-                  {/* <Route path="comments" element={<Comments />} /> */}
-                </Route>
+                {/* <Route path=":id" element={<SinglePost />}> */}
+                  <Route path="comments" element={<Comments />} />
+                {/* </Route> */}
               </Route>
               <Route path="albums" element={<Albums />} />
             </Route>
