@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { AppContext } from "../App";
 function Home() {
-    const { userDetailes } = useContext(AppContext)
+    const { userDetailes, setUserDetails } = useContext(AppContext)
     // setUserDetails(JSON.parse(localStorage.getItem('currentUser')))
     // const userDetailes = JSON.parse(localStorage.getItem('currentUser'));
     const navigate = useNavigate();
@@ -12,6 +12,8 @@ function Home() {
         navigate("/")
     }
 
+    if (userDetailes === undefined)
+        setUserDetails(JSON.parse(localStorage.getItem('currentUser')))
 
 
     return (<>

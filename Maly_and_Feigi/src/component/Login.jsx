@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { AppContext } from "../App";
 
 
@@ -17,11 +17,11 @@ function Login() {
         }
     }, [])
 
-    // const {
-    //     register,
-    //     handleSubmit,
-    //     formState: { errors }
-    // } = useForm();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm();
 
     // const onSubmit = (event) => {
     //     event.preventDefault();
@@ -29,11 +29,11 @@ function Login() {
     //     checkUser(name.value, password.value);
     // };
 
-    function onSubmit(event) {
-        event.preventDefault();
-        const { name, password } = event.target;
-        checkUser(name.value, password.value);
-    }
+    // function onSubmit(event) {
+    //     event.preventDefault();
+    //     const { name, password } = event.target;
+    //     checkUser(name.value, password.value);
+    // }
 
     async function checkUser(name, password) {
         try {
@@ -53,24 +53,24 @@ function Login() {
     }
 
 
-    return (<>
-        <form onSubmit={onSubmit}>
-            <label htmlFor='name' >user name</label>
-            <input name='name' type='text' required></input>
-            <label htmlFor='password' >password</label>
-            <input name='password' type='password' required></input>
-            <button type='submit'>enter</button>
-        </form>
-    </>)
     // return (<>
-    //     <form onSubmit={handleSubmit(onSubmit)}>
+    //     <form onSubmit={onSubmit}>
     //         <label htmlFor='name' >user name</label>
-    //         <input name='name' type='text' required {...register('name')}></input>
+    //         <input name='name' type='text' required></input>
     //         <label htmlFor='password' >password</label>
-    //         <input name='password' type='password' required {...register('password')}></input>
+    //         <input name='password' type='password' required></input>
     //         <button type='submit'>enter</button>
     //     </form>
     // </>)
+    return (<>
+        <form onSubmit={handleSubmit((data => checkUser(data.name, data.password)))}>
+            <label htmlFor='name' >user name</label>
+            <input name='name' type='text' required {...register('name')}></input>
+            <label htmlFor='password' >password</label>
+            <input name='password' type='password' required {...register('password')}></input>
+            <button type='submit'>enter</button>
+        </form>
+    </>)
 }
 
 export default Login;
