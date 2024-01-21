@@ -31,7 +31,11 @@ function Photos() {
 
 
         //fech Photos
-        fetch(`http://localhost:3000/photos?albumId=${albums[i].id}`)
+        fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_limit=10`)
+        //קטן שווה זה _lte   id_gte=0
+        //הפקודה בפץ תתן 10 ראשונים. נראה לי שהגדול והקטן לא עובדים אצלנו כי המספרים מחרוזות
+        //את יכולה להריץ את הפקודה בעוד 2 שורות ולראות 10 תמונות עם אי די מעל 10
+        //https://jsonplaceholder.typicode.com/photos?albumId=1&id_gte=10&_limit=10
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
