@@ -111,7 +111,7 @@ function Photos() {
         const updatedPhoto = { title: title.value, url: url.value, thumbnailUrl: thumbnailUrl.value }
         fetch(`http://localhost:3000/photos/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify({ updatedPhoto }),
+            body: JSON.stringify(updatedPhoto),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
