@@ -6,15 +6,9 @@ import arrowUp from "../icons/angle-small-up.png"
 import SingleAlbum from "./SingleAlbum";
 import { AppContext } from "../App";
 
-
-
 function Albums() {
     const navigate = useNavigate();
-    // const [userAlbums, setUserAlbums] = useState([]);
     const [showAdditionForm, setShowAdditionForm] = useState(false);
-    // const [editables, setEditables] = useState([]);
-    // const {  } = useContext(AlbumContext);
-    // const [stringSearch, setStringSearch] = useState();
     const [nextId, setNextId] = useState();
     const [searchType, setSearchType] = useState();
     const { userDetails, albums, setAlbums, userAlbums, setUserAlbums } = useContext(AppContext)
@@ -43,7 +37,7 @@ function Albums() {
                 // setUserAlbums(data.map(Album => { return { ...Album, editables: false } }));
                 let albumsArr = []
                 for (let i = 0; i < data.length; i++)
-                    albumsArr.push({ ...data[i], originalIndex: i, editable: false, AlbumDetailsView: false })
+                    albumsArr.push({ ...data[i], originalIndex: i })
                 setAlbums(albumsArr);
             }).catch(ex => alert(ex))
     }, [])
@@ -65,8 +59,8 @@ function Albums() {
 
     function addingAlbum(event) {
         event.preventDefault();
-        const { title, body } = event.target;
-        const newAlbum = { userId: userDetails.id, id: `${nextId}`, title: title.value, body: body.value }
+        const { title } = event.target;
+        const newAlbum = { userId: userDetails.id, id: `${nextId}`, title: title.value }
         fetch('http://localhost:3000/albums', {
             method: 'Album',
             body: JSON.stringify(newAlbum),
@@ -76,58 +70,9 @@ function Albums() {
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
             setUserAlbums(prev => [...prev, newAlbum])
-            setAlbums(prev => [...prev, { ...newAlbum, originalIndex: userAlbums.length, editable: false, AlbumDetailsView: false }])
+            setAlbums(prev => [...prev, { ...newAlbum, originalIndex: userAlbums.length }])
             setShowAdditionForm(false)
             setNextId(prev => prev + 1)
-        }).catch((ex) => alert(ex));
-    }
-
-    function deleteAlbum(originalIndex, i, id) {
-        if (confirm('Are you sure you want to delete this Album from the database?')) {
-            fetch(`http://localhost:3000/albums/${id}`, {
-                method: 'DELETE'
-            }).then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-            }).then(() => {
-                setUserAlbums((prev) => [...prev.slice(0, originalIndex), null, ...prev.slice(originalIndex + 1, prev.length)])
-                setAlbums((prev) => [...prev.slice(0, i), ...prev.slice(i + 1, prev.length)])
-            }).catch((ex) => alert(ex));
-        } else {
-            return;
-        }
-    }
-
-    function changeEditable(i) {
-        setAlbums(prev => [...prev.slice(0, i), { ...prev[i], editable: !prev[i].editable }, ...prev.slice(i + 1, prev.length)])
-    }
-
-    function changeAlbumDetailsView(i, Album) {
-        setAlbums(prev => [...prev.slice(0, i), { ...prev[i], AlbumDetailsView: !prev[i].AlbumDetailsView }, ...prev.slice(i + 1, prev.length)])
-        // navigate(`./${Album.id}`, {Album:Album,changeEditable:changeEditable,originalIndex:i})
-        navigate(`./${Album.id}`)
-    }
-
-    function updateAlbum(event, originalIndex, i, id) {
-        event.preventDefault()
-        const { title, body } = event.target;
-
-        fetch(`http://localhost:3000/albums/${id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({
-                title: title.value,
-                body: body.value
-            }),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        }).then(response => {
-            if (!response.ok)
-                throw 'Error' + response.status + ': ' + response.statusText;
-        }).then(() => {
-            setUserAlbums(prev => [...prev.slice(0, originalIndex), { ...prev[originalIndex], title: title.value, body: body.value }, ...prev.slice(originalIndex + 1, prev.length)])
-            setAlbums(prev => [...prev.slice(0, i), { ...prev[i], title: title.value, body: body.value }, ...prev.slice(i + 1, prev.length)])
-            changeEditable(i)
         }).catch((ex) => alert(ex));
     }
 
@@ -136,12 +81,12 @@ function Albums() {
         let foundIndex;
         switch (event.target.name) {
             case "id":
-                foundIndex = userAlbums.findIndex(p => p != null && p.id == event.target.value)
-                setAlbums([{ ...userAlbums[foundIndex], originalIndex: foundIndex, editable: false, albumDetailsView: false }])
+                foundIndex = userAlbums.findIndex( a =>  a != null &&  a.id == event.target.value)
+                setAlbums([{ ...userAlbums[foundIndex], originalIndex: foundIndex }])
                 break;
             case "title":
-                foundsArr = userAlbums.map((p, i) => { if (p != null && p.title.includes(event.target.value)) return { ...p, originalIndex: i, editable: false, albumDetailsView: false } })
-                setAlbums(foundsArr.filter(p => p != null))
+                foundsArr = userAlbums.map(( a, i) => { if ( a != null &&  a.title.includes(event.target.value)) return { ... a, originalIndex: i } })
+                setAlbums(foundsArr.filter( a =>  a != null))
                 break;
         }
     }
@@ -149,8 +94,8 @@ function Albums() {
     function search(event) {
         let foundsArr;
         if (event.target.value == "all") {
-            foundsArr = userAlbums.map((p, i) => { if (p != null) return { ...p, originalIndex: i, editable: false, albumDetailsView: false } })
-            setAlbums(foundsArr.filter(p => p != null));
+            foundsArr = userAlbums.map(( a, i) => { if ( a != null) return { ... a, originalIndex: i } })
+            setAlbums(foundsArr.filter(a => a != null));
             setSearchType();
         }
         else
@@ -162,11 +107,9 @@ function Albums() {
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add album</button>
         <br />
 
-        {showAdditionForm && <form onSubmit={addingalbum}>
+        {showAdditionForm && <form onSubmit={addingAlbum}>
             <label htmlFor='title' >album title</label>
             <input name='title' type='text' required></input>
-            <label htmlFor='body' >album body</label>
-            <input name='body' type='text' required></input>
             <button type="submit">Add</button>
         </form>}
 
@@ -185,19 +128,16 @@ function Albums() {
             : albums.map((album, i) => {
                 return (album.id > -1 ?
                     <div key={i}>
-                        <form onClick={() => navigate(`./${album.id}`, { state: { i } })}
-                            style={album.albumDetailsView ? { backgroundColor: "rgb(180, 229, 201)", borderRadius: 10, padding: 20, margin: 20 } : {}}
-                            key={i} >
+                        <form onClick={() => navigate(`./${album.id}`, { state: { i } })} key={i} >
                             <span style={{ marginRight: 10 }}>{album.id}: </span>
                             <span>{album.title} </span>
-
                             {/* {album.albumDetailsView && <Singlealbum album={album} i={i} changeEditable={changeEditable} />} */}
                             {/* <Link to={`./${album.id}`} state={{album,changeEditable,i}}><img src={arrowDown} /></Link> */}
                             {/* <Link to={`./${album.id}`} state={{ album, i }}><img src={arrowDown} /></Link> */}
                             {/* <img src={arrowDown} onClick={()=>navigate(`./${album.id}` ,{state:{ album, i }})} /> */}
-                            {/* <Outlet />                         */}
+                            {/* <Outlet />*/}
                             <br /><br />
-                        </form> <img onClick={() => deleteAlbum(album.originalIndex, i, album.id)} src={trash} />
+                        </form>
                     </div>
                     : <h2>No albums found</h2>
                 )

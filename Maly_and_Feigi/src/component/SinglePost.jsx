@@ -6,10 +6,6 @@ import trash from "../icons/trash.png"
 
 
 function SinglePost() {
-    // return(<>
-    //     <Link to="./comments" state={3}>show comments</Link>
-    //     <Outlet />
-    // </>)
     const { userDetails, posts, setPosts, setUserPosts } = useContext(AppContext)
     const navigate = useNavigate();
     const { state } = useLocation();

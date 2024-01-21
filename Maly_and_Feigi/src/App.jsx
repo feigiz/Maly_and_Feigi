@@ -10,7 +10,7 @@ import Albums from './component/Albums';
 import Info from './component/Info';
 import Posts from './component/Posts';
 import Todos from './component/Todos';
-import SinglePost from './component/SinglePost'; 
+import SinglePost from './component/SinglePost';
 import Comments from './component/Comments';
 import SingleAlbum from './component/SingleAlbum';
 import Photos from './component/Photos';
@@ -44,9 +44,7 @@ function App() {
               </Route>
               <Route path="albums" >
                 <Route index element={<Albums />} />
-                <Route path=":id" element={<SingleAlbum />}>
-                  <Route path="comments" element={<Photos />} />
-                </Route>
+                <Route path=":id/photos" element={<SingleAlbum />} />
               </Route>
             </Route>
           </Routes>

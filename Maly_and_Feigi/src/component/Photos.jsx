@@ -14,7 +14,7 @@ function Photos() {
     const [nextId, setNextId] = useState();
     const { userDetails, albums, setAlbums, setUserAlbums } = useContext(AppContext)
     const navigate = useNavigate();
-    const {i}=state;
+    const { i } = state;
 
 
     useEffect(() => {
@@ -128,17 +128,19 @@ function Photos() {
     }
 
     return (<>
-        <img src={X} onClick={() => navigate("..",{state: { i }})} /><br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add photo</button>
         <br />
 
         {showAdditionForm && <form onSubmit={addingPhoto}>
-            <label htmlFor='name' >name</label>
-            <input name='name' type='text' required></input>
-            <label htmlFor='body' >body</label>
-            <input name='body' type='text' required></input>
+            <label htmlFor='title' >title</label>
+            <input name='title' type='text' required></input>
+            <label htmlFor='url' >url</label>
+            <input name='url' type='text' required></input>
+            <label htmlFor='thumbnailUrl' >thumbnail url</label>
+            <input name='thumbnailUrl' type='text' required></input>
             <button type="submit">Add</button>
         </form>}
+
         <br />
         <h2> <ins>photos list</ins></h2>
         {photos.length == 0 ? <h2>There are no photos</h2>
@@ -147,17 +149,19 @@ function Photos() {
                     <form key={i} onSubmit={(event) => updatePhoto(event, photo.i, i, photo.id)}>
                         <span style={{ marginRight: 10 }}>{photo.id}: </span>
                         {photo.editable ? <>
-                            <input name="name" type="text" defaultValue={photo.name} style={{ width: 300 }} />
+                            <input name="title" type="text" defaultValue={photo.title} style={{ width: 300 }} />
                             <br />
-                            <input name="body" type="text" defaultChecked={photo.body} /></>
-                            : <><span><b>name: </b> {photo.name} </span>
+                            <input name="url" type="text" defaultChecked={photo.url} />
+                            <br />
+                            <input name="url" type="text" defaultChecked={photo.url} /></>
+                            : <><span><b>title: </b> {photo.title} </span>
                                 <br />
                                 <span><b>body: </b> {photo.body} </span> </>}
                         {userDetails.email == photo.email && <img src={edit} onClick={() => changeEditable(i)} />}
                         <img onClick={() => deletePhoto(photo.i, i, photo.id)} src={trash} />
                         {photo.editable && <button type="submit" >update</button>}
                         <br /><br />
-                    </form>)
+                    </form >)
             })}</>)
 }
 
