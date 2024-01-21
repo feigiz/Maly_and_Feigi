@@ -18,7 +18,7 @@ function Todos() {
     // const [stringSearch, setStringSearch] = useState();
     const [nextId, setNextId] = useState();
     const [searchType, setSearchType] = useState();
-    const {userDetailes}=useContext(AppContext)
+    const { userDetailes } = useContext(AppContext)
 
     useEffect(() => {
         //fech next id
@@ -162,7 +162,7 @@ function Todos() {
                 break;
             case "searchBycompleted":
                 foundsArr = userTodos.slice()
-                    .map((t, i) => { if (t != null && `${t.completed}`==event.target.value) return { ...t, i: i, editable: false } })
+                    .map((t, i) => { if (t != null && `${t.completed}` == event.target.value) return { ...t, i: i, editable: false } })
                 setTodos(foundsArr.filter(t => t != null))
                 break;
         }
@@ -177,8 +177,8 @@ function Todos() {
         }
         else
             setSearchType(event.target.value);
-        console.log(event.target.value)
     }
+
     return (<>
         <br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add task</button>
@@ -202,12 +202,13 @@ function Todos() {
 
         <label htmlFor='search' >search by</label>
         <select onChange={search} name="search">
-            <option value="all" onClick={searchTodos}></option>
+            <option value="all" ></option>
             <option value="id">id</option>
             <option value="title">title</option>
             <option value="completed">completed</option>
         </select>
         <br />
+        {/* onClick={searchTodos} */}
         {searchType ? (searchType == "completed" ?
             <>
                 <label htmlFor="completed">completed</label>
@@ -217,9 +218,9 @@ function Todos() {
             </> : <input type="text" name={searchType} onChange={event => searchTodos(event)} />)
             : <></>}
         <h2> <ins>todos list</ins></h2>
-        {todos.length == 0 ? <h2>There are no tasks</h2>
+        {todos.length == 0 ? <h2>No todos found</h2>
             : todos.map((todo, i) => {
-                return (
+                return (todo.id > -1 ?
                     <form key={i} onSubmit={(event) => updateTask(event, todo.i, i, todo.id)}>
                         <span style={{ marginRight: 10 }}>{todo.id}: </span>
                         {todo.editable ? <>
@@ -231,7 +232,7 @@ function Todos() {
                         <img onClick={() => deleteTask(todo.i, i, todo.id)} src={trash} />
                         {todo.editable && <button type="submit" >update</button>}
                         <br /><br />
-                    </form>)
+                    </form> : <h2>No todos found</h2>)
             })}</>)
 }
 
