@@ -128,7 +128,7 @@ function Albums() {
             : albums.map((album, i) => {
                 return (album.id > -1 ?
                     <div key={i}>
-                        <form onClick={() => navigate(`./${album.id}`, { state: { i } })} key={i} >
+                        <form onClick={() => navigate(`./${album.id}/photos`, { state: { i } })} key={i} >
                             <span style={{ marginRight: 10 }}>{album.id}: </span>
                             <span>{album.title} </span>
                             {/* {album.albumDetailsView && <Singlealbum album={album} i={i} changeEditable={changeEditable} />} */}

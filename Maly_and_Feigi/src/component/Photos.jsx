@@ -68,8 +68,8 @@ function Photos() {
 
     function addingPhoto(event) {
         event.preventDefault();
-        const { name, body } = event.target
-        const newPhoto = { albumId: albums[i].id, id: `${nextId}`, name: name.value, email: userDetails.email, body: body.value }
+        const { title, url, thumbnailUrl } = event.target
+        const newPhoto = { albumId: albums[i].id, id: `${nextId}`, title: title.value, url: url.value, thumbnailUrl: thumbnailUrl.value }
         fetch('http://localhost:3000/photos', {
             method: 'Album',
             body: JSON.stringify(newPhoto),
@@ -107,13 +107,11 @@ function Photos() {
 
     function updatePhoto(event, index, i, id) {
         event.preventDefault()
-        const { title, completed } = event.target;
+        const { title, url, thumbnailUrl } = event.target;
+        const updatedPhoto = { title: title.value, url: url.value, thumbnailUrl: thumbnailUrl.value }
         fetch(`http://localhost:3000/photos/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify({
-                title: title.value,
-                completed: completed.checked
-            }),
+            body: JSON.stringify({ updatedPhoto }),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
@@ -121,8 +119,9 @@ function Photos() {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
-            setUserPhotos(prev => [...prev.slice(0, index), { ...prev[index], title: title.value, completed: completed.value }, ...prev.slice(index + 1, prev.length)])
-            setPhotos(prev => [...prev.slice(0, i), { ...prev[i], title: title.value, completed: completed.value }, ...prev.slice(i + 1, prev.length)])
+            //לזכור לבדוק אם זה עובד
+            setUserPhotos(prev => [...prev.slice(0, index), { ...prev[index], ...updatedPhoto }, ...prev.slice(index + 1, prev.length)])
+            setPhotos(prev => [...prev.slice(0, i), { ...prev[i], ...updatedPhoto }, ...prev.slice(i + 1, prev.length)])
             changeEditable(i)
         }).catch((ex) => alert(ex));
     }
@@ -151,13 +150,14 @@ function Photos() {
                         {photo.editable ? <>
                             <input name="title" type="text" defaultValue={photo.title} style={{ width: 300 }} />
                             <br />
-                            <input name="url" type="text" defaultChecked={photo.url} />
+                            <input name="url" type="text" defaultValue={photo.url} />
                             <br />
-                            <input name="url" type="text" defaultChecked={photo.url} /></>
+                            <input name="thumbnailUrl" type="text" defaultValue={photo.thumbnailUrl} /></>
                             : <><span><b>title: </b> {photo.title} </span>
                                 <br />
-                                <span><b>body: </b> {photo.body} </span> </>}
-                        {userDetails.email == photo.email && <img src={edit} onClick={() => changeEditable(i)} />}
+                                <img src={photo.thumbnailUrl} />
+                            </>}
+                        {<img src={edit} onClick={() => changeEditable(i)} />}
                         <img onClick={() => deletePhoto(photo.i, i, photo.id)} src={trash} />
                         {photo.editable && <button type="submit" >update</button>}
                         <br /><br />
