@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { AppContext } from "../App";
 
 function Todos() {
-
+    //מלי רוצה לחלק לקומפוננטות
     //לקצר את הפונקציה בסינאפ
     //לקצר מערך טודו קטן
     // IהI פייגי רוצה לסדר את עניני    

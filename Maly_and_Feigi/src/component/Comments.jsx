@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import trash from "../icons/trash.png"
 import edit from "../icons/edit.png"
 import { AppContext } from "../App";
+import X from "../icons/X.png"
 
 
 function Comments() {
@@ -11,7 +12,10 @@ function Comments() {
     const [showAdditionForm, setShowAdditionForm] = useState(false);
     const [comments, setComments] = useState([]);
     const [nextId, setNextId] = useState();
-    const { userDetailes } = useContext(AppContext)
+    const { userDetailes, posts, setPosts, setUserPosts } = useContext(AppContext)
+    const navigate = useNavigate();
+    const {i}=state;
+
 
     useEffect(() => {
         //fech next id
@@ -27,7 +31,7 @@ function Comments() {
 
 
         //fech comments
-        fetch(`http://localhost:3000/comments?postId=${state.post.id}`)
+        fetch(`http://localhost:3000/comments?postId=${posts[i].id}`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -65,7 +69,7 @@ function Comments() {
     function addingComment(event) {
         event.preventDefault();
         const { name, body } = event.target
-        const newComment = { postId: state.post.id, id: `${nextId}`, name: name.value, email: userDetails.email, body: body.value }
+        const newComment = { postId: posts[i].id, id: `${nextId}`, name: name.value, email: userDetails.email, body: body.value }
         fetch('http://localhost:3000/comments', {
             method: 'POST',
             body: JSON.stringify(newComment),
@@ -124,7 +128,7 @@ function Comments() {
     }
 
     return (<>
-        <br /><br />
+        <img src={X} onClick={() => navigate("..",{state: { i }})} /><br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add comment</button>
         <br />
 

@@ -16,6 +16,7 @@ input {
   background-color: rgb(214, 239, 225);
   margin: 15px;
   width: 200px;
+  height:min-content;
 }
 
 
@@ -47,6 +48,8 @@ button:hover {
 img {
   margin: 0 20px;
   opacity: 0.5;
+  height: 25px;
+  width: 25px;
 }
 
 img:hover {

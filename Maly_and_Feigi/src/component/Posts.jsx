@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useLocation, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useContext, createContext } from "react";
+import { useLocation, NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
 import trash from "../icons/trash.png"
 // import edit from "../icons/edit.png"
 import arrowDown from "../icons/angle-small-down.png"
@@ -8,20 +8,21 @@ import SinglePost from "./SinglePost";
 import { AppContext } from "../App";
 
 
+
 function Posts() {
-    // const navigate = useNavigate();
-    const [userPosts, setUserPosts] = useState([]);
+    const navigate = useNavigate();
+    // const [userPosts, setUserPosts] = useState([]);
     const [showAdditionForm, setShowAdditionForm] = useState(false);
     // const [editables, setEditables] = useState([]);
-    const [posts, setPosts] = useState([]);
+    // const {  } = useContext(PostContext);
     // const [stringSearch, setStringSearch] = useState();
     const [nextId, setNextId] = useState();
     const [searchType, setSearchType] = useState();
-    const { userDetailes } = useContext(AppContext)
+    const { userDetailes, posts, setPosts, userPosts, setUserPosts } = useContext(AppContext)
 
     useEffect(() => {
         //fech next id
-        fetch("http://localhost:3000/nextIDs/2")
+        fetch("http://localhost:3000/nextIDs/3")
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -50,7 +51,7 @@ function Posts() {
 
     useEffect(() => {
         if (nextId != null)
-            fetch("http://localhost:3000/nextIDs/2", {
+            fetch("http://localhost:3000/nextIDs/3", {
                 method: "PATCH",
                 body: JSON.stringify({
                     "nextId": nextId
@@ -105,6 +106,7 @@ function Posts() {
     function changePostDetailsView(i, post) {
         setPosts(prev => [...prev.slice(0, i), { ...prev[i], postDetailsView: !prev[i].postDetailsView }, ...prev.slice(i + 1, prev.length)])
         // navigate(`./${post.id}`, {post:post,changeEditable:changeEditable,originalIndex:i})
+        navigate(`./${post.id}`)
     }
 
     function updatePost(event, originalIndex, i, id) {
@@ -183,26 +185,28 @@ function Posts() {
         {posts.length == 0 ? <h2>No posts found</h2>
             : posts.map((post, i) => {
                 return (post.id > -1 ?
-                    <form
-                        style={post.postDetailsView ? { backgroundColor: "rgb(180, 229, 201)", borderRadius: 10, padding: 20, margin: 20 } : {}}
-                        key={i} onSubmit={(event) => updatePost(event, post.originalIndex, i, post.id)}>
+                    <div key={i}>
+                        <form onClick={() => navigate(`./${post.id}`, { state: { i } })}
+                            style={post.postDetailsView ? { backgroundColor: "rgb(180, 229, 201)", borderRadius: 10, padding: 20, margin: 20 } : {}}
+                            key={i} >
+                            <span style={{ marginRight: 10 }}>{post.id}: </span>
+                            <span>{post.title} </span>
 
-                        {!post.postDetailsView && <span style={{ marginRight: 10 }}>{post.id}: </span>}
-                        {!post.postDetailsView && <span>{post.title} </span>}
-                        {/* {post.postDetailsView && <Outlet />} */}
-                        {post.postDetailsView && <SinglePost post={post} i={i} changeEditable={changeEditable} />}
-                        <img onClick={() => deletePost(post.originalIndex, i, post.id)} src={trash} />
-                        {!post.postDetailsView && <img src={arrowDown} onClick={() => changePostDetailsView(i, post)} />}
-                        {post.postDetailsView && <img src={arrowUp} onClick={() => changePostDetailsView(i, post)} />}
-                        <br /><br />
-                        {post.editable && post.postDetailsView && <button type="submit" >update</button>}
-                    </form> : <h2>No posts found</h2>
+                            {/* {post.postDetailsView && <SinglePost post={post} i={i} changeEditable={changeEditable} />} */}
+                            {/* <Link to={`./${post.id}`} state={{post,changeEditable,i}}><img src={arrowDown} /></Link> */}
+                            {/* <Link to={`./${post.id}`} state={{ post, i }}><img src={arrowDown} /></Link> */}
+                            {/* <img src={arrowDown} onClick={()=>navigate(`./${post.id}` ,{state:{ post, i }})} /> */}
+                            {/* <Outlet />                         */}
+                            <br /><br />
+                        </form> <img onClick={() => deletePost(post.originalIndex, i, post.id)} src={trash} />
+                    </div>
+                    : <h2>No posts found</h2>
                 )
             })}
     </>);
 }
-// post.postDetailsView ?
 export default Posts;
+// post.postDetailsView ?
 
 
 // {post.editable ?
@@ -215,3 +219,21 @@ export default Posts;
 // <img src={arrow} onClick={() => changePostDetailsView(i)} />
 
 // {post.editable && <button type="submit" >update</button>}
+
+
+
+
+// {/* <form
+// style={post.postDetailsView ? { backgroundColor: "rgb(180, 229, 201)", borderRadius: 10, padding: 20, margin: 20 } : {}}
+// key={i} onSubmit={(event) => updatePost(event, post.originalIndex, i, post.id)}>
+
+// {!post.postDetailsView && <span style={{ marginRight: 10 }}>{post.id}: </span>}
+// {!post.postDetailsView && <span>{post.title} </span>}
+// {post.postDetailsView && <Outlet />}
+// {/* {post.postDetailsView && <SinglePost post={post} i={i} changeEditable={changeEditable} />} */}
+// <img onClick={() => deletePost(post.originalIndex, i, post.id)} src={trash} />
+// {!post.postDetailsView && <img src={arrowDown} onClick={() => changePostDetailsView(i, post)} />}
+// {post.postDetailsView && <img src={arrowUp} onClick={() => changePostDetailsView(i, post)} />}
+// <br /><br />
+// {post.editable && post.postDetailsView && <button type="submit" >update</button>}
+// </form> : <h2>No posts found</h2> */}
