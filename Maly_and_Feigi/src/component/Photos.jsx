@@ -19,7 +19,7 @@ function Photos() {
 
     useEffect(() => {
         //fech next id
-        fetch("http://localhost:3000/nextIDs/4")
+        fetch("http://localhost:3000/nextIDs/6")
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -48,7 +48,7 @@ function Photos() {
 
     useEffect(() => {
         if (nextId != null)
-            fetch("http://localhost:3000/nextIDs/4", {
+            fetch("http://localhost:3000/nextIDs/6", {
                 method: "PATCH",
                 body: JSON.stringify({
                     "nextId": nextId
