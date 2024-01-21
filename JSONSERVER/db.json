@@ -18,8 +18,7 @@
     {
       "id": "4",
       "type": "comment",
-<<<<<<< HEAD
-      "nextId": 501
+      "nextId": 503
     },
     {
       "id": "5",
@@ -30,9 +29,6 @@
       "id": "6",
       "type": "photos",
       "nextId": 5001
-=======
-      "nextId": 503
->>>>>>> 7f10e62455ae7f316084ab62b3acfab3332457d0
     }
   ],
   "users": [
