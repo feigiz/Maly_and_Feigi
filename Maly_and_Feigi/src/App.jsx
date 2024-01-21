@@ -15,13 +15,13 @@ import SinglePost from './component/SinglePost'; import Comments from './compone
 export const AppContext = createContext();
 
 function App() {
-  const [userDetailes, setUserDetails] = useState();
+  const [userDetails, setUserDetails] = useState();
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
 
   return (
     <div className='App'>
-      <AppContext.Provider value={{ userDetailes, setUserDetails, posts, setPosts, userPosts, setUserPosts }}>
+      <AppContext.Provider value={{ userDetails, setUserDetails, posts, setPosts, userPosts, setUserPosts }}>
         <Router>
           <Routes>
             <Route path="/" element={<Header />} >

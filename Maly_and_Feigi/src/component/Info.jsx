@@ -16,9 +16,9 @@ import { AppContext } from "../App";
 // }
 
 function Info() {
-    const {userDetailes} =useContext(AppContext)
+    const {userDetails} =useContext(AppContext)
    
-    // const userDetailes = useLocation();
+    // const userDetails = useLocation();
     const print = (myObject) => {
         return Object.keys(myObject).map((key) => (typeof myObject[key] === 'object' ?
             <div key={key} ><br /><p><ins><strong>{key + ":"}</strong></ins></p> {print(myObject[key])}</div> :
@@ -28,31 +28,31 @@ function Info() {
     return (<>
     <br /><br />
         <div>
-            {print(userDetailes)}
+            {print(userDetails)}
         </div>
 
 
         {/* map */}
         {/* <h1>information</h1>
-        <p><b>name:</b> {userDetailes.state.name}</p>
-        <p><b>user name:</b> {userDetailes.state.username}</p>
-        <p><b>email:</b> {userDetailes.state.email}</p>
-        <p><b>phone:</b> {userDetailes.state.phone}</p>
-        <p><b>website:</b> {userDetailes.state.website}</p>
+        <p><b>name:</b> {userDetails.state.name}</p>
+        <p><b>user name:</b> {userDetails.state.username}</p>
+        <p><b>email:</b> {userDetails.state.email}</p>
+        <p><b>phone:</b> {userDetails.state.phone}</p>
+        <p><b>website:</b> {userDetails.state.website}</p>
         <br />
         <h4>address</h4>
-        <p><b>city:</b> {userDetailes.state.address.city}</p>
-        <p><b>street:</b> {userDetailes.state.address.street}</p>
-        <p><b>suite:</b> {userDetailes.state.address.suite}</p>
-        <p><b>zipcode:</b> {userDetailes.state.address.zipcode}</p>
+        <p><b>city:</b> {userDetails.state.address.city}</p>
+        <p><b>street:</b> {userDetails.state.address.street}</p>
+        <p><b>suite:</b> {userDetails.state.address.suite}</p>
+        <p><b>zipcode:</b> {userDetails.state.address.zipcode}</p>
         <h4>geo</h4>
-        <p><b>lat:</b> {userDetailes.state.address.geo.lat}</p>
-        <p><b>lng:</b> {userDetailes.state.address.geo.lng}</p>
+        <p><b>lat:</b> {userDetails.state.address.geo.lat}</p>
+        <p><b>lng:</b> {userDetails.state.address.geo.lng}</p>
         <br />
         <h4>company</h4>
-        <p><b>name:</b> {userDetailes.state.company.name}</p>
-        <p><b>catch phrase:</b> {userDetailes.state.company.catchPhrase}</p>
-        <p><b>bs:</b> {userDetailes.state.company.bs}</p> */}
+        <p><b>name:</b> {userDetails.state.company.name}</p>
+        <p><b>catch phrase:</b> {userDetails.state.company.catchPhrase}</p>
+        <p><b>bs:</b> {userDetails.state.company.bs}</p> */}
     </>);
 }
 
