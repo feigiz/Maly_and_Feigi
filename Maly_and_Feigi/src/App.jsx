@@ -18,7 +18,10 @@ import Photos from './component/Photos';
 export const AppContext = createContext();
 
 function App() {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7f10e62455ae7f316084ab62b3acfab3332457d0
   const [userDetails, setUserDetails] = useState();
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
@@ -27,7 +30,11 @@ function App() {
 
   return (
     <div className='App'>
+<<<<<<< HEAD
       <AppContext.Provider value={{ userDetails, setUserDetails, posts, setPosts, userPosts, setUserPosts, albums, setAlbums, userAlbums, setUserAlbums }}>
+=======
+      <AppContext.Provider value={{ userDetails, setUserDetails, posts, setPosts, userPosts, setUserPosts }}>
+>>>>>>> 7f10e62455ae7f316084ab62b3acfab3332457d0
         <Router>
           <Routes>
             <Route path="/" element={<Header />} >

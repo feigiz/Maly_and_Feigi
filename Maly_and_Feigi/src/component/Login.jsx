@@ -5,7 +5,7 @@ import { AppContext } from "../App";
 
 
 function Login() {
-    const { userDetailes, setUserDetails } = useContext(AppContext)
+    const { userDetails, setUserDetails } = useContext(AppContext)
 
     const navigate = useNavigate();
 

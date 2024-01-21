@@ -10,7 +10,7 @@ function SinglePost() {
     //     <Link to="./comments" state={3}>show comments</Link>
     //     <Outlet />
     // </>)
-    const { userDetailes, posts, setPosts, setUserPosts } = useContext(AppContext)
+    const { userDetails, posts, setPosts, setUserPosts } = useContext(AppContext)
     const navigate = useNavigate();
     const { state } = useLocation();
     const [isEditable, setIsEditable] = useState(false)

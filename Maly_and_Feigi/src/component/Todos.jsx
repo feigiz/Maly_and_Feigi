@@ -66,7 +66,7 @@ function Todos() {
 
     function addingTask(event) {
         event.preventDefault();
-        const newTask = { userId: userDetailes.id, id: `${nextId}`, title: event.target[0].value, completed: false }
+        const newTask = { userId: userDetails.id, id: `${nextId}`, title: event.target[0].value, completed: false }
         fetch('http://localhost:3000/todos', {
             method: 'POST',
             body: JSON.stringify(newTask),

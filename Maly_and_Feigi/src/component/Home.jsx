@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { AppContext } from "../App";
 function Home() {
-    const { userDetailes, setUserDetails } = useContext(AppContext)
+    const { userDetails, setUserDetails } = useContext(AppContext)
     // setUserDetails(JSON.parse(localStorage.getItem('currentUser')))
-    // const userDetailes = JSON.parse(localStorage.getItem('currentUser'));
+    // const userDetails = JSON.parse(localStorage.getItem('currentUser'));
     const navigate = useNavigate();
     function logout() {
         localStorage.clear()
@@ -12,11 +12,11 @@ function Home() {
         navigate("/")
     }
 
-    if (userDetailes === undefined)
+    if (userDetails === undefined)
         setUserDetails(JSON.parse(localStorage.getItem('currentUser')))
 
     return (<>
-        <h1>welcome {userDetailes.name}</h1>
+        <h1>welcome {userDetails.name}</h1>
         <Link to="./info" >Info</Link>
         <Link to="./todos" >Todos</Link>
         <Link to="./posts" >Posts</Link>

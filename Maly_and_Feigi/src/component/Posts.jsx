@@ -18,7 +18,7 @@ function Posts() {
     // const [stringSearch, setStringSearch] = useState();
     const [nextId, setNextId] = useState();
     const [searchType, setSearchType] = useState();
-    const { userDetailes, posts, setPosts, userPosts, setUserPosts } = useContext(AppContext)
+    const { userDetails, posts, setPosts, userPosts, setUserPosts } = useContext(AppContext)
 
     useEffect(() => {
         //fech next id
@@ -33,7 +33,7 @@ function Posts() {
             }).catch(ex => alert(ex))
 
         //fech posts
-        fetch(`http://localhost:3000/posts?userId=${userDetailes.id}`)
+        fetch(`http://localhost:3000/posts?userId=${userDetails.id}`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -67,7 +67,7 @@ function Posts() {
     function addingPost(event) {
         event.preventDefault();
         const { title, body } = event.target;
-        const newPost = { userId: userDetailes.id, id: `${nextId}`, title: title.value, body: body.value }
+        const newPost = { userId: userDetails.id, id: `${nextId}`, title: title.value, body: body.value }
         fetch('http://localhost:3000/posts', {
             method: 'POST',
             body: JSON.stringify(newPost),
