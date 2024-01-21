@@ -10,18 +10,24 @@ import Albums from './component/Albums';
 import Info from './component/Info';
 import Posts from './component/Posts';
 import Todos from './component/Todos';
-import SinglePost from './component/SinglePost'; import Comments from './component/Comments';
+import SinglePost from './component/SinglePost'; 
+import Comments from './component/Comments';
+import SingleAlbum from './component/SingleAlbum';
+import Photos from './component/Photos';
 
 export const AppContext = createContext();
 
 function App() {
-  const [userDetailes, setUserDetails] = useState();
+
+  const [userDetails, setUserDetails] = useState();
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
+  const [albums, setAlbums] = useState([]);
+  const [userAlbums, setUserAlbums] = useState([]);
 
   return (
     <div className='App'>
-      <AppContext.Provider value={{ userDetailes, setUserDetails, posts, setPosts, userPosts, setUserPosts }}>
+      <AppContext.Provider value={{ userDetails, setUserDetails, posts, setPosts, userPosts, setUserPosts, albums, setAlbums, userAlbums, setUserAlbums }}>
         <Router>
           <Routes>
             <Route path="/" element={<Header />} >
@@ -37,7 +43,12 @@ function App() {
                   <Route path="comments" element={<Comments />} />
                 </Route>
               </Route>
-              <Route path="albums" element={<Albums />} />
+              <Route path="albums" >
+                <Route index element={<Albums />} />
+                <Route path=":id" element={<SingleAlbum />}>
+                  <Route path="comments" element={<Photos />} />
+                </Route>
+              </Route>
             </Route>
           </Routes>
         </Router>

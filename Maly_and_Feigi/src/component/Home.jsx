@@ -15,7 +15,6 @@ function Home() {
     if (userDetailes === undefined)
         setUserDetails(JSON.parse(localStorage.getItem('currentUser')))
 
-
     return (<>
         <h1>welcome {userDetailes.name}</h1>
         <Link to="./info" >Info</Link>
