@@ -13,7 +13,6 @@ import Todos from './component/Todos';
 import SinglePost from './component/SinglePost';
 import Comments from './component/Comments';
 import SingleAlbum from './component/SingleAlbum';
-import Photos from './component/Photos';
 
 export const AppContext = createContext();
 
@@ -44,7 +43,9 @@ function App() {
               </Route>
               <Route path="albums" >
                 <Route index element={<Albums />} />
-                <Route path=":id/photos" element={<SingleAlbum />} />
+                <Route path=":id">
+                  <Route path="photos" element={<SingleAlbum />} />
+                </Route>
               </Route>
             </Route>
           </Routes>

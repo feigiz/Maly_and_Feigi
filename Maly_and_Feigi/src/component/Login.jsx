@@ -5,9 +5,13 @@ import { AppContext } from "../App";
 
 
 function Login() {
-    const { userDetails, setUserDetails } = useContext(AppContext)
+    const { setUserDetails } = useContext(AppContext)
 
     const navigate = useNavigate();
+    const {
+        register,
+        handleSubmit,
+    } = useForm();
 
     useEffect(() => {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'))
@@ -17,23 +21,7 @@ function Login() {
         }
     }, [])
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm();
-
-    // const onSubmit = (event) => {
-    //     event.preventDefault();
-    //     const { name, password } = event.target;
-    //     checkUser(name.value, password.value);
-    // };
-
-    // function onSubmit(event) {
-    //     event.preventDefault();
-    //     const { name, password } = event.target;
-    //     checkUser(name.value, password.value);
-    // }
+    
 
     async function checkUser(name, password) {
         try {
@@ -52,16 +40,6 @@ function Login() {
         } catch (ex) { alert(ex) }
     }
 
-
-    // return (<>
-    //     <form onSubmit={onSubmit}>
-    //         <label htmlFor='name' >user name</label>
-    //         <input name='name' type='text' required></input>
-    //         <label htmlFor='password' >password</label>
-    //         <input name='password' type='password' required></input>
-    //         <button type='submit'>enter</button>
-    //     </form>
-    // </>)
     return (<>
         <form onSubmit={handleSubmit((data => checkUser(data.name, data.password)))}>
             <label htmlFor='name' >user name</label>

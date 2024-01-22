@@ -1,9 +1,5 @@
-import React, { useEffect, useState, useContext, createContext } from "react";
-import { useLocation, NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
-import trash from "../icons/trash.png"
-import arrowDown from "../icons/angle-small-down.png"
-import arrowUp from "../icons/angle-small-up.png"
-import SingleAlbum from "./SingleAlbum";
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate, } from 'react-router-dom';
 import { AppContext } from "../App";
 
 function Albums() {
@@ -52,9 +48,11 @@ function Albums() {
                 headers: {
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => response.json())
-                .then((json) => console.log(json));
+            }).then(response => {
+                if (!response.ok)
+                    throw 'Error' + response.status + ': ' + response.statusText;
+                return response.json();
+            }).catch(ex => alert(ex))
     }, [nextId])
 
     function addingAlbum(event) {
@@ -62,7 +60,7 @@ function Albums() {
         const { title } = event.target;
         const newAlbum = { userId: userDetails.id, id: `${nextId}`, title: title.value }
         fetch('http://localhost:3000/albums', {
-            method: 'Album',
+            method: 'POST',
             body: JSON.stringify(newAlbum),
             headers: { 'Content-type': 'application/json; charset=UTF-8' },
         }).then(response => {
@@ -81,12 +79,12 @@ function Albums() {
         let foundIndex;
         switch (event.target.name) {
             case "id":
-                foundIndex = userAlbums.findIndex( a =>  a != null &&  a.id == event.target.value)
+                foundIndex = userAlbums.findIndex(a => a != null && a.id == event.target.value)
                 setAlbums([{ ...userAlbums[foundIndex], originalIndex: foundIndex }])
                 break;
             case "title":
-                foundsArr = userAlbums.map(( a, i) => { if ( a != null &&  a.title.includes(event.target.value)) return { ... a, originalIndex: i } })
-                setAlbums(foundsArr.filter( a =>  a != null))
+                foundsArr = userAlbums.map((a, i) => { if (a != null && a.title.includes(event.target.value)) return { ...a, originalIndex: i } })
+                setAlbums(foundsArr.filter(a => a != null))
                 break;
         }
     }
@@ -94,7 +92,7 @@ function Albums() {
     function search(event) {
         let foundsArr;
         if (event.target.value == "all") {
-            foundsArr = userAlbums.map(( a, i) => { if ( a != null) return { ... a, originalIndex: i } })
+            foundsArr = userAlbums.map((a, i) => { if (a != null) return { ...a, originalIndex: i } })
             setAlbums(foundsArr.filter(a => a != null));
             setSearchType();
         }
@@ -131,11 +129,6 @@ function Albums() {
                         <form onClick={() => navigate(`./${album.id}/photos`, { state: { i } })} key={i} >
                             <span style={{ marginRight: 10 }}>{album.id}: </span>
                             <span>{album.title} </span>
-                            {/* {album.albumDetailsView && <Singlealbum album={album} i={i} changeEditable={changeEditable} />} */}
-                            {/* <Link to={`./${album.id}`} state={{album,changeEditable,i}}><img src={arrowDown} /></Link> */}
-                            {/* <Link to={`./${album.id}`} state={{ album, i }}><img src={arrowDown} /></Link> */}
-                            {/* <img src={arrowDown} onClick={()=>navigate(`./${album.id}` ,{state:{ album, i }})} /> */}
-                            {/* <Outlet />*/}
                             <br /><br />
                         </form>
                     </div>
@@ -147,7 +140,11 @@ function Albums() {
 export default Albums;
 // album.albumDetailsView ?
 
-
+{/* {album.albumDetailsView && <Singlealbum album={album} i={i} changeEditable={changeEditable} />} */ }
+{/* <Link to={`./${album.id}`} state={{album,changeEditable,i}}><img src={arrowDown} /></Link> */ }
+{/* <Link to={`./${album.id}`} state={{ album, i }}><img src={arrowDown} /></Link> */ }
+{/* <img src={arrowDown} onClick={()=>navigate(`./${album.id}` ,{state:{ album, i }})} /> */ }
+{/* <Outlet />*/ }
 // {album.editable ?
 //     <input name="title" type="text" defaultValue={album.title} style={{ width: 300 }} />
 //     : <span>{album.title} </span>}

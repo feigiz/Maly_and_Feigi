@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom';
 import trash from "../icons/trash.png"
 import edit from "../icons/edit.png"
 import { useContext } from "react";
 import { AppContext } from "../App";
+import { useForm } from "react-hook-form";
 
 function Todos() {
     //מלי רוצה לחלק לקומפוננטות
-    //לקצר את הפונקציה בסינאפ
     //לקצר מערך טודו קטן
     // IהI פייגי רוצה לסדר את עניני    
-    // const { state } = useLocation();
+
+    //לסדר את עניני הפונקציות החוזרות 
+    // STATE לבדוק אם אפשר לשלוח פוקציות ב 
+    const { userDetails } = useContext(AppContext)
     const [userTodos, setUserTodos] = useState([]);
     const [showAdditionForm, setShowAdditionForm] = useState(false);
-    // const [editables, setEditables] = useState([]);
     const [todos, setTodos] = useState([]);
-    // const [stringSearch, setStringSearch] = useState();
     const [nextId, setNextId] = useState();
     const [searchType, setSearchType] = useState();
-    const { userDetailes } = useContext(AppContext)
+    const { register, handleSubmit, } = useForm()
 
     useEffect(() => {
         //fech next id
@@ -33,7 +33,7 @@ function Todos() {
             }).catch(ex => alert(ex))
 
         //fech todos
-        fetch(`http://localhost:3000/todos?userId=${userDetailes.id}`)
+        fetch(`http://localhost:3000/todos?userId=${userDetails.id}`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -59,12 +59,14 @@ function Todos() {
                 headers: {
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => response.json())
-                .then((json) => console.log(json));
+            }).then(response => {
+                if (!response.ok)
+                    throw 'Error' + response.status + ': ' + response.statusText;
+                return response.json();
+            }).catch(ex => alert(ex))
     }, [nextId])
 
-    function addingTask(event) {
+    function addingTodo(event) {
         event.preventDefault();
         const newTask = { userId: userDetails.id, id: `${nextId}`, title: event.target[0].value, completed: false }
         fetch('http://localhost:3000/todos', {
@@ -82,7 +84,7 @@ function Todos() {
         }).catch((ex) => alert(ex));
     }
 
-    function deleteTask(userIndex, i, id) {
+    function deleteTodo(userIndex, i, id) {
         if (confirm('Are you sure you want to delete this todo from the database?')) {
             fetch(`http://localhost:3000/todos/${id}`, {
                 method: 'DELETE'
@@ -122,18 +124,12 @@ function Todos() {
         console.log(userTodos)
     }
 
-    function updateTask(event, userIndex, i, id) {
-        event.preventDefault()
-        const { title, completed } = event.target;
-        console.log(completed.checked)
-
+    function updateTask(data, userIndex, i, id) {
+        const { title, completed } = data;
 
         fetch(`http://localhost:3000/todos/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify({
-                title: title.value,
-                completed: completed.checked
-            }),
+            body: JSON.stringify({ title: title, completed: completed }),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
@@ -141,8 +137,8 @@ function Todos() {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
-            setUserTodos(prev => [...prev.slice(0, userIndex), { ...prev[userIndex], title: title.value, completed: completed.value }, ...prev.slice(userIndex + 1, prev.length)])
-            setTodos(prev => [...prev.slice(0, i), { ...prev[i], title: title.value, completed: completed.value }, ...prev.slice(i + 1, prev.length)])
+            setUserTodos(prev => [...prev.slice(0, userIndex), { ...prev[userIndex], title: title, completed: completed }, ...prev.slice(userIndex + 1, prev.length)])
+            setTodos(prev => [...prev.slice(0, i), { ...prev[i], title: title, completed: completed }, ...prev.slice(i + 1, prev.length)])
             changeEditable(i)
         }).catch((ex) => alert(ex));
     }
@@ -184,7 +180,7 @@ function Todos() {
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add task</button>
         <br />
 
-        {showAdditionForm && <form onSubmit={addingTask}>
+        {showAdditionForm && <form onSubmit={addingTodo}>
             <label htmlFor='title' >task title</label>
             <input name='title' type='text' required></input>
             <button type="submit">Add</button>
@@ -221,15 +217,15 @@ function Todos() {
         {todos.length == 0 ? <h2>No todos found</h2>
             : todos.map((todo, i) => {
                 return (todo.id > -1 ?
-                    <form key={i} onSubmit={(event) => updateTask(event, todo.i, i, todo.id)}>
+                    <form key={i} onSubmit={handleSubmit((data) => updateTask(data, todo.i, i, todo.id))}>
                         <span style={{ marginRight: 10 }}>{todo.id}: </span>
                         {todo.editable ? <>
-                            <input name="title" type="text" defaultValue={todo.title} style={{ width: 300 }} />
-                            <input name="completed" type="checkbox" defaultChecked={todo.completed} /></>
+                            <input name="title" type="text" defaultValue={todo.title} style={{ width: 300 }}  {...register('title')} />
+                            <input name="completed" type="checkbox" defaultChecked={todo.completed}  {...register('completed')} /></>
                             : <><span>{todo.title} </span>
                                 <input name="completed" type="checkbox" disabled={true} checked={todo.completed} /></>}
                         <img src={edit} onClick={() => changeEditable(i)} />
-                        <img onClick={() => deleteTask(todo.i, i, todo.id)} src={trash} />
+                        <img onClick={() => deleteTodo(todo.i, i, todo.id)} src={trash} />
                         {todo.editable && <button type="submit" >update</button>}
                         <br /><br />
                     </form> : <h2>No todos found</h2>)

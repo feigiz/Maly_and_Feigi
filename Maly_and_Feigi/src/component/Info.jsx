@@ -1,5 +1,4 @@
-import React,{useContext} from "react";
-import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import React, { useContext } from "react";
 import { AppContext } from "../App";
 
 
@@ -16,8 +15,8 @@ import { AppContext } from "../App";
 // }
 
 function Info() {
-    const {userDetails} =useContext(AppContext)
-   
+    const { userDetails } = useContext(AppContext)
+
     // const userDetails = useLocation();
     const print = (myObject) => {
         return Object.keys(myObject).map((key) => (typeof myObject[key] === 'object' ?
@@ -26,7 +25,7 @@ function Info() {
     }
 
     return (<>
-    <br /><br />
+        <br /><br />
         <div>
             {print(userDetails)}
         </div>

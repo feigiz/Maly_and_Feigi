@@ -1,12 +1,8 @@
-import React, { useEffect, useState, useContext, createContext } from "react";
-import { useLocation, NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
 import trash from "../icons/trash.png"
-// import edit from "../icons/edit.png"
-import arrowDown from "../icons/angle-small-down.png"
-import arrowUp from "../icons/angle-small-up.png"
-import SinglePost from "./SinglePost";
 import { AppContext } from "../App";
-
+import { useForm } from "react-hook-form";
 
 
 function Posts() {
@@ -19,7 +15,7 @@ function Posts() {
     const [nextId, setNextId] = useState();
     const [searchType, setSearchType] = useState();
     const { userDetails, posts, setPosts, userPosts, setUserPosts } = useContext(AppContext)
-
+    const { register, handleSubmit, } = useForm()
     useEffect(() => {
         //fech next id
         fetch("http://localhost:3000/nextIDs/3")
@@ -44,7 +40,7 @@ function Posts() {
                 // setUserPosts(data.map(post => { return { ...post, editables: false } }));
                 let postsArr = []
                 for (let i = 0; i < data.length; i++)
-                    postsArr.push({ ...data[i], originalIndex: i})
+                    postsArr.push({ ...data[i], originalIndex: i })
                 setPosts(postsArr);
             }).catch(ex => alert(ex))
     }, [])
@@ -59,9 +55,11 @@ function Posts() {
                 headers: {
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => response.json())
-                .then((json) => console.log(json));
+            }).then(response => {
+                if (!response.ok)
+                    throw 'Error' + response.status + ': ' + response.statusText;
+                return response.json();
+            }).catch(ex => alert(ex))
     }, [nextId])
 
     function addingPost(event) {
@@ -77,7 +75,7 @@ function Posts() {
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
             setUserPosts(prev => [...prev, newPost])
-            setPosts(prev => [...prev, { ...newPost, originalIndex: userPosts.length}])
+            setPosts(prev => [...prev, { ...newPost, originalIndex: userPosts.length }])
             setShowAdditionForm(false)
             setNextId(prev => prev + 1)
         }).catch((ex) => alert(ex));
@@ -105,10 +103,10 @@ function Posts() {
         switch (event.target.name) {
             case "id":
                 foundIndex = userPosts.findIndex(p => p != null && p.id == event.target.value)
-                setPosts([{ ...userPosts[foundIndex], originalIndex: foundIndex}])
+                setPosts([{ ...userPosts[foundIndex], originalIndex: foundIndex }])
                 break;
             case "title":
-                foundsArr = userPosts.map((p, i) => { if (p != null && p.title.includes(event.target.value)) return { ...p, originalIndex: i,} })
+                foundsArr = userPosts.map((p, i) => { if (p != null && p.title.includes(event.target.value)) return { ...p, originalIndex: i, } })
                 setPosts(foundsArr.filter(p => p != null))
                 break;
         }
@@ -117,7 +115,7 @@ function Posts() {
     function search(event) {
         let foundsArr;
         if (event.target.value == "all") {
-            foundsArr = userPosts.map((p, i) => { if (p != null) return { ...p, originalIndex: i} })
+            foundsArr = userPosts.map((p, i) => { if (p != null) return { ...p, originalIndex: i } })
             setPosts(foundsArr.filter(p => p != null));
             setSearchType();
         }
@@ -153,18 +151,19 @@ function Posts() {
             : posts.map((post, i) => {
                 return (post.id > -1 ?
                     <div key={i}>
-                        <form onClick={() => navigate(`./${post.id}`, { state: { i } })}
+                        <div onClick={() => navigate(`./${post.id}`, { state: { i } })}
                             key={i} >
                             <span style={{ marginRight: 10 }}>{post.id}: </span>
                             <span>{post.title} </span>
                             <br /><br />
-                        </form> <img onClick={() => deletePost(post.originalIndex, i, post.id)} src={trash} />
+                        </div> <img onClick={() => deletePost(post.originalIndex, i, post.id)} src={trash} />
                     </div>
                     : <h2>No posts found</h2>
                 )
             })}
     </>);
 }
+
 export default Posts;
 // post.postDetailsView ?
 
