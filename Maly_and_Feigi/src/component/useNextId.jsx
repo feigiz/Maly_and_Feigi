@@ -10,11 +10,9 @@ export default function useNextId(id) {
                     throw 'Error' + response.status + ': ' + response.statusText;
                 return response.json();
             })
-            .then((json) => {
-                console.log("nextId")
-                console.log(json)
+            .then(json =>
                 setNextId(json.nextId)
-            }).catch(ex => alert(ex))
+            ).catch(ex => alert(ex))
     }, [])
 
     useEffect(() => {
@@ -31,9 +29,6 @@ export default function useNextId(id) {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
                 return response.json();
-            }).then((json) => {
-                console.log("setNextId")
-                console.log(json)
             }).catch(ex => alert(ex))
     }, [nextId])
 

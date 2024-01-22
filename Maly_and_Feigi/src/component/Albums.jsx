@@ -1,27 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, } from 'react-router-dom';
 import { AppContext } from "../App";
+import useNextId from "./useNextId";
 
 function Albums() {
     const navigate = useNavigate();
     const [showAdditionForm, setShowAdditionForm] = useState(false);
-    const [nextId, setNextId] = useState();
+    const [nextId, setNextId] = useNextId(5);
     const [searchType, setSearchType] = useState();
     const { userDetails, albums, setAlbums, userAlbums, setUserAlbums } = useContext(AppContext)
 
     useEffect(() => {
-        //fech next id
-        fetch("http://localhost:3000/nextIDs/5")
-            .then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            })
-            .then((json) => {
-                setNextId(json.nextId)
-            }).catch(ex => alert(ex))
-
-        //fech albums
         fetch(`http://localhost:3000/albums?userId=${userDetails.id}`)
             .then(response => {
                 if (!response.ok)
@@ -30,30 +19,12 @@ function Albums() {
             })
             .then(data => {
                 setUserAlbums(data);
-                // setUserAlbums(data.map(Album => { return { ...Album, editables: false } }));
                 let albumsArr = []
                 for (let i = 0; i < data.length; i++)
                     albumsArr.push({ ...data[i], originalIndex: i })
                 setAlbums(albumsArr);
             }).catch(ex => alert(ex))
     }, [])
-
-    useEffect(() => {
-        if (nextId != null)
-            fetch("http://localhost:3000/nextIDs/5", {
-                method: "PATCH",
-                body: JSON.stringify({
-                    "nextId": nextId
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            }).then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            }).catch(ex => alert(ex))
-    }, [nextId])
 
     function addingAlbum(event) {
         event.preventDefault();

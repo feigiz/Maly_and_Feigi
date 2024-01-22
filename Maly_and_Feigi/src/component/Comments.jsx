@@ -3,32 +3,20 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import trash from "../icons/trash.png"
 import edit from "../icons/edit.png"
 import { AppContext } from "../App";
-import X from "../icons/X.png"
+import useNextId from "./useNextId";
 
 
 function Comments() {
     const { state } = useLocation();
     const [showAdditionForm, setShowAdditionForm] = useState(false);
     const [comments, setComments] = useState([]);
-    const [nextId, setNextId] = useState();
+    const [nextId, setNextId] = useNextId(4);
     const { userDetails, posts } = useContext(AppContext)
     const navigate = useNavigate();
     const { i } = state;
 
 
     useEffect(() => {
-        //fech next id
-        fetch("http://localhost:3000/nextIDs/4")
-            .then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            })
-            .then((json) => {
-                setNextId(json.nextId)
-            }).catch(ex => alert(ex))
-
-        //fech comments
         fetch(`http://localhost:3000/comments?postId=${posts[i].id}`)
             .then(response => {
                 if (!response.ok)
@@ -42,23 +30,6 @@ function Comments() {
                 setComments(commentsArr);
             }).catch(ex => alert(ex))
     }, [])
-
-    useEffect(() => {
-        if (nextId != null)
-            fetch("http://localhost:3000/nextIDs/4", {
-                method: "PATCH",
-                body: JSON.stringify({
-                    "nextId": nextId
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            }).then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            }).catch(ex => alert(ex))
-    }, [nextId])
 
     function addingComment(event) {
         event.preventDefault();

@@ -34,19 +34,19 @@ function Home() {
                 <button onClick={logout}>Logout</button>
                 <br /><br />
                 <nav>
-        <NavLink to="./info"
-                style={({ isActive }) => isActive ? { backgroundColor:"rgb(224, 214, 239)" } : {}}>
-                Info</NavLink>
-        <NavLink to="./todos"
-                style={({ isActive }) => isActive ? { backgroundColor:"rgb(224, 214, 239)" } : {}}>
-                Todos</NavLink>
-        <NavLink to="./posts"
-                style={({ isActive }) => isActive ? { backgroundColor:"rgb(224, 214, 239)" } : {}}>
-                Posts</NavLink>
-        <NavLink to="./albums"
-                style={({ isActive }) => isActive ? { backgroundColor:"rgb(224, 214, 239)" } : {}}>
-                Albums</NavLink>
-        </nav>
+                        <NavLink to="./info"
+                                style={({ isActive }) => isActive ? { backgroundColor: "rgb(224, 214, 239)" } : {}}>
+                                Info</NavLink>
+                        <NavLink to="./todos"
+                                style={({ isActive }) => isActive ? { backgroundColor: "rgb(224, 214, 239)" } : {}}>
+                                Todos</NavLink>
+                        <NavLink to="./posts"
+                                style={({ isActive }) => isActive ? { backgroundColor: "rgb(224, 214, 239)" } : {}}>
+                                Posts</NavLink>
+                        <NavLink to="./albums"
+                                style={({ isActive }) => isActive ? { backgroundColor: "rgb(224, 214, 239)" } : {}}>
+                                Albums</NavLink>
+                </nav>
                 {/* <nav>
                         <NavLink to="./info">Info</NavLink>
                         <NavLink to="./todos">Todos</NavLink>

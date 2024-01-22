@@ -4,40 +4,27 @@ import trash from "../icons/trash.png"
 import edit from "../icons/edit.png"
 import { AppContext } from "../App";
 import { useForm } from "react-hook-form";
+import useNextId from "./useNextId";
 
 function Photos() {
     const { state } = useLocation();
     const [showAdditionForm, setShowAdditionForm] = useState(false);
     const [photos, setPhotos] = useState([]);
-    const [nextId, setNextId] = useState();
+    const [nextId, setNextId] = useNextId(6);
     const { userDetails, albums, setAlbums, setUserAlbums } = useContext(AppContext)
     const navigate = useNavigate();
     const [showBtnMore, setShowBtnMore] = useState(true)
     const { i } = state;
     const { register, handleSubmit, } = useForm();
-    const allPhotos=useRef(null)
+    const allPhotos = useRef(null)
 
     let scrolling = false;
 
-window.scroll = () => {
-    scrolling = true;
-};
-
-
+    window.scroll = () => {
+        scrolling = true;
+    };
 
     useEffect(() => {
-        //fech next id
-        fetch("http://localhost:3000/nextIDs/6")
-            .then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            })
-            .then((json) => {
-                setNextId(json.nextId)
-            }).catch(ex => alert(ex))
-
-
         //fech Photos
         fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_limit=12`)
             .then(response => {
@@ -52,23 +39,6 @@ window.scroll = () => {
                 setPhotos(photosArr);
             }).catch(ex => alert(ex))
     }, [])
-
-    useEffect(() => {
-        if (nextId != null)
-            fetch("http://localhost:3000/nextIDs/6", {
-                method: "PATCH",
-                body: JSON.stringify({
-                    "nextId": nextId
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            }).then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            }).catch(ex => alert(ex))
-    }, [nextId])
 
     function addPhotos() {
         const length = photos.length
@@ -95,7 +65,7 @@ window.scroll = () => {
         const { title, url, thumbnailUrl } = event.target
         const newPhoto = { albumId: albums[i].id, id: `${nextId}`, title: title.value, url: url.value, thumbnailUrl: thumbnailUrl.value }
         fetch('http://localhost:3000/photos', {
-            method: 'Album',
+            method: 'POST',
             body: JSON.stringify(newPhoto),
             headers: { 'Content-type': 'application/json; charset=UTF-8' },
         }).then(response => {
@@ -144,21 +114,21 @@ window.scroll = () => {
             changeEditable(i)
         }).catch((ex) => alert(ex));
     }
-        // setInterval(() => {
-        //     console.log("a")
-     
-        // },300);
+    // setInterval(() => {
+    //     console.log("a")
+
+    // },300);
     function scrolled() {
         console.log("a")
 
-       if (scrolling) {
-                scrolling = false;
-                // place the scroll handling logic here
-            }
-        if (allPhotos.current.offsetHeight + allPhotos.current.scrollTop >= allPhotos.current.scrollHeight) {
-          addPhotos();
+        if (scrolling) {
+            scrolling = false;
+            // place the scroll handling logic here
         }
-      }
+        if (allPhotos.current.offsetHeight + allPhotos.current.scrollTop >= allPhotos.current.scrollHeight) {
+            addPhotos();
+        }
+    }
 
     return (<>
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add photo</button>
@@ -173,7 +143,7 @@ window.scroll = () => {
             <input name='thumbnailUrl' type='text' required></input>
             <button type="submit">Add</button>
         </form>}
-        
+
 
         <br />
         <h2> <ins>photos list</ins></h2>
@@ -213,9 +183,9 @@ export default Photos;
 
 
 //קטן שווה זה _lte   id_gte=0
-            //הפקודה בפץ תתן 10 ראשונים. נראה לי שהגדול והקטן לא עובדים אצלנו כי המספרים מחרוזות
-            //את יכולה להריץ את הפקודה בעוד 2 שורות ולראות 10 תמונות עם אי די מעל 10
-            //https://jsonplaceholder.typicode.com/photos?albumId=1&id_gte=10&_limit=10
+//הפקודה בפץ תתן 10 ראשונים. נראה לי שהגדול והקטן לא עובדים אצלנו כי המספרים מחרוזות
+//את יכולה להריץ את הפקודה בעוד 2 שורות ולראות 10 תמונות עם אי די מעל 10
+//https://jsonplaceholder.typicode.com/photos?albumId=1&id_gte=10&_limit=10
 
 
 

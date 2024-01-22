@@ -7,12 +7,15 @@ import { useForm } from "react-hook-form";
 import useNextId from "./useNextId";
 
 function Todos() {
+    
     //מלי רוצה לחלק לקומפוננטות
     //לקצר מערך טודו קטן
     // IהI פייגי רוצה לסדר את עניני    
 
     //לסדר את עניני הפונקציות החוזרות 
     // STATE לבדוק אם אפשר לשלוח פוקציות ב 
+
+    //להפוך את ההוספה גם ליוז פורם
     const { userDetails } = useContext(AppContext)
     const [userTodos, setUserTodos] = useState([]);
     const [showAdditionForm, setShowAdditionForm] = useState(false);
@@ -151,11 +154,11 @@ function Todos() {
 
     return (<>
         <br /><br />
-        <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add task</button>
+        <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add todo</button>
         <br />
 
         {showAdditionForm && <form onSubmit={addingTodo}>
-            <label htmlFor='title' >task title</label>
+            <label htmlFor='title' >todo title</label>
             <input name='title' type='text' required></input>
             <button type="submit">Add</button>
         </form>}

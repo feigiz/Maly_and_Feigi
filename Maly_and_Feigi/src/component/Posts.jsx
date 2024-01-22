@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import trash from "../icons/trash.png"
 import { AppContext } from "../App";
 import { useForm } from "react-hook-form";
-
+import useNextId from "./useNextId";
 
 function Posts() {
     const navigate = useNavigate();
@@ -12,23 +12,11 @@ function Posts() {
     // const [editables, setEditables] = useState([]);
     // const {  } = useContext(PostContext);
     // const [stringSearch, setStringSearch] = useState();
-    const [nextId, setNextId] = useState();
+    const [nextId, setNextId] = useNextId(3);
     const [searchType, setSearchType] = useState();
     const { userDetails, posts, setPosts, userPosts, setUserPosts } = useContext(AppContext)
     const { register, handleSubmit, } = useForm()
     useEffect(() => {
-        //fech next id
-        fetch("http://localhost:3000/nextIDs/3")
-            .then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            })
-            .then((json) => {
-                setNextId(json.nextId)
-            }).catch(ex => alert(ex))
-
-        //fech posts
         fetch(`http://localhost:3000/posts?userId=${userDetails.id}`)
             .then(response => {
                 if (!response.ok)
@@ -44,23 +32,6 @@ function Posts() {
                 setPosts(postsArr);
             }).catch(ex => alert(ex))
     }, [])
-
-    useEffect(() => {
-        if (nextId != null)
-            fetch("http://localhost:3000/nextIDs/3", {
-                method: "PATCH",
-                body: JSON.stringify({
-                    "nextId": nextId
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            }).then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            }).catch(ex => alert(ex))
-    }, [nextId])
 
     function addingPost(event) {
         event.preventDefault();
