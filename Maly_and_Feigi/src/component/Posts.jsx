@@ -146,22 +146,22 @@ function Posts() {
 
         {searchType ? <input type="text" name={searchType} onChange={event => searchPosts(event)} /> : <></>}
 
-        <h2><ins>posts list</ins></h2>
+        <h2><ins>posts list</ins></h2><div className="postsContainer" >
         {posts.length == 0 ? <h2>No posts found</h2>
             : posts.map((post, i) => {
                 return (post.id > -1 ?
-                    <div key={i}>
-                        <div onClick={() => navigate(`./${post.id}`, { state: { i } })}
-                            key={i} >
-                            <span style={{ marginRight: 10 }}>{post.id}: </span>
-                            <span>{post.title} </span>
-                            <br /><br />
-                        </div> <img onClick={() => deletePost(post.originalIndex, i, post.id)} src={trash} />
+                    <div className="post" key={i}>
+                        {/* <div key={i} > */}
+                        <span>{post.id}: </span>
+                        <span onClick={() => navigate(`./${post.id}`, { state: { i } })}>{post.title} </span>
+                        {/* <br /><br /> */}
+                        {/* </div> */}
+                        <img onClick={() => deletePost(post.originalIndex, i, post.id)} src={trash} />
                     </div>
                     : <h2>No posts found</h2>
                 )
             })}
-    </>);
+    </div></>);
 }
 
 export default Posts;
