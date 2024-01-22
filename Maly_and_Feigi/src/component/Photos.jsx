@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import trash from "../icons/trash.png"
 import edit from "../icons/edit.png"
@@ -14,7 +14,16 @@ function Photos() {
     const navigate = useNavigate();
     const [showBtnMore, setShowBtnMore] = useState(true)
     const { i } = state;
-    const { register, handleSubmit, } = useForm()
+    const { register, handleSubmit, } = useForm();
+    const allPhotos=useRef(null)
+
+    let scrolling = false;
+
+window.scroll = () => {
+    scrolling = true;
+};
+
+
 
     useEffect(() => {
         //fech next id
@@ -30,7 +39,7 @@ function Photos() {
 
 
         //fech Photos
-        fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_limit=10`)
+        fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_limit=12`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -63,7 +72,7 @@ function Photos() {
 
     function addPhotos() {
         const length = photos.length
-        fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_start=${length}&_end=${length + 10}`)
+        fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_start=${length}&_end=${length + 12}`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -135,6 +144,21 @@ function Photos() {
             changeEditable(i)
         }).catch((ex) => alert(ex));
     }
+        // setInterval(() => {
+        //     console.log("a")
+     
+        // },300);
+    function scrolled() {
+        console.log("a")
+
+       if (scrolling) {
+                scrolling = false;
+                // place the scroll handling logic here
+            }
+        if (allPhotos.current.offsetHeight + allPhotos.current.scrollTop >= allPhotos.current.scrollHeight) {
+          addPhotos();
+        }
+      }
 
     return (<>
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add photo</button>
@@ -149,14 +173,17 @@ function Photos() {
             <input name='thumbnailUrl' type='text' required></input>
             <button type="submit">Add</button>
         </form>}
+        
 
         <br />
         <h2> <ins>photos list</ins></h2>
-        {photos.length == 0 ? <h2>There are no photos</h2>
+        <div ref={allPhotos} onWheel={scrolled} className="allPhotos">{photos.length == 0 ? <h2>There are no photos</h2>
             : photos.map((photo, i) => {
                 return (
                     <form key={i} onSubmit={handleSubmit((data) => updatePhoto(data, i, photo.id))}>
                         <span style={{ marginRight: 10 }}>{photo.id}: </span>
+                        {<img src={edit} onClick={() => changeEditable(i)} />}
+                        <img onClick={() => deletePhoto(i, photo.id)} src={trash} />
                         {photo.editable ?
                             <>
                                 <input name="title" type="text" defaultValue={photo.title} style={{ width: 300 }} {...register('title')} />
@@ -165,18 +192,17 @@ function Photos() {
                                 <br />
                                 <input name="thumbnailUrl" type="url" defaultValue={photo.thumbnailUrl} {...register('thumbnailUrl')} />
                             </>
-                            : <>
+                            : <div className="photosContainer">
+                                {/* <br /> */}
+                                <img className="photos" src={photo.thumbnailUrl} />
                                 <span><b>title: </b> {photo.title} </span>
-                                <br />
-                                <img src={photo.thumbnailUrl} />
-                            </>}
-                        {<img src={edit} onClick={() => changeEditable(i)} />}
-                        <img onClick={() => deletePhoto(i, photo.id)} src={trash} />
+
+                            </div>}
                         {photo.editable && <button type="submit" >update</button>}
-                        <br /><br />
+                        {/* <br /><br /> */}
                     </form >)
-            })}
-        {showBtnMore && <button onClick={addPhotos}>more</button>}
+            })}</div>
+        {/* {showBtnMore && <button onClick={addPhotos}>more</button>} */}
     </>)
 
 }

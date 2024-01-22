@@ -119,7 +119,9 @@ function Comments() {
     }
 
     return (<>
-        <img src={X} onClick={() => navigate("..", { state: { i } })} /><br /><br />
+        <button onClick={() => navigate("..", { state: { i } })}>close</button>
+        <br /><br />
+        {/* <img src={X} onClick={() => navigate("..", { state: { i } })} /><br /><br /> */}
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add comment</button>
         <br />
 

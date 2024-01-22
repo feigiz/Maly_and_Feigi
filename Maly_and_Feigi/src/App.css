@@ -1,8 +1,15 @@
 #root {
-  max-width: 1280px;
+  /* max-width: 1280px; */
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  /* width: 90%; */
+  width: 1700px;
+  /* background-color: red; */
+  /* background-image: url("/img/background.jpg") */
+  background-image: url("/img/background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 select,
@@ -13,37 +20,55 @@ input {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: rgb(214, 239, 225);
+  background-color: rgb(224, 214, 239);
   margin: 15px;
   width: 200px;
-  height:min-content;
+  height: min-content;
 }
 
 
-a,
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  /* border: 1px solid transparent; */
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: rgb(122, 172, 143);
+  background-color: rgb(145, 127, 173);
   cursor: pointer;
-  transition: border-color 0.25s;
   margin: 3px;
-}
-
-a:hover,
-button:hover {
+  /* color: #000000; */
+  /* text-decoration: inherit; */
   border-color: rgb(0, 0, 0);
-  background-color: rgb(180, 229, 201);
+}
+span{
+  cursor: pointer;
+  text-align: left;
 }
 
-/* #nn{
-  height: 60px;
-  width: 60px;
-} */
+button:hover {
+  background-color: rgb(224, 214, 239);
+}
+
+a {
+  /* border-radius: 8px; */
+  /* border: 1px solid transparent; */
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: rgb(145, 127, 173);
+  cursor: pointer;
+  /* margin: 3px; */
+  margin: 10px 100px;
+  color: #000000;
+  text-decoration: inherit;
+}
+
+a:hover {
+  border-color: rgb(0, 0, 0);
+  background-color: rgb(208, 195, 228);
+}
 
 img {
   margin: 0 20px;
@@ -55,3 +80,107 @@ img {
 img:hover {
   opacity: 1;
 }
+
+.photos {
+  /* margin: 0 20px; */
+  opacity: 1;
+  height: 250px;
+  width: 250px;
+
+}
+
+.allPhotos {
+  /* background-color: blueviolet; */
+  /* width: 100%; */
+  display: grid;
+  grid-gap: 60px;
+  /* grid-template-columns: auto auto auto auto;
+  grid-template-rows: auto auto auto auto; */
+  grid-template-columns: 300px 300px 300px 300px;
+  grid-template-rows: 300px 300px;
+  justify-content: center;
+  /* align-items:center; */
+  margin: 100px;
+}
+
+.photosContainer {
+  /* background-color: rgb(43, 226, 101); */
+}
+
+nav {
+  background-color: rgb(224, 214, 239);
+  padding: 15px;
+  display: flex;
+  /* justify-content: space-around; */
+  justify-content: center;
+  /* justify-content: space-between; */
+}
+nav>a:focus{
+  /* background-color: rgb(224, 214, 239); */
+}
+
+/* nav {
+  background-color: rgb(224, 214, 239);
+  display: grid;
+  grid-template-columns: 200px 200px 200px 200px 200px;
+  position: fixed;
+  width: 100%;
+  height: 40px;
+  top: 0;
+} */
+/* nav>a {
+border-radius: 0;
+} */
+
+/* nav>a {
+  font-size: 140%;
+  text-decoration: none;
+  background-color: rgb(34, 150, 179);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: rgb(195, 229, 230);
+  padding: 10px;
+  height: 100%;
+  border-right: 2px solid black;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+nav>a:hover {
+  background-color: rgb(105, 202, 226);
+} */
+
+.todosContainer{
+  display: grid;
+  grid-column-gap: 60px;
+  /* grid-gap: 60px; */
+  /* grid-template-columns: auto auto auto auto;
+  grid-template-rows: auto auto auto auto; */
+  grid-template-columns: 10px 400px 100px 30px 30px;
+
+  /* grid-template-rows: 300px 300px; */
+  justify-content: center;
+}
+
+.post{
+  display: grid;
+  grid-column-gap: 30px;
+  /* grid-gap: 60px; */
+  /* grid-template-columns: auto auto auto auto;
+  grid-template-rows: auto auto auto auto; */
+  grid-template-columns:10px 600px 30px;
+  /* grid-template-rows: 300px 300px; */
+  justify-content: center;
+  margin: 20px auto;
+  background-color: rgb(224, 214, 239);
+  width: 60%;
+  padding: 10px;
+  border-radius: 5px;
+}
+.post:hover{
+  background-color: rgb(244, 240, 249);
+}
+/* .postsContainer{
+background-color: rgb(63, 25, 121);
+padding: 0 auto;
+} */

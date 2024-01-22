@@ -8,6 +8,7 @@ function Home() {
         const navigate = useNavigate();
         const { id } = useParams();
 
+
         function logout() {
                 localStorage.clear()
                 navigate("/")
@@ -24,23 +25,34 @@ function Home() {
                                 .then(data => {
                                         setUserDetails(data);
                                 }).catch(ex => alert(ex))
+
         }, [])
 
         return (userDetails && <>
                 <h1>welcome {userDetails.name}</h1>
-                <NavLink to="./info"
-                        style={({ isActive }) => isActive ? { border: "3px solid green", borderRadius: "10px", padding: "10px" } : {}}>
-                        Info</NavLink>
-                <NavLink to="./todos"
-                        style={({ isActive }) => isActive ? { border: "3px solid green", borderRadius: "10px", padding: "10px" } : {}}>
-                        Todos</NavLink>
-                <NavLink to="./posts"
-                        style={({ isActive }) => isActive ? { border: "3px solid green", borderRadius: "10px", padding: "10px" } : {}}>
-                        Posts</NavLink>
-                <NavLink to="./albums"
-                        style={({ isActive }) => isActive ? { border: "3px solid green", borderRadius: "10px", padding: "10px" } : {}}>
-                        Albums</NavLink>
+
                 <button onClick={logout}>Logout</button>
+                <br /><br />
+                <nav>
+        <NavLink to="./info"
+                style={({ isActive }) => isActive ? { backgroundColor:"rgb(224, 214, 239)" } : {}}>
+                Info</NavLink>
+        <NavLink to="./todos"
+                style={({ isActive }) => isActive ? { backgroundColor:"rgb(224, 214, 239)" } : {}}>
+                Todos</NavLink>
+        <NavLink to="./posts"
+                style={({ isActive }) => isActive ? { backgroundColor:"rgb(224, 214, 239)" } : {}}>
+                Posts</NavLink>
+        <NavLink to="./albums"
+                style={({ isActive }) => isActive ? { backgroundColor:"rgb(224, 214, 239)" } : {}}>
+                Albums</NavLink>
+        </nav>
+                {/* <nav>
+                        <NavLink to="./info">Info</NavLink>
+                        <NavLink to="./todos">Todos</NavLink>
+                        <NavLink to="./posts">Posts</NavLink>
+                        <NavLink to="./albums">Albums</NavLink>
+                </nav> */}
                 <Outlet />
         </>);
 }

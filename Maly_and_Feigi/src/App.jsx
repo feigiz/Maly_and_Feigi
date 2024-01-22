@@ -16,6 +16,15 @@ import SingleAlbum from './component/SingleAlbum';
 
 export const AppContext = createContext();
 
+//חיבים למחוק מהלוקל סטוראג
+//למחוק סטיילים
+//להחליף אלבום ללינק
+//לטפל בבעיה של טודוס
+//לסדר את העיצוב כשרוצים לעדכן
+//שהכל נכון עם שם משתמש וסיסמא
+//לעבור על ההוראות
+//לחשוב על מקרי קצה ובעיות אבטחה ובראש שלו...
+
 function App() {
   const [userDetails, setUserDetails] = useState();
   const [posts, setPosts] = useState([]);

@@ -6,12 +6,16 @@ function Header() {
     return (<>
         <nav>
             <NavLink to="/login"
-                style={({ isActive }) => isActive ? { border: "3px solid green", borderRadius: "10px", padding: "10px" } : {}}>
+                style={({ isActive }) => isActive ? {   backgroundColor: "rgb(224, 214, 239)" } : {}}>
                 log in</NavLink>
             <NavLink to="/signup"
-                style={({ isActive }) => isActive ? { border: "3px solid green", borderRadius: "10px", padding: "10px" } : {}}>
+                style={({ isActive }) => isActive ? {   backgroundColor: "rgb(224, 214, 239)" } : {}}>
                 sign up</NavLink>
         </nav>
+        {/* <nav>
+            <NavLink to="/login"> log in</NavLink>
+            <NavLink to="/signup"> sign up</NavLink>
+        </nav> */}
         <Outlet />
     </>);
 }

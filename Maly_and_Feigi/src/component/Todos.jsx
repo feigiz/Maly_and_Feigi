@@ -188,22 +188,26 @@ function Todos() {
             </> : <input type="text" name={searchType} onChange={event => searchTodos(event)} />)
             : <></>}
         <h2> <ins>todos list</ins></h2>
-        {todos.length == 0 ? <h2>No todos found</h2>
-            : todos.map((todo, i) => {
-                return (todo.id > -1 ?
-                    <form key={i} onSubmit={handleSubmit((data) => updateTask(data, todo.i, i, todo.id))}>
-                        <span style={{ marginRight: 10 }}>{todo.id}: </span>
-                        {todo.editable ? <>
-                            <input name="title" type="text" defaultValue={todo.title} style={{ width: 300 }}  {...register('title')} />
-                            <input name="completed" type="checkbox" defaultChecked={todo.completed}  {...register('completed')} /></>
-                            : <><span>{todo.title} </span>
-                                <input name="completed" type="checkbox" disabled={true} checked={todo.completed} /></>}
-                        <img src={edit} onClick={() => changeEditable(i)} />
-                        <img onClick={() => deleteTodo(todo.i, i, todo.id)} src={trash} />
-                        {todo.editable && <button type="submit" >update</button>}
-                        <br /><br />
-                    </form> : <h2 key={i}>No todos found</h2>)
-            })}</>)
+
+        {/* <div className="todosContainer"> */}
+            {todos.length == 0 ? <h2>No todos found</h2>
+                : todos.map((todo, i) => {
+                    return (todo.id > -1 ?
+                        <form className="todosContainer" key={i} onSubmit={handleSubmit((data) => updateTask(data, todo.i, i, todo.id))}>
+                            <span>{todo.id}: </span>
+                            {todo.editable ? <>
+                                <input name="title" type="text" defaultValue={todo.title} style={{ width: 300 }}  {...register('title')} />
+                                <input name="completed" type="checkbox" defaultChecked={todo.completed}  {...register('completed')} /></>
+                                : <><span>{todo.title} </span>
+                                    <input name="completed" type="checkbox" disabled={true} checked={todo.completed} /></>}
+                            <img src={edit} onClick={() => changeEditable(i)} />
+                            <img onClick={() => deleteTodo(todo.i, i, todo.id)} src={trash} />
+                            {todo.editable && <button type="submit" >update</button>}
+                            <br /><br />
+                        </form> : <h2>No todos found</h2>)
+                })}
+                {/* </div> */}
+                </>)
 }
 
 export default Todos;
