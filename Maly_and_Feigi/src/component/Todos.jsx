@@ -4,6 +4,7 @@ import edit from "../icons/edit.png"
 import { useContext } from "react";
 import { AppContext } from "../App";
 import { useForm } from "react-hook-form";
+import useNextId from "./useNextId";
 
 function Todos() {
     //מלי רוצה לחלק לקומפוננטות
@@ -16,23 +17,12 @@ function Todos() {
     const [userTodos, setUserTodos] = useState([]);
     const [showAdditionForm, setShowAdditionForm] = useState(false);
     const [todos, setTodos] = useState([]);
-    const [nextId, setNextId] = useState();
+    // const [nextId, setNextId] = useState();
+    const [nextId, setNextId] = useNextId(2);
     const [searchType, setSearchType] = useState();
     const { register, handleSubmit, } = useForm()
 
     useEffect(() => {
-        //fech next id
-        fetch("http://localhost:3000/nextIDs/2")
-            .then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            })
-            .then((json) => {
-                setNextId(json.nextId)
-            }).catch(ex => alert(ex))
-
-        //fech todos
         fetch(`http://localhost:3000/todos?userId=${userDetails.id}`)
             .then(response => {
                 if (!response.ok)
@@ -49,22 +39,6 @@ function Todos() {
             }).catch(ex => alert(ex))
     }, [])
 
-    useEffect(() => {
-        if (nextId != null)
-            fetch("http://localhost:3000/nextIDs/2", {
-                method: "PATCH",
-                body: JSON.stringify({
-                    "nextId": nextId
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            }).then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            }).catch(ex => alert(ex))
-    }, [nextId])
 
     function addingTodo(event) {
         event.preventDefault();
@@ -80,7 +54,7 @@ function Todos() {
             setUserTodos(prev => [...prev, newTask])
             setTodos(prev => [...prev, { ...newTask, i: userTodos.length, editable: false }])
             setShowAdditionForm(false)
-            setNextId(prev => prev + 1)
+            setNextId(nextId+1)
         }).catch((ex) => alert(ex));
     }
 
@@ -228,7 +202,7 @@ function Todos() {
                         <img onClick={() => deleteTodo(todo.i, i, todo.id)} src={trash} />
                         {todo.editable && <button type="submit" >update</button>}
                         <br /><br />
-                    </form> : <h2>No todos found</h2>)
+                    </form> : <h2 key={i}>No todos found</h2>)
             })}</>)
 }
 

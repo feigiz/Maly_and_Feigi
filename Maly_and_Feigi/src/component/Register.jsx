@@ -2,41 +2,18 @@ import React, { useContext, useRef, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { AppContext } from "../App";
+import useNextId from "./useNextId";
 
 function Register({ userIdentifyDetails }) {
 
     const { setUserDetails } = useContext(AppContext)
-    const nextId = useRef();
     const navigate = useNavigate()
+    const [nextId, setNextId] = useNextId(1)
 
     const {
         register,
         handleSubmit,
     } = useForm();
-
-    useEffect(() => {
-        fetch("http://localhost:3000/nextIDs/1")
-            .then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
-            }).then((json) => {
-                nextId.current = json.nextId
-            }).catch(ex => alert(ex))
-    }, [])
-
-    function updateNextId() {
-        nextId.current = nextId.current + 1;
-        fetch("http://localhost:3000/nextIDs/1", {
-            method: "PATCH",
-            body: JSON.stringify({ "nextId": nextId.current }),
-            headers: { "Content-type": "application/json; charset=UTF-8" },
-        }).then(response => {
-            if (!response.ok)
-                throw 'Error' + response.status + ': ' + response.statusText;
-            return response.json();
-        }).catch((ex) => alert(ex));
-    }
 
     function onSubmit(data) {
         const { name, email, street, suite, city, zipcode, lat, lng, phone,
@@ -59,11 +36,11 @@ function Register({ userIdentifyDetails }) {
             return response.json();
         }).then(data => {
             localStorage.setItem('currentUser', JSON.stringify(data));
-            updateNextId()
             setUserDetails(data)
             alert("user successfully added");
             navigate(`/home/users/${data.id}`);
         }).catch((ex) => alert(ex));
+        setNextId(prev => prev + 1)
     }
 
     return (
