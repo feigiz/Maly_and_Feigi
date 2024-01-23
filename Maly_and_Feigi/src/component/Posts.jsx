@@ -2,20 +2,15 @@ import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import trash from "../icons/trash.png"
 import { AppContext } from "../App";
-import { useForm } from "react-hook-form";
 import useNextId from "./useNextId";
 
 function Posts() {
     const navigate = useNavigate();
-    // const [userPosts, setUserPosts] = useState([]);
     const [showAdditionForm, setShowAdditionForm] = useState(false);
-    // const [editables, setEditables] = useState([]);
-    // const {  } = useContext(PostContext);
-    // const [stringSearch, setStringSearch] = useState();
     const [nextId, setNextId] = useNextId(3);
     const [searchType, setSearchType] = useState();
-    const { userDetails, posts, setPosts, userPosts, setUserPosts } = useContext(AppContext)
-    const { register, handleSubmit, } = useForm()
+    const { userDetails, posts, setPosts, originalPosts, setOriginalPosts } = useContext(AppContext)
+
     useEffect(() => {
         fetch(`http://localhost:3000/posts?userId=${userDetails.id}`)
             .then(response => {
@@ -24,8 +19,7 @@ function Posts() {
                 return response.json();
             })
             .then(data => {
-                setUserPosts(data);
-                // setUserPosts(data.map(post => { return { ...post, editables: false } }));
+                setOriginalPosts(data);
                 let postsArr = []
                 for (let i = 0; i < data.length; i++)
                     postsArr.push({ ...data[i], originalIndex: i })
@@ -33,7 +27,7 @@ function Posts() {
             }).catch(ex => alert(ex))
     }, [])
 
-    function addingPost(event) {
+    function addPost(event) {
         event.preventDefault();
         const { title, body } = event.target;
         const newPost = { userId: userDetails.id, id: `${nextId}`, title: title.value, body: body.value }
@@ -45,8 +39,8 @@ function Posts() {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
-            setUserPosts(prev => [...prev, newPost])
-            setPosts(prev => [...prev, { ...newPost, originalIndex: userPosts.length }])
+            setOriginalPosts(prev => [...prev, newPost])
+            setPosts(prev => [...prev, { ...newPost, originalIndex: originalPosts.length }])
             setShowAdditionForm(false)
             setNextId(prev => prev + 1)
         }).catch((ex) => alert(ex));
@@ -60,7 +54,7 @@ function Posts() {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
             }).then(() => {
-                setUserPosts((prev) => [...prev.slice(0, originalIndex), null, ...prev.slice(originalIndex + 1, prev.length)])
+                setOriginalPosts((prev) => [...prev.slice(0, originalIndex), null, ...prev.slice(originalIndex + 1, prev.length)])
                 setPosts((prev) => [...prev.slice(0, i), ...prev.slice(i + 1, prev.length)])
             }).catch((ex) => alert(ex));
         } else {
@@ -69,24 +63,24 @@ function Posts() {
     }
 
     function searchPosts(event) {
-        let foundsArr;
-        let foundIndex;
-        switch (event.target.name) {
+        let foundsArr, foundIndex;
+        const { name, value } = event.target;
+        switch (name) {
             case "id":
-                foundIndex = userPosts.findIndex(p => p != null && p.id == event.target.value)
-                setPosts([{ ...userPosts[foundIndex], originalIndex: foundIndex }])
+                foundIndex = originalPosts.findIndex(p => p != null && p.id == value)
+                setPosts([{ ...originalPosts[foundIndex], originalIndex: foundIndex }])
                 break;
             case "title":
-                foundsArr = userPosts.map((p, i) => { if (p != null && p.title.includes(event.target.value)) return { ...p, originalIndex: i, } })
+                foundsArr = originalPosts.map((p, i) => { if (p != null && p.title.includes(value)) return { ...p, originalIndex: i, } })
                 setPosts(foundsArr.filter(p => p != null))
                 break;
         }
     }
 
-    function search(event) {
+    function selectSearchType(event) {
         let foundsArr;
         if (event.target.value == "all") {
-            foundsArr = userPosts.map((p, i) => { if (p != null) return { ...p, originalIndex: i } })
+            foundsArr = originalPosts.map((p, i) => { if (p != null) return { ...p, originalIndex: i } })
             setPosts(foundsArr.filter(p => p != null));
             setSearchType();
         }
@@ -98,8 +92,7 @@ function Posts() {
         <br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add post</button>
         <br />
-
-        {showAdditionForm && <form onSubmit={addingPost}>
+        {showAdditionForm && <form onSubmit={addPost}>
             <label htmlFor='title' >post title</label>
             <input name='title' type='text' required></input>
             <label htmlFor='body' >post body</label>
@@ -107,63 +100,28 @@ function Posts() {
             <button type="submit">Add</button>
         </form>}
 
-        <label htmlFor='search' >search by</label>
-        <select onChange={search} name="search">
+        <label htmlFor='search' >Search by</label>
+        <select onChange={selectSearchType} name="search">
             <option value="all"></option>
             <option value="id">id</option>
             <option value="title">title</option>
         </select>
         <br />
-
         {searchType ? <input type="text" name={searchType} onChange={event => searchPosts(event)} /> : <></>}
 
-        <h1><ins>posts list</ins></h1><div className="postsContainer" >
-        {posts.length == 0 ? <h2>No posts found</h2>
-            : posts.map((post, i) => {
-                return (post.id > -1 ?
-                    <div className="post" key={i}>
-                        {/* <div key={i} > */}
-                        <span>{post.id}: </span>
-                        <span onClick={() => navigate(`./${post.id}`, { state: { i } })}>{post.title} </span>
-                        {/* <br /><br /> */}
-                        {/* </div> */}
-                        <img onClick={() => deletePost(post.originalIndex, i, post.id)} src={trash} />
-                    </div>
-                    : <h2>No posts found</h2>
-                )
-            })}
-    </div></>);
+        <h1><ins>Posts list</ins></h1><div className="postsContainer" >
+            {posts.length == 0 ? <h2>No posts found</h2>
+                : posts.map((post, i) => {
+                    return (post.id > -1 ?
+                        <div className="post" key={i}>
+                            <span>{post.id}: </span>
+                            <span onClick={() => navigate(`./${post.id}`, { state: { i } })}>{post.title} </span>
+                            <img onClick={() => deletePost(post.originalIndex, i, post.id)} src={trash} />
+                        </div>
+                        : <h2>No posts found</h2>)
+                })}
+        </div>
+    </>);
 }
 
 export default Posts;
-// post.postDetailsView ?
-
-
-// {post.editable ?
-//     <input name="title" type="text" defaultValue={post.title} style={{ width: 300 }} />
-//     : <span>{post.title} </span>}
-// {/* <input name="completed" type="checkbox" defaultChecked={post.completed} /></> */}
-// {/* <input name="completed" type="checkbox" disabled={true} checked={post.completed} /></> */}
-// <img src={edit} onClick={() => changeEditable(i)} />
-// <img onClick={() => deletePost(post.i, i, post.id)} src={trash} />
-// <img src={arrow} onClick={() => changePostDetailsView(i)} />
-
-// {post.editable && <button type="submit" >update</button>}
-
-
-
-
-// {/* <form
-// style={post.postDetailsView ? { backgroundColor: "rgb(180, 229, 201)", borderRadius: 10, padding: 20, margin: 20 } : {}}
-// key={i} onSubmit={(event) => updatePost(event, post.originalIndex, i, post.id)}>
-
-// {!post.postDetailsView && <span style={{ marginRight: 10 }}>{post.id}: </span>}
-// {!post.postDetailsView && <span>{post.title} </span>}
-// {post.postDetailsView && <Outlet />}
-// {/* {post.postDetailsView && <SinglePost post={post} i={i} changeEditable={changeEditable} />} */}
-// <img onClick={() => deletePost(post.originalIndex, i, post.id)} src={trash} />
-// {!post.postDetailsView && <img src={arrowDown} onClick={() => changePostDetailsView(i, post)} />}
-// {post.postDetailsView && <img src={arrowUp} onClick={() => changePostDetailsView(i, post)} />}
-// <br /><br />
-// {post.editable && post.postDetailsView && <button type="submit" >update</button>}
-// </form> : <h2>No posts found</h2> */}
