@@ -13,15 +13,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
+/* body {
   /* margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh; */
-  /* background-image: url("/img/background.jpg"); */
+/* background-image: url("/img/background.jpg");
 
-}
+} */
 
 html {
 
@@ -31,7 +31,7 @@ html {
   background-size:cover */
   background-image: url("./img/background.jpg");
   background-repeat: no-repeat;
-  background-size:cover;
+  background-size: cover;
   background: auto auto;
 }
 

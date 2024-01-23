@@ -18,7 +18,7 @@ import PostsOfAllUsers from './component/PostOfAllUsers';
 export const AppContext = createContext();
 
 function App() {
-  const [userDetails, setUserDetails] = useState();
+  const [userDetails, setUserDetails] = useState({});
   const [posts, setPosts] = useState([]);
   const [originalPosts, setOriginalPosts] = useState([]);
   const [albums, setAlbums] = useState([]);

@@ -1,11 +1,11 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect } from "react";
+import { Link, useLocation } from 'react-router-dom';
 import { AppContext } from "../App";
 import Photos from "./Photos";
 
 
 function SingleAlbum() {
-    const { userDetails, albums, setAlbums, setUserAlbums } = useContext(AppContext)
+    const { userDetails, albums, setAlbums,  setOriginalAlbums } = useContext(AppContext)
     const { state } = useLocation();
     const  {i}  = state;
 
@@ -18,8 +18,7 @@ function SingleAlbum() {
                     return response.json();
                 })
                 .then(data => {
-                    setUserAlbums(data);
-                    // setUserAlbums(data.map(Album => { return { ...Album, editables: false } }));
+                    setOriginalAlbums(data);
                     let albumsArr = []
                     for (let i = 0; i < data.length; i++)
                         albumsArr.push({ ...data[i], originalIndex: i })
@@ -31,12 +30,12 @@ function SingleAlbum() {
         <br /><br /><Link
             to="../.."
             relative="path"
-        > <span>back to all albums</span></Link>
+        > <span>Back to all albums</span></Link>
         <h3>id: {albums[i].id}</h3>
         <h3>title: {albums[i].title} </h3>
         <Photos />
     </>);
 }
-// className="singleAlbumContainer"
+
 export default SingleAlbum;
 

@@ -66,17 +66,17 @@ function Todos() {
     function updateTodo(event, originalIndex, i, id) {
         event.preventDefault()
         const { title, completed } = event.target;
-        const newTodo={ title: title.value, completed: completed.checked }
+        const updatedTodo={ title: title.value, completed: completed.checked }
         fetch(`http://localhost:3000/todos/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify(newTodo),
+            body: JSON.stringify(updatedTodo),
             headers: { 'Content-type': 'application/json; charset=UTF-8' },
         }).then(response => {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
-            setOriginalTodos(prev => [...prev.slice(0, originalIndex), { ...prev[originalIndex], ...newTodo }, ...prev.slice(originalIndex + 1, prev.length)])
-            setTodos(prev => [...prev.slice(0, i), { ...prev[i], ...newTodo }, ...prev.slice(i + 1, prev.length)])
+            setOriginalTodos(prev => [...prev.slice(0, originalIndex), { ...prev[originalIndex], ...updatedTodo }, ...prev.slice(originalIndex + 1, prev.length)])
+            setTodos(prev => [...prev.slice(0, i), { ...prev[i], ...updatedTodo }, ...prev.slice(i + 1, prev.length)])
             changeEditable(i)
         }).catch((ex) => alert(ex));
     }
