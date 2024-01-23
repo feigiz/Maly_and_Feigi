@@ -165,7 +165,7 @@ function Photos() {
                                 <input name="thumbnailUrl" type="url" defaultValue={photo.thumbnailUrl} {...register('thumbnailUrl')} /> */}
                                 <input name="title" type="text" defaultValue={photo.title} style={{ width: 300 }} />
                                 <br />
-                                <input name="url" type="url" defaultValue={photo.url} {...register('url')} />
+                                <input name="url" type="url" defaultValue={photo.url} />
                                 <br />
                                 <input name="thumbnailUrl" type="url" defaultValue={photo.thumbnailUrl} />
                             </>

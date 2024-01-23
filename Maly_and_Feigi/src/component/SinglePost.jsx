@@ -32,7 +32,6 @@ function SinglePost() {
 
     function updatePost(data) {
         const { title, body } = data;
-
         fetch(`http://localhost:3000/posts/${posts[i].id}`, {
             method: 'PATCH',
             body: JSON.stringify({

@@ -107,7 +107,7 @@ function Todos() {
 
         fetch(`http://localhost:3000/todos/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify({ title: title.value, completed: completed.value }),
+            body: JSON.stringify({ title: title.value, completed: completed.checked }),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
@@ -115,8 +115,8 @@ function Todos() {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
-            setUserTodos(prev => [...prev.slice(0, userIndex), { ...prev[userIndex], title: title.value, completed: completed.value }, ...prev.slice(userIndex + 1, prev.length)])
-            setTodos(prev => [...prev.slice(0, i), { ...prev[i], title: title.value, completed: completed.value }, ...prev.slice(i + 1, prev.length)])
+            setUserTodos(prev => [...prev.slice(0, userIndex), { ...prev[userIndex], title: title.value, completed: completed.checked }, ...prev.slice(userIndex + 1, prev.length)])
+            setTodos(prev => [...prev.slice(0, i), { ...prev[i], title: title.value, completed: completed.checked }, ...prev.slice(i + 1, prev.length)])
             changeEditable(i)
         }).catch((ex) => alert(ex));
     }
