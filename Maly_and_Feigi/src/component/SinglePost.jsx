@@ -6,7 +6,7 @@ import trash from "../icons/trash.png"
 import { useForm } from "react-hook-form";
 
 function SinglePost() {
-    const { posts, setPosts, setUserPosts } = useContext(AppContext)
+    const { posts, setPosts, setUserPosts, userDetails } = useContext(AppContext)
     const navigate = useNavigate();
     const { state } = useLocation();
     const [isEditable, setIsEditable] = useState(false)
@@ -74,17 +74,17 @@ function SinglePost() {
         }
     }
 
-    return (posts.length && <>
-        <br /><br /><Link
+    return (posts.length && <div className="singlePostContainer">
+        <Link
             to=".."
             relative="path"
         > <span>back to all posts</span></Link>
         <h3>id: {posts[i].id}</h3>
         {isEditable ?
             <form onSubmit={handleSubmit(updatePost)}>
-                title: <input name="title" type="text" defaultValue={posts[i].title} style={{ width: 300 }} {...register('title')}/>
+                title: <input name="title" type="text" defaultValue={posts[i].title} style={{ width: 300 }} {...register('title')} />
                 <br />
-                body: <input name="body" type="text" defaultValue={posts[i].body} style={{ width: 500 }} {...register('body')}/>
+                body: <input name="body" type="text" defaultValue={posts[i].body} style={{ width: 500 }} {...register('body')} />
                 <button type="submit" >update</button>
             </form>
             : <div >
@@ -96,10 +96,11 @@ function SinglePost() {
         <Outlet /> */}
         <img src={edit} onClick={() => setIsEditable(prev => !prev)} />
         <img onClick={() => deletePost()} src={trash} />
+        <br /><br />
         <button onClick={() => navigate('./comments', { state: { i } })}>show comments</button>
         <Outlet />
 
-    </>);
+    </div>);
 }
 
 export default SinglePost;

@@ -96,13 +96,12 @@ function Albums() {
         {albums.length == 0 ? <h2>No albums found</h2>
             : albums.map((album, i) => {
                 return (album.id > -1 ?
-                    <div key={i}>
-                        <form onClick={() => navigate(`./${album.id}/photos`, { state: { i } })} key={i} >
-                            <span style={{ marginRight: 10 }}>{album.id}: </span>
-                            <span>{album.title} </span>
-                            <br /><br />
-                        </form>
-                    </div>
+                    // <div key={i}>
+                    <form className="albumContainer" onClick={() => navigate(`./${album.id}/photos`, { state: { i } })} key={i} >
+                        <span>{album.id}: </span>
+                        <span>{album.title} </span>
+                    </form>
+                    // </div>
                     : <h2>No albums found</h2>
                 )
             })}

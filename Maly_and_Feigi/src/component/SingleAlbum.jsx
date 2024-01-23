@@ -37,6 +37,6 @@ function SingleAlbum() {
         <Photos />
     </>);
 }
-
+// className="singleAlbumContainer"
 export default SingleAlbum;
 

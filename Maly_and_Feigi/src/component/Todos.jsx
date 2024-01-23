@@ -210,7 +210,7 @@ function Todos() {
                         <img src={edit} onClick={() => changeEditable(i)} />
                         <img onClick={() => deleteTodo(todo.i, i, todo.id)} src={trash} />
                         {todo.editable && <button type="submit" >update</button>}
-                        <br /><br />
+                        {/* <br /><br /> */}
                     </form> : <h2>No todos found</h2>)
             })}
         {/* </div> */}
