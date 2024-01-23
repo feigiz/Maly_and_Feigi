@@ -21,13 +21,13 @@ function Register({ userIdentifyDetails }) {
         fetch('http://localhost:3000/users', {
             method: 'POST',
             body: JSON.stringify({
-                id: `${nextId.current}`, name: name.value, username: userIdentifyDetails.current.username, email: email.value,
+                id: `${nextId}`, name: name, username: userIdentifyDetails.current.username, email: email,
                 address: {
-                    street: street.value, suite: suite.value, city: city.value, zipcode: zipcode.value,
-                    geo: { lat: lat.value, lng: lng.value }
+                    street: street, suite: suite, city: city, zipcode: zipcode,
+                    geo: { lat: lat, lng: lng }
                 },
-                phone: phone.value, website: userIdentifyDetails.current.website,
-                company: { name: companyName.value, catchPhrase: catchPhrase.value, bs: bs.value }
+                phone: phone, website: userIdentifyDetails.current.website,
+                company: { name: companyName, catchPhrase: catchPhrase, bs: bs }
             }),
             headers: { 'Content-type': 'application/json; charset=UTF-8' },
         }).then(response => {
@@ -35,6 +35,7 @@ function Register({ userIdentifyDetails }) {
                 throw 'Error' + response.status + ': ' + response.statusText;
             return response.json();
         }).then(data => {
+            delete data.website
             localStorage.setItem('currentUser', JSON.stringify(data));
             setUserDetails(data)
             alert("user successfully added");
