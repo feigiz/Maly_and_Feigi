@@ -4,7 +4,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 function Header() {
 
     return (<>
-        <nav>
+        <nav class="navLogin">
             <NavLink to="/login"
                 style={({ isActive }) => isActive ? {   backgroundColor: "rgb(224, 214, 239)" } : {}}>
                 log in</NavLink>

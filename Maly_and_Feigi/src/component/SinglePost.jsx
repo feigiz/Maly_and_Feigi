@@ -31,17 +31,17 @@ function SinglePost() {
     }, [])
 
     function updatePost(data) {
-        const newPost = { title: data.title, body: data.body }
+        const updatedPost = { title: data.title, body: data.body }
         fetch(`http://localhost:3000/posts/${posts[i].id}`, {
             method: 'PATCH',
-            body: JSON.stringify(newPost),
+            body: JSON.stringify(updatedPost),
             headers: { 'Content-type': 'application/json; charset=UTF-8', },
         }).then(response => {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
-            setOriginalPosts(prev => [...prev.slice(0, posts[i].originalIndex), { ...prev[posts[i].originalIndex], ...newPost }, ...prev.slice(posts[i].originalIndex + 1, prev.length)])
-            setPosts(prev => [...prev.slice(0, i), { ...prev[i], ...newPost }, ...prev.slice(i + 1, prev.length)])
+            setOriginalPosts(prev => [...prev.slice(0, posts[i].originalIndex), { ...prev[posts[i].originalIndex], ...updatedPost }, ...prev.slice(posts[i].originalIndex + 1, prev.length)])
+            setPosts(prev => [...prev.slice(0, i), { ...prev[i], ...updatedPost }, ...prev.slice(i + 1, prev.length)])
             setIsEditable(prev => !prev)
         }).catch((ex) => alert(ex));
     }
@@ -70,7 +70,7 @@ function SinglePost() {
             <form onSubmit={handleSubmit(updatePost)}>
                 title: <input name="title" type="text" defaultValue={posts[i].title} style={{ width: 300 }} {...register('title')} />
                 <br />
-                body: <input name="body" type="text" defaultValue={posts[i].body} style={{ width: 500 }} {...register('body')} />
+                <b>body: </b> <input name="body" type="text" defaultValue={posts[i].body} style={{ width: 500 }} {...register('body')} />
                 <button type="submit" >Update</button>
             </form>
             : <div >

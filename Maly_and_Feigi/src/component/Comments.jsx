@@ -65,10 +65,10 @@ function Comments() {
 
     function updateComment(event, i, id) {
         event.preventDefault()
-        const newComment = { name: event.target.name.value, body: event.target.body.value }
+        const updatedComment = { name: event.target.name.value, body: event.target.body.value }
         fetch(`http://localhost:3000/comments/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify(newComment),
+            body: JSON.stringify(updatedComment),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
@@ -76,7 +76,7 @@ function Comments() {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
-            setComments(prev => [...prev.slice(0, i), { ...prev[i], ...newComment }, ...prev.slice(i + 1, prev.length)])
+            setComments(prev => [...prev.slice(0, i), { ...prev[i], ...updatedComment }, ...prev.slice(i + 1, prev.length)])
             changeEditable(i)
         }).catch((ex) => alert(ex));
     }
@@ -86,11 +86,10 @@ function Comments() {
     }
 
     return (<>
-        <button onClick={() => navigate("..", { state: { i } })}>close</button>
+        <button onClick={() => navigate("..", { state: { i } })}>Close</button>
         <br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add comment</button>
         <br />
-
         {showAdditionForm && <form onSubmit={addComment}>
             <label htmlFor='name' >name</label>
             <input name='name' type='text' required></input>
@@ -120,7 +119,8 @@ function Comments() {
                         {comment.editable && <button type="submit" >Update</button>}
                         <br /><br />
                     </form>)
-            })}</>)
+            })}
+    </>)
 }
 
 export default Comments;

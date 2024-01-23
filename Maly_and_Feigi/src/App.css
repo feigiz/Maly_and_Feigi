@@ -41,7 +41,8 @@ button {
   /* text-decoration: inherit; */
   border-color: rgb(0, 0, 0);
 }
-span{
+
+span {
   cursor: pointer;
   text-align: left;
 }
@@ -103,9 +104,9 @@ img:hover {
   margin: 100px;
 }
 
-.photosContainer {
-  /* background-color: rgb(43, 226, 101); */
-}
+/*  .photosContainer {
+  /* background-color: rgb(43, 226, 101); 
+}*/
 
 nav {
   background-color: rgb(224, 214, 239);
@@ -115,9 +116,10 @@ nav {
   justify-content: center;
   /* justify-content: space-between; */
 }
-nav>a:focus{
+
+/* nav>a:focus{
   /* background-color: rgb(224, 214, 239); */
-}
+/* } */
 
 /* nav {
   background-color: rgb(224, 214, 239);
@@ -150,7 +152,7 @@ nav>a:hover {
   background-color: rgb(105, 202, 226);
 } */
 
-.todosContainer{
+.todosContainer {
   display: grid;
   grid-column-gap: 60px;
   /* grid-gap: 60px; */
@@ -164,13 +166,17 @@ nav>a:hover {
   align-items: center;
 }
 
-.post{
+.navLogin{
+  margin-bottom: 300px;
+}
+
+.post {
   display: grid;
   grid-column-gap: 30px;
   /* grid-gap: 60px; */
   /* grid-template-columns: auto auto auto auto;
   grid-template-rows: auto auto auto auto; */
-  grid-template-columns:10px 600px 30px;
+  grid-template-columns: 10px 600px 30px;
   /* grid-template-rows: 300px 300px; */
   justify-content: center;
   margin: 20px auto;
@@ -179,30 +185,32 @@ nav>a:hover {
   padding: 10px;
   border-radius: 5px;
 }
-.post:hover{
+
+.post:hover {
   background-color: rgb(244, 240, 249);
 }
+
 /* .postsContainer{
 background-color: rgb(63, 25, 121);
 padding: 0 auto;
 } */
 
-.titleInput{
+.titleInput {
   width: 400px;
 }
 
-.singlePostContainer{
+.singlePostContainer {
   width: 600px;
   margin: 30px auto;
-  background-color:rgb(224, 214, 239) ;
+  background-color: rgb(224, 214, 239);
   padding: 30px;
   border-radius: 8px;
 }
 
-.albumContainer{
+.albumContainer {
   display: grid;
   grid-column-gap: 30px;
-  grid-template-columns:10px 400px;
+  grid-template-columns: 10px 400px;
   justify-content: center;
   margin: 20px auto;
   background-color: rgb(224, 214, 239);
