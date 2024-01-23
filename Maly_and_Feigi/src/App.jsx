@@ -16,25 +16,16 @@ import SingleAlbum from './component/SingleAlbum';
 
 export const AppContext = createContext();
 
-//חיבים למחוק מהלוקל סטוראג
-//למחוק סטיילים
-//להחליף אלבום ללינק
-//לטפל בבעיה של טודוס
-//לסדר את העיצוב כשרוצים לעדכן
-//שהכל נכון עם שם משתמש וסיסמא
-//לעבור על ההוראות
-//לחשוב על מקרי קצה ובעיות אבטחה ובראש שלו...
-
 function App() {
   const [userDetails, setUserDetails] = useState();
   const [posts, setPosts] = useState([]);
-  const [userPosts, setUserPosts] = useState([]);
+  const [originalPosts, setOriginalPosts] = useState([]);
   const [albums, setAlbums] = useState([]);
-  const [userAlbums, setUserAlbums] = useState([]);
+  const [originalAlbums, setOriginalAlbums] = useState([]);
 
   return (
     <div className='App'>
-      <AppContext.Provider value={{ userDetails, setUserDetails, posts, setPosts, userPosts, setUserPosts, albums, setAlbums, userAlbums, setUserAlbums }}>
+      <AppContext.Provider value={{ userDetails, setUserDetails, posts, setPosts, originalPosts, setOriginalPosts, albums, setAlbums, originalAlbums, setOriginalAlbums }}>
         <Router>
           <Routes>
             <Route path="/" element={<Header />} >

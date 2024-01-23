@@ -1,19 +1,18 @@
 import React, { useRef, useState } from "react";
-import Register from "./Register";
+import RegisterDetails from "./RegisterDetails";
+import { useForm } from "react-hook-form";
 
 function Signup() {
-
     const [isFillingDetails, setIsFillingDetails] = useState(false);
     const userIdentifyDetails = useRef();
+    const { register, handleSubmit } = useForm()
 
-    function onSubmitSignUp(event) {
-        event.preventDefault();
-        const { name, password, verifyPassword } = event.target;
-        if (password.value != verifyPassword.value)
+    function onSubmitSignUp(data) {
+        const { name, password, verifyPassword } = data;
+        if (password != verifyPassword)
             alert("verify failed");
         else {
-            userIdentifyDetails.current = { username: name.value, website: password.value }
-            console.log(userIdentifyDetails.current)
+            userIdentifyDetails.current = { username: name, website: password }
             checkUser();
         }
     }
@@ -25,27 +24,27 @@ function Signup() {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
             if (!user[0])
-                setIsFillingDetails(true);//when false?   
+                setIsFillingDetails(true);
             else
                 alert("existing user, please login");
         } catch (ex) { alert(ex) }
     }
 
     return (<>
-        {!isFillingDetails && <form onSubmit={onSubmitSignUp}>
+        {!isFillingDetails && <form onSubmit={handleSubmit(onSubmitSignUp)}>
 
             <label htmlFor='name' >user name</label>
-            <input name='name' type='text' required></input>
+            <input name='name' type='text' required  {...register('name')}></input>
 
             <label htmlFor='password' >password</label>
-            <input name='password' type='password' required></input>
+            <input name='password' type='password' required {...register('password')}></input>
 
             <label htmlFor='verifyPassword' >verify password</label>
-            <input name='verifyPassword' type='password' required></input>
+            <input name='verifyPassword' type='password' required {...register('verifyPassword')}></input>
 
             <button type='submit'>continue</button>
         </form>}
-        {isFillingDetails && <Register userIdentifyDetails={userIdentifyDetails} />}
+        {isFillingDetails && <RegisterDetails userIdentifyDetails={userIdentifyDetails} />}
     </>);
 }
 

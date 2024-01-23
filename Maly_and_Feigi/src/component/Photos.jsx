@@ -46,7 +46,6 @@ function Photos() {
         }
     };
     useEffect(() => {
-
         //fech Photos
         fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_limit=12`)
             .then(response => {

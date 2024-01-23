@@ -3,27 +3,15 @@ import trash from "../icons/trash.png"
 import edit from "../icons/edit.png"
 import { useContext } from "react";
 import { AppContext } from "../App";
-import { useForm } from "react-hook-form";
 import useNextId from "./useNextId";
 
 function Todos() {
-
-    //מלי רוצה לחלק לקומפוננטות
-    //לקצר מערך טודו קטן
-    // IהI פייגי רוצה לסדר את עניני    
-
-    //לסדר את עניני הפונקציות החוזרות 
-    // STATE לבדוק אם אפשר לשלוח פוקציות ב 
-
-    //להפוך את ההוספה גם ליוז פורם
     const { userDetails } = useContext(AppContext)
-    const [userTodos, setUserTodos] = useState([]);
-    const [showAdditionForm, setShowAdditionForm] = useState(false);
+    const [originalTodos, setOriginalTodos] = useState([]);
     const [todos, setTodos] = useState([]);
-    // const [nextId, setNextId] = useState();
+    const [showAdditionForm, setShowAdditionForm] = useState(false);
     const [nextId, setNextId] = useNextId(2);
     const [searchType, setSearchType] = useState();
-    // const { register, handleSubmit, } = useForm()
 
     useEffect(() => {
         fetch(`http://localhost:3000/todos?userId=${userDetails.id}`)
@@ -33,17 +21,15 @@ function Todos() {
                 return response.json();
             })
             .then(data => {
-                setUserTodos(data);
-                // setUserTodos(data.map(todo => { return { ...todo, editables: false } }));
+                setOriginalTodos(data);
                 let todosArr = []
                 for (let i = 0; i < data.length; i++)
-                    todosArr.push({ ...data[i], i: i, editable: false })
+                    todosArr.push({ ...data[i], originalIndex: i, editable: false })
                 setTodos(todosArr);
             }).catch(ex => alert(ex))
     }, [])
 
-
-    function addingTodo(event) {
+    function addTodo(event) {
         event.preventDefault();
         const newTask = { userId: userDetails.id, id: `${nextId}`, title: event.target[0].value, completed: false }
         fetch('http://localhost:3000/todos', {
@@ -54,14 +40,14 @@ function Todos() {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
-            setUserTodos(prev => [...prev, newTask])
-            setTodos(prev => [...prev, { ...newTask, i: userTodos.length, editable: false }])
+            setOriginalTodos(prev => [...prev, newTask])
+            setTodos(prev => [...prev, { ...newTask, originalIndex: originalTodos.length, editable: false }])
             setShowAdditionForm(false)
-            setNextId(nextId + 1)
+            setNextId(prevId => prevId + 1)
         }).catch((ex) => alert(ex));
     }
 
-    function deleteTodo(userIndex, i, id) {
+    function deleteTodo(originalIndex, i, id) {
         if (confirm('Are you sure you want to delete this todo from the database?')) {
             fetch(`http://localhost:3000/todos/${id}`, {
                 method: 'DELETE'
@@ -69,12 +55,30 @@ function Todos() {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
             }).then(() => {
-                setUserTodos((prev) => [...prev.slice(0, userIndex), null, ...prev.slice(userIndex + 1, prev.length)])
+                setOriginalTodos((prev) => [...prev.slice(0, originalIndex), null, ...prev.slice(originalIndex + 1, prev.length)])
                 setTodos((prev) => [...prev.slice(0, i), ...prev.slice(i + 1, prev.length)])
             }).catch((ex) => alert(ex));
         } else {
             return;
         }
+    }
+
+    function updateTodo(event, originalIndex, i, id) {
+        event.preventDefault()
+        const { title, completed } = event.target;
+        const newTodo={ title: title.value, completed: completed.checked }
+        fetch(`http://localhost:3000/todos/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(newTodo),
+            headers: { 'Content-type': 'application/json; charset=UTF-8' },
+        }).then(response => {
+            if (!response.ok)
+                throw 'Error' + response.status + ': ' + response.statusText;
+        }).then(() => {
+            setOriginalTodos(prev => [...prev.slice(0, originalIndex), { ...prev[originalIndex], ...newTodo }, ...prev.slice(originalIndex + 1, prev.length)])
+            setTodos(prev => [...prev.slice(0, i), { ...prev[i], ...newTodo }, ...prev.slice(i + 1, prev.length)])
+            changeEditable(i)
+        }).catch((ex) => alert(ex));
     }
 
     function changeEditable(i) {
@@ -85,67 +89,40 @@ function Todos() {
         event.preventDefault()
         let sortArr = todos.slice()
         switch (event.target.value) {
-            case "id":
-                setTodos(sortArr.sort((a, b) => a.id - b.id))
-                break;
-            case "alphabet":
-                setTodos(sortArr.sort((a, b) => a.title > b.title ? 1 : -1))
-                break;
-            case "completed":
-                setTodos(sortArr.sort(a => a.completed ? -1 : 1))
-                break;
-            case "random":
-                setTodos(sortArr.sort(() => Math.random() > 0.5 ? -1 : 1))
-                break;
+            case "id": setTodos(sortArr.sort((a, b) => a.id - b.id)); break;
+            case "alphabet": setTodos(sortArr.sort((a, b) => a.title > b.title ? 1 : -1)); break;
+            case "completed": setTodos(sortArr.sort(a => a.completed ? -1 : 1)); break;
+            case "random": setTodos(sortArr.sort(() => Math.random() > 0.5 ? -1 : 1)); break;
         }
-        console.log(userTodos)
-    }
-
-    function updateTask(event, userIndex, i, id) {
-        event.preventDefault()
-        const { title, completed } = event.target;
-
-        fetch(`http://localhost:3000/todos/${id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ title: title.value, completed: completed.checked }),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        }).then(response => {
-            if (!response.ok)
-                throw 'Error' + response.status + ': ' + response.statusText;
-        }).then(() => {
-            setUserTodos(prev => [...prev.slice(0, userIndex), { ...prev[userIndex], title: title.value, completed: completed.checked }, ...prev.slice(userIndex + 1, prev.length)])
-            setTodos(prev => [...prev.slice(0, i), { ...prev[i], title: title.value, completed: completed.checked }, ...prev.slice(i + 1, prev.length)])
-            changeEditable(i)
-        }).catch((ex) => alert(ex));
     }
 
     function searchTodos(event) {
-        let foundsArr;
-        let foundIndex;
-        console.log(event.target.value)
-        switch (event.target.name) {
+        let foundsArr, foundIndex;
+        const { name, value } = event.target;
+        switch (name) {
             case "id":
-                foundIndex = userTodos.findIndex(t => t != null && t.id == event.target.value)
-                setTodos([{ ...userTodos[foundIndex], i: foundIndex, editable: false }])
+                foundIndex = originalTodos.findIndex(t => t != null && t.id == value)
+                setTodos([{ ...originalTodos[foundIndex], originalIndex: foundIndex, editable: false }])
                 break;
             case "title":
-                foundsArr = userTodos.map((t, i) => { if (t != null && t.title.includes(event.target.value)) return { ...t, i: i, editable: false } })
+                foundsArr = originalTodos.map((t, i) => {
+                    if (t != null && t.title.includes(value)) return { ...t, originalIndex: i, editable: false }
+                })
                 setTodos(foundsArr.filter(t => t != null))
                 break;
-            case "searchBycompleted":
-                foundsArr = userTodos.slice()
-                    .map((t, i) => { if (t != null && `${t.completed}` == event.target.value) return { ...t, i: i, editable: false } })
+            case "completed":
+                foundsArr = originalTodos.slice().map((t, i) => {
+                    if (t != null && `${t.completed}` == value) return { ...t, originalIndex: i, editable: false }
+                })
                 setTodos(foundsArr.filter(t => t != null))
                 break;
         }
     }
 
-    function search(event) {
+    function selectSearchType(event) {
         let foundsArr;
         if (event.target.value == "all") {
-            foundsArr = userTodos.map((t, i) => { if (t != null) return { ...t, i: i, editable: false } })
+            foundsArr = originalTodos.map((t, i) => { if (t != null) return { ...t, originalIndex: i, editable: false } })
             setTodos(foundsArr.filter(t => t != null));
             setSearchType();
         }
@@ -158,7 +135,7 @@ function Todos() {
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add todo</button>
         <br />
 
-        {showAdditionForm && <form onSubmit={addingTodo}>
+        {showAdditionForm && <form onSubmit={addTodo}>
             <label htmlFor='title' >todo title</label>
             <input name='title' type='text' required></input>
             <button type="submit">Add</button>
@@ -175,75 +152,38 @@ function Todos() {
         </select>
 
         <label htmlFor='search' >search by</label>
-        <select onChange={search} name="search">
+        <select onChange={selectSearchType} name="search">
             <option value="all" ></option>
             <option value="id">id</option>
             <option value="title">title</option>
             <option value="completed">completed</option>
         </select>
         <br />
-        {/* onClick={searchTodos} */}
-        {searchType ? (searchType == "completed" ?
-            <>
+
+        {searchType ?
+            (searchType == "completed" ? <>
                 <label htmlFor="completed">completed</label>
-                <input type="radio" name="searchBycompleted" value="true" onChange={event => searchTodos(event)} />
+                <input type="radio" name="completed" value="true" onChange={event => searchTodos(event)} />
                 <label htmlFor="notCompleted">not completed</label>
-                <input type="radio" name="searchBycompleted" value="false" onChange={event => searchTodos(event)} />
+                <input type="radio" name="completed" value="false" onChange={event => searchTodos(event)} />
             </> : <input type="text" name={searchType} onChange={event => searchTodos(event)} />)
             : <></>}
-        <h1> <ins>todos list</ins></h1>
 
-        {/* <div className="todosContainer"> */}
+        <h1><ins>Todos list</ins></h1>
         {todos.length == 0 ? <h2>No todos found</h2>
             : todos.map((todo, i) => {
                 return (todo.id > -1 ?
-                    // <form className="todosContainer" key={i} onSubmit={handleSubmit((data) => updateTask(data, todo.i, i, todo.id))}>
-                    <form className="todosContainer" key={i} onSubmit={(event) => {updateTask(event, todo.i, i, todo.id)}}>
+                    <form className="todosContainer" key={i} onSubmit={(event) => { updateTodo(event, todo.originalIndex, i, todo.id) }}>
                         <span>{todo.id}: </span>
                         {todo.editable ? <>
-                            {/* <input name="title" type="text" defaultValue={todo.title} className="titleInput" {...register('title')} />
-                                <input name="completed" type="checkbox" defaultChecked={todo.completed}  {...register('completed')} /></> */}
                             <input name="title" type="text" defaultValue={todo.title} className="titleInput" />
                             <input name="completed" type="checkbox" defaultChecked={todo.completed} /></>
                             : <><span>{todo.title} </span>
                                 <input name="completed" type="checkbox" disabled={true} checked={todo.completed} /></>}
                         <img src={edit} onClick={() => changeEditable(i)} />
-                        <img onClick={() => deleteTodo(todo.i, i, todo.id)} src={trash} />
-                        {todo.editable && <button type="submit" >update</button>}
-                        {/* <br /><br /> */}
+                        <img onClick={() => deleteTodo(todo.originalIndex, i, todo.id)} src={trash} />
+                        {todo.editable && <button type="submit" >Update</button>}
                     </form> : <h2>No todos found</h2>)
-            })}
-        {/* </div> */}
-    </>)
+            })}</>)
 }
-
 export default Todos;
-
-
-
-// {/* <form onSubmit={searchTodos}>
-// // <label htmlFor='searchById'>search by id</label>
-// <input type="text" name="searchById" onChange={event => searchTodos(event.target)} />
-// {/* <input type="text" name="searchById" /> */}
-// {/* <label htmlFor='searchByTitle'>search by title</label> */}
-// {/* <input type="text" name="searchByTitle" onChange={event => searchTodos(event.target)} /> */}
-// {/* <input type="text" name="searchByTitle" /> */}
-// {/* {/* <label htmlFor='searchBycompleted'>search by completed</label> */}
-// {/* <input type="text" name="searchBycompleted" onChange={event => setStringSearch(event.target.value)} /> */} */}
-// {/* <p>search by completed</p>
-// <input type="radio" name="searchBycompleted" value="true" />
-// <label htmlFor="completed">completed</label>
-// <input type="radio" name="searchBycompleted" value="false" />
-// <label htmlFor="notComplete">not complete</label> */}
-// {/* <input onChange={event => searchTodos(event.target)} type="radio" name="searchBycompleted" value="all" />
-// <label htmlFor="all">all</label> */}
-// {/* <button type="submit">search</button> */}
-// {/* <p>search by completed</p>
-// <input type="radio" onChange={event => searchTodos(event.target)} name="searchBycompleted" value="true" />
-// <label htmlFor="completed">completed</label>
-// <input onChange={event => searchTodos(event.target)} type="radio" name="searchBycompleted" value="false" />
-// <label htmlFor="notComplete">not complete</label> */}
-// {/* <input onChange={event => searchTodos(event.target)} type="radio" name="searchBycompleted" value="all" />
-// // <label htmlFor="all">all</label> */}
-// {/* <br /> */}
-// //     </form >

@@ -1,19 +1,16 @@
-import React, { useContext, useRef, useEffect } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { AppContext } from "../App";
 import useNextId from "./useNextId";
 
-function Register({ userIdentifyDetails }) {
+function RegisterDetails({ userIdentifyDetails }) {
 
     const { setUserDetails } = useContext(AppContext)
     const navigate = useNavigate()
     const [nextId, setNextId] = useNextId(1)
 
-    const {
-        register,
-        handleSubmit,
-    } = useForm();
+    const { register, handleSubmit } = useForm();
 
     function onSubmit(data) {
         const { name, email, street, suite, city, zipcode, lat, lng, phone,
@@ -82,4 +79,4 @@ function Register({ userIdentifyDetails }) {
         </form>)
 }
 
-export default Register;
+export default RegisterDetails;

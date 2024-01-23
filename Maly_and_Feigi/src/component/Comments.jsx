@@ -15,7 +15,6 @@ function Comments() {
     const navigate = useNavigate();
     const { i } = state;
 
-
     useEffect(() => {
         fetch(`http://localhost:3000/comments?postId=${posts[i].id}`)
             .then(response => {
@@ -31,7 +30,7 @@ function Comments() {
             }).catch(ex => alert(ex))
     }, [])
 
-    function addingComment(event) {
+    function addComment(event) {
         event.preventDefault();
         const { name, body } = event.target
         const newComment = { postId: posts[i].id, id: `${nextId}`, name: name.value, email: userDetails.email, body: body.value }
@@ -64,19 +63,12 @@ function Comments() {
         }
     }
 
-    function changeEditable(i) {
-        setComments(prev => [...prev.slice(0, i), { ...prev[i], editable: !prev[i].editable }, ...prev.slice(i + 1, prev.length)])
-    }
-
     function updateComment(event, i, id) {
         event.preventDefault()
-        const { name, body } = event.target;
+        const newComment = { name: event.target.name.value, body: event.target.body.value }
         fetch(`http://localhost:3000/comments/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify({
-                name: name.value,
-                body: body.value
-            }),
+            body: JSON.stringify(newComment),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
@@ -84,19 +76,22 @@ function Comments() {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
-            setComments(prev => [...prev.slice(0, i), { ...prev[i], name: name.value, body: body.value }, ...prev.slice(i + 1, prev.length)])
+            setComments(prev => [...prev.slice(0, i), { ...prev[i], ...newComment }, ...prev.slice(i + 1, prev.length)])
             changeEditable(i)
         }).catch((ex) => alert(ex));
+    }
+
+    function changeEditable(i) {
+        setComments(prev => [...prev.slice(0, i), { ...prev[i], editable: !prev[i].editable }, ...prev.slice(i + 1, prev.length)])
     }
 
     return (<>
         <button onClick={() => navigate("..", { state: { i } })}>close</button>
         <br /><br />
-        {/* <img src={X} onClick={() => navigate("..", { state: { i } })} /><br /><br /> */}
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add comment</button>
         <br />
 
-        {showAdditionForm && <form onSubmit={addingComment}>
+        {showAdditionForm && <form onSubmit={addComment}>
             <label htmlFor='name' >name</label>
             <input name='name' type='text' required></input>
             <label htmlFor='body' >body</label>
@@ -105,7 +100,7 @@ function Comments() {
         </form>}
         <br />
 
-        <h2> <ins>comments list</ins></h2>
+        <h2><ins>Comments list</ins></h2>
         {comments.length == 0 ? <h2>No comments found</h2>
             : comments.map((comment, i) => {
                 return (
@@ -118,20 +113,14 @@ function Comments() {
                             : <><span><b>name: </b> {comment.name} </span>
                                 <br />
                                 <span><b>body: </b> {comment.body} </span> </>}
-                        {userDetails.email == comment.email && <img src={edit} onClick={() => changeEditable(i)} />}
-                        <img onClick={() => deleteComment(i, comment.id)} src={trash} />
-                        {comment.editable && <button type="submit" >update</button>}
+                        {userDetails.email == comment.email && <>
+                            <img src={edit} onClick={() => changeEditable(i)} />
+                            <img onClick={() => deleteComment(i, comment.id)} src={trash} />
+                        </>}
+                        {comment.editable && <button type="submit" >Update</button>}
                         <br /><br />
                     </form>)
             })}</>)
 }
 
 export default Comments;
-
-
-
-
-
-
-
-
