@@ -12,7 +12,7 @@ function RegisterDetails({ userIdentifyDetails }) {
 
     const { register, handleSubmit } = useForm();
 
-    function onSubmit(data) {
+    function onSubmitFullDetails(data) {
         const { name, email, street, suite, city, zipcode, lat, lng, phone,
             companyName, catchPhrase, bs } = data;
         fetch('http://localhost:3000/users', {
@@ -42,7 +42,7 @@ function RegisterDetails({ userIdentifyDetails }) {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmitFullDetails)}>
             <label htmlFor='name'>name</label>
             <input name='name' type='text' required {...register('name')} ></input>
 

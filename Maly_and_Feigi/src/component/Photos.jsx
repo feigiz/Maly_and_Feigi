@@ -25,7 +25,6 @@ function Photos() {
                 for (let i = 0; i < data.length; i++)
                     photosArr.push({ ...data[i], editable: false })
                 setPhotos(photosArr);
-                console.log(photos)
             }).catch(ex => alert(ex))
     }, [])
 
@@ -69,7 +68,6 @@ function Photos() {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
-            setPhotos(prev => [...prev, { ...newPhoto, editable: false }])
             setShowAdditionForm(false)
             setNextId(prev => prev + 1)
         }).catch((ex) => alert(ex));
@@ -85,9 +83,8 @@ function Photos() {
             }).then(() => {
                 setPhotos((prev) => [...prev.slice(0, i), ...prev.slice(i + 1, prev.length)])
             }).catch((ex) => alert(ex));
-        } else {
+        } else
             return;
-        }
     }
 
     function changeEditable(i) {
@@ -120,9 +117,9 @@ function Photos() {
             <label htmlFor='title' >title</label>
             <input name='title' type='text' required></input>
             <label htmlFor='url' >url</label>
-            <input name='url' type='text' required></input>
+            <input name='url' type="url" required></input>
             <label htmlFor='thumbnailUrl' >thumbnail url</label>
-            <input name='thumbnailUrl' type='text' required></input>
+            <input name='thumbnailUrl' type="url" required></input>
             <button type="submit">Add</button>
         </form>}
 

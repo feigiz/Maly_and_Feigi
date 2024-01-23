@@ -3,11 +3,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { AppContext } from "../App";
 import Photos from "./Photos";
 
-
 function SingleAlbum() {
-    const { userDetails, albums, setAlbums,  setOriginalAlbums } = useContext(AppContext)
+    const { userDetails, albums, setAlbums, setOriginalAlbums } = useContext(AppContext)
     const { state } = useLocation();
-    const  {i}  = state;
+    const { i } = state;
 
     useEffect(() => {
         if (albums.length == 0)
@@ -27,10 +26,7 @@ function SingleAlbum() {
     }, [])
 
     return (albums.length && <>
-        <Link
-            to="../.."
-            relative="path"
-        > <span>Back to all albums</span></Link>
+        <Link onClick={() => document.removeEventListener('scroll', onScroll)} to="../.." relative="path"> <span>Back to all albums</span> </Link>
         <h3>id: {albums[i].id}</h3>
         <h3>title: {albums[i].title} </h3>
         <Photos />
@@ -38,4 +34,3 @@ function SingleAlbum() {
 }
 
 export default SingleAlbum;
-

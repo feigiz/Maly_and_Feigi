@@ -11,7 +11,7 @@ function SinglePost() {
     const { state } = useLocation();
     const { i } = state;
     const [isEditable, setIsEditable] = useState(false)
-    const { register, handleSubmit, } = useForm()
+    const { register, handleSubmit } = useForm()
 
     useEffect(() => {
         if (posts.length == 0)
@@ -58,9 +58,8 @@ function SinglePost() {
                 setPosts((prev) => [...prev.slice(0, i), ...prev.slice(i + 1, prev.length)])
                 navigate("..")
             }).catch((ex) => alert(ex));
-        } else {
+        } else
             return;
-        }
     }
 
     return (posts.length && <div className="singlePostContainer">

@@ -31,17 +31,17 @@ function Todos() {
 
     function addTodo(event) {
         event.preventDefault();
-        const newTask = { userId: userDetails.id, id: `${nextId}`, title: event.target[0].value, completed: false }
+        const newTodo = { userId: userDetails.id, id: `${nextId}`, title: event.target[0].value, completed: false }
         fetch('http://localhost:3000/todos', {
             method: 'POST',
-            body: JSON.stringify(newTask),
+            body: JSON.stringify(newTodo),
             headers: { 'Content-type': 'application/json; charset=UTF-8' },
         }).then(response => {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
-            setOriginalTodos(prev => [...prev, newTask])
-            setTodos(prev => [...prev, { ...newTask, originalIndex: originalTodos.length, editable: false }])
+            setOriginalTodos(prev => [...prev, newTodo])
+            setTodos(prev => [...prev, { ...newTodo, originalIndex: originalTodos.length, editable: false }])
             setShowAdditionForm(false)
             setNextId(prevId => prevId + 1)
         }).catch((ex) => alert(ex));
@@ -130,7 +130,6 @@ function Todos() {
     }
 
     return (<>
-        {/* <br /><br /> */}
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add todo</button>
         <br />
 
