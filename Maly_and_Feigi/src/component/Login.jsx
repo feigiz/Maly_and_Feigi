@@ -39,9 +39,9 @@ function Login() {
             }
         } catch (ex) { alert(ex) }
     }
-
+// style={{marginTop:500}}
     return (<>
-        <form onSubmit={handleSubmit((data => checkUser(data.name, data.password)))}>
+        <form  onSubmit={handleSubmit((data => checkUser(data.name, data.password)))}>
             <label htmlFor='name' >user name</label>
             <input name='name' type='text' required {...register('name')}></input>
             <label htmlFor='password' >password</label>

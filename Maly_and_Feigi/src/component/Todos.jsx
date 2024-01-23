@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import useNextId from "./useNextId";
 
 function Todos() {
-    
+
     //מלי רוצה לחלק לקומפוננטות
     //לקצר מערך טודו קטן
     // IהI פייגי רוצה לסדר את עניני    
@@ -23,7 +23,7 @@ function Todos() {
     // const [nextId, setNextId] = useState();
     const [nextId, setNextId] = useNextId(2);
     const [searchType, setSearchType] = useState();
-    const { register, handleSubmit, } = useForm()
+    // const { register, handleSubmit, } = useForm()
 
     useEffect(() => {
         fetch(`http://localhost:3000/todos?userId=${userDetails.id}`)
@@ -57,7 +57,7 @@ function Todos() {
             setUserTodos(prev => [...prev, newTask])
             setTodos(prev => [...prev, { ...newTask, i: userTodos.length, editable: false }])
             setShowAdditionForm(false)
-            setNextId(nextId+1)
+            setNextId(nextId + 1)
         }).catch((ex) => alert(ex));
     }
 
@@ -101,12 +101,13 @@ function Todos() {
         console.log(userTodos)
     }
 
-    function updateTask(data, userIndex, i, id) {
-        const { title, completed } = data;
+    function updateTask(event, userIndex, i, id) {
+        event.preventDefault()
+        const { title, completed } = event.target;
 
         fetch(`http://localhost:3000/todos/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify({ title: title, completed: completed }),
+            body: JSON.stringify({ title: title.value, completed: completed.value }),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
@@ -114,8 +115,8 @@ function Todos() {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
         }).then(() => {
-            setUserTodos(prev => [...prev.slice(0, userIndex), { ...prev[userIndex], title: title, completed: completed }, ...prev.slice(userIndex + 1, prev.length)])
-            setTodos(prev => [...prev.slice(0, i), { ...prev[i], title: title, completed: completed }, ...prev.slice(i + 1, prev.length)])
+            setUserTodos(prev => [...prev.slice(0, userIndex), { ...prev[userIndex], title: title.value, completed: completed.value }, ...prev.slice(userIndex + 1, prev.length)])
+            setTodos(prev => [...prev.slice(0, i), { ...prev[i], title: title.value, completed: completed.value }, ...prev.slice(i + 1, prev.length)])
             changeEditable(i)
         }).catch((ex) => alert(ex));
     }
@@ -193,24 +194,27 @@ function Todos() {
         <h2> <ins>todos list</ins></h2>
 
         {/* <div className="todosContainer"> */}
-            {todos.length == 0 ? <h2>No todos found</h2>
-                : todos.map((todo, i) => {
-                    return (todo.id > -1 ?
-                        <form className="todosContainer" key={i} onSubmit={handleSubmit((data) => updateTask(data, todo.i, i, todo.id))}>
-                            <span>{todo.id}: </span>
-                            {todo.editable ? <>
-                                <input name="title" type="text" defaultValue={todo.title} style={{ width: 300 }}  {...register('title')} />
-                                <input name="completed" type="checkbox" defaultChecked={todo.completed}  {...register('completed')} /></>
-                                : <><span>{todo.title} </span>
-                                    <input name="completed" type="checkbox" disabled={true} checked={todo.completed} /></>}
-                            <img src={edit} onClick={() => changeEditable(i)} />
-                            <img onClick={() => deleteTodo(todo.i, i, todo.id)} src={trash} />
-                            {todo.editable && <button type="submit" >update</button>}
-                            <br /><br />
-                        </form> : <h2>No todos found</h2>)
-                })}
-                {/* </div> */}
-                </>)
+        {todos.length == 0 ? <h2>No todos found</h2>
+            : todos.map((todo, i) => {
+                return (todo.id > -1 ?
+                    // <form className="todosContainer" key={i} onSubmit={handleSubmit((data) => updateTask(data, todo.i, i, todo.id))}>
+                    <form className="todosContainer" key={i} onSubmit={(event) => {updateTask(event, todo.i, i, todo.id)}}>
+                        <span>{todo.id}: </span>
+                        {todo.editable ? <>
+                            {/* <input name="title" type="text" defaultValue={todo.title} className="titleInput" {...register('title')} />
+                                <input name="completed" type="checkbox" defaultChecked={todo.completed}  {...register('completed')} /></> */}
+                            <input name="title" type="text" defaultValue={todo.title} className="titleInput" />
+                            <input name="completed" type="checkbox" defaultChecked={todo.completed} /></>
+                            : <><span>{todo.title} </span>
+                                <input name="completed" type="checkbox" disabled={true} checked={todo.completed} /></>}
+                        <img src={edit} onClick={() => changeEditable(i)} />
+                        <img onClick={() => deleteTodo(todo.i, i, todo.id)} src={trash} />
+                        {todo.editable && <button type="submit" >update</button>}
+                        <br /><br />
+                    </form> : <h2>No todos found</h2>)
+            })}
+        {/* </div> */}
+    </>)
 }
 
 export default Todos;

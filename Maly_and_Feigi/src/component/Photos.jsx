@@ -15,7 +15,7 @@ function Photos() {
     const navigate = useNavigate();
     const [showBtnMore, setShowBtnMore] = useState(true)
     const { i } = state;
-    const { register, handleSubmit, } = useForm();
+    // const { register, handleSubmit, } = useForm();
     const allPhotos = useRef(null)
 
     let scrolling = false;
@@ -97,9 +97,10 @@ function Photos() {
         setPhotos(prev => [...prev.slice(0, i), { ...prev[i], editable: !prev[i].editable }, ...prev.slice(i + 1, prev.length)])
     }
 
-    function updatePhoto(data, i, id) {
-        const { title, url, thumbnailUrl } = data;
-        const updatedPhoto = { title: title, url: url, thumbnailUrl: thumbnailUrl }
+    function updatePhoto(event, i, id) {
+        event.preventDefault()
+        const { title, url, thumbnailUrl } = event.target;
+        const updatedPhoto = { title: title.value, url: url.value, thumbnailUrl: thumbnailUrl.value }
         fetch(`http://localhost:3000/photos/${id}`, {
             method: 'PATCH',
             body: JSON.stringify(updatedPhoto),
@@ -150,17 +151,23 @@ function Photos() {
         <div ref={allPhotos} onWheel={scrolled} className="allPhotos">{photos.length == 0 ? <h2>There are no photos</h2>
             : photos.map((photo, i) => {
                 return (
-                    <form key={i} onSubmit={handleSubmit((data) => updatePhoto(data, i, photo.id))}>
+                    // <form key={i} onSubmit={handleSubmit((data) => updatePhoto(data, i, photo.id))}>
+                    <form key={i} onSubmit={(event) => updatePhoto(event, i, photo.id)}>
                         <span style={{ marginRight: 10 }}>{photo.id}: </span>
                         {<img src={edit} onClick={() => changeEditable(i)} />}
                         <img onClick={() => deletePhoto(i, photo.id)} src={trash} />
                         {photo.editable ?
                             <>
-                                <input name="title" type="text" defaultValue={photo.title} style={{ width: 300 }} {...register('title')} />
+                                {/* <input name="title" type="text" defaultValue={photo.title} style={{ width: 300 }} {...register('title')} />
                                 <br />
                                 <input name="url" type="url" defaultValue={photo.url} {...register('url')} />
                                 <br />
-                                <input name="thumbnailUrl" type="url" defaultValue={photo.thumbnailUrl} {...register('thumbnailUrl')} />
+                                <input name="thumbnailUrl" type="url" defaultValue={photo.thumbnailUrl} {...register('thumbnailUrl')} /> */}
+                                <input name="title" type="text" defaultValue={photo.title} style={{ width: 300 }} />
+                                <br />
+                                <input name="url" type="url" defaultValue={photo.url} {...register('url')} />
+                                <br />
+                                <input name="thumbnailUrl" type="url" defaultValue={photo.thumbnailUrl} />
                             </>
                             : <div className="photosContainer">
                                 {/* <br /> */}
