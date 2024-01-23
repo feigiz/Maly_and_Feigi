@@ -31,9 +31,9 @@ function Photos() {
 
     function onScroll() {
         const wrappedElement = document.getElementById('header');
-        if (wrappedElement.getBoundingClientRect().bottom < window.innerHeight) {
+        if (wrappedElement.getBoundingClientRect().bottom < window.innerHeight-130) {
             document.removeEventListener('scroll', onScroll);
-            addPhotos()
+            addPhotosToScreen()
         }
     };
 
@@ -41,7 +41,7 @@ function Photos() {
         document.addEventListener('scroll', onScroll);
     }, [photos])
 
-    function addPhotos() {
+    function addPhotosToScreen() {
         const length = photos.length
         fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_start=${length}&_end=${length + 8}`)
             .then(response => {

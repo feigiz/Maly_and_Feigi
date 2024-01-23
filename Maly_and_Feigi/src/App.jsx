@@ -13,12 +13,11 @@ import Todos from './component/Todos';
 import SinglePost from './component/SinglePost';
 import Comments from './component/Comments';
 import SingleAlbum from './component/SingleAlbum';
-import PostsOfAllUsers from './component/PostOfAllUsers';
 
 export const AppContext = createContext();
 
 function App() {
-  const [userDetails, setUserDetails] = useState({});
+  const [userDetails, setUserDetails] = useState();
   const [posts, setPosts] = useState([]);
   const [originalPosts, setOriginalPosts] = useState([]);
   const [albums, setAlbums] = useState([]);
@@ -49,13 +48,6 @@ function App() {
                 </Route>
               </Route>
             </Route>
-            <Route path="posts">
-              <Route index element={<PostsOfAllUsers />} />
-              <Route path=":id" element={<SinglePost />}>
-                <Route path="comments" element={<Comments />} />
-              </Route>
-            </Route>
-            {/* <Route path="Posts" element={<PostsOfAllUsers/>}/> */}
           </Routes>
         </Router>
       </AppContext.Provider>

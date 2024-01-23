@@ -66,7 +66,7 @@ function Todos() {
     function updateTodo(event, originalIndex, i, id) {
         event.preventDefault()
         const { title, completed } = event.target;
-        const updatedTodo={ title: title.value, completed: completed.checked }
+        const updatedTodo = { title: title.value, completed: completed.checked }
         fetch(`http://localhost:3000/todos/${id}`, {
             method: 'PATCH',
             body: JSON.stringify(updatedTodo),

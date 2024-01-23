@@ -90,7 +90,6 @@ function Posts() {
 
     return (<>
         <br /><br />
-        <button onClick={()=>navigate('/posts')}>show posts of all users</button>
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add post</button>
         <br />
         {showAdditionForm && <form onSubmit={addPost}>
