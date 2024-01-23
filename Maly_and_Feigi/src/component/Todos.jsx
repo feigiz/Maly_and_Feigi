@@ -58,9 +58,8 @@ function Todos() {
                 setOriginalTodos((prev) => [...prev.slice(0, originalIndex), null, ...prev.slice(originalIndex + 1, prev.length)])
                 setTodos((prev) => [...prev.slice(0, i), ...prev.slice(i + 1, prev.length)])
             }).catch((ex) => alert(ex));
-        } else {
+        } else
             return;
-        }
     }
 
     function updateTodo(event, originalIndex, i, id) {
@@ -131,7 +130,7 @@ function Todos() {
     }
 
     return (<>
-        <br /><br />
+        {/* <br /><br /> */}
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add todo</button>
         <br />
 

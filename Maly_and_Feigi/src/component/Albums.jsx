@@ -71,7 +71,6 @@ function Albums() {
     }
 
     return (<>
-        <br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add album</button>
         <br />
         {showAdditionForm && <form onSubmit={addAlbum}>

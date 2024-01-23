@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react";
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from "../App";
 
-
 function Home() {
         const { userDetails, setUserDetails } = useContext(AppContext)
         const navigate = useNavigate();
@@ -20,7 +19,6 @@ function Home() {
         return (userDetails && <>
                 <h1>Welcome {userDetails.name}</h1>
                 <button onClick={logout}>Logout</button>
-                <br /><br />
                 <nav>
                         <NavLink to="./info"
                                 style={({ isActive }) => isActive ? { backgroundColor: "rgb(224, 214, 239)" } : {}}>

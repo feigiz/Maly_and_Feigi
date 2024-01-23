@@ -89,7 +89,6 @@ function Posts() {
     }
 
     return (<>
-        <br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add post</button>
         <br />
         {showAdditionForm && <form onSubmit={addPost}>

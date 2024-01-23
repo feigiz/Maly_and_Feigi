@@ -27,7 +27,7 @@ function SingleAlbum() {
     }, [])
 
     return (albums.length && <>
-        <br /><br /><Link
+        <Link
             to="../.."
             relative="path"
         > <span>Back to all albums</span></Link>

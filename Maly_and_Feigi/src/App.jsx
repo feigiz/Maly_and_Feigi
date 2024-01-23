@@ -1,6 +1,5 @@
 import { useState, createContext } from 'react'
 import './App.css'
-
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Signup from './component/Signup';
 import Login from './component/Login';
@@ -25,7 +24,10 @@ function App() {
 
   return (
     <div className='App'>
-      <AppContext.Provider value={{ userDetails, setUserDetails, posts, setPosts, originalPosts, setOriginalPosts, albums, setAlbums, originalAlbums, setOriginalAlbums }}>
+      <AppContext.Provider value={{
+        userDetails, setUserDetails, posts, setPosts, originalPosts,
+        setOriginalPosts, albums, setAlbums, originalAlbums, setOriginalAlbums
+      }}>
         <Router>
           <Routes>
             <Route path="/" element={<Header />} >
