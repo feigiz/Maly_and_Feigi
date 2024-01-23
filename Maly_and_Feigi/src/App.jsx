@@ -17,7 +17,7 @@ import SingleAlbum from './component/SingleAlbum';
 export const AppContext = createContext();
 
 function App() {
-  const [userDetails, setUserDetails] = useState();
+  const [userDetails, setUserDetails] = useState({});
   const [posts, setPosts] = useState([]);
   const [originalPosts, setOriginalPosts] = useState([]);
   const [albums, setAlbums] = useState([]);
