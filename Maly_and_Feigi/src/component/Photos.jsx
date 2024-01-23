@@ -20,11 +20,33 @@ function Photos() {
 
     let scrolling = false;
 
-    window.scroll = () => {
-        scrolling = true;
-    };
+    // window.scroll = () => {
+    //     scrolling = true;
+    // };
 
+    function isBottom(el) {
+        return el.getBoundingClientRect().bottom <= window.innerHeight;
+    }
+
+    // function componentDidMount() {
+    //     document.addEventListener('scroll', trackScrolling);
+    // }
+
+    // function componentWillUnmount() {
+    //     document.removeEventListener('scroll', trackScrolling);
+    // }
+
+    function trackScrolling() {
+        const wrappedElement = document.getElementById('header');
+        if (isBottom(wrappedElement)) {
+            console.log('header bottom reached');
+            console.log(photos)
+            document.removeEventListener('scroll', trackScrolling);
+            addPhotos()
+        }
+    };
     useEffect(() => {
+
         //fech Photos
         fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_limit=12`)
             .then(response => {
@@ -37,7 +59,9 @@ function Photos() {
                 for (let i = 0; i < data.length; i++)
                     photosArr.push({ ...data[i], editable: false })
                 setPhotos(photosArr);
+                document.addEventListener('scroll', trackScrolling);
             }).catch(ex => alert(ex))
+
     }, [])
 
     function addPhotos() {
@@ -119,17 +143,27 @@ function Photos() {
     //     console.log("a")
 
     // },300);
-    function scrolled() {
-        console.log("a")
+    // function scrolled() {
+    //     console.log("a")
 
-        if (scrolling) {
-            scrolling = false;
-            // place the scroll handling logic here
-        }
-        if (allPhotos.current.offsetHeight + allPhotos.current.scrollTop >= allPhotos.current.scrollHeight) {
-            addPhotos();
-        }
-    }
+    //     if (scrolling) {
+    //         scrolling = false;
+    //         // place the scroll handling logic here
+    //     }
+    //     if (allPhotos.current.offsetHeight + allPhotos.current.scrollTop >= allPhotos.current.scrollHeight) {
+    //         addPhotos();
+    //     }
+
+
+
+    // }
+    // .scroll(function() {
+    //         if($(window).scrollTop() + $(window).height() >= $(document).height()) {
+    //             console.log("bottom!");
+    //         }
+    //      });
+
+    // const onscrollend = (event) => { console.log("finish") };
 
     return (<>
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add photo</button>
@@ -148,7 +182,7 @@ function Photos() {
 
         <br />
         <h2> <ins>photos list</ins></h2>
-        <div ref={allPhotos} onWheel={scrolled} className="allPhotos">{photos.length == 0 ? <h2>There are no photos</h2>
+        <div ref={allPhotos} className="allPhotos" id="header">{photos.length == 0 ? <h2>There are no photos</h2>
             : photos.map((photo, i) => {
                 return (
                     // <form key={i} onSubmit={handleSubmit((data) => updatePhoto(data, i, photo.id))}>

@@ -92,7 +92,7 @@ function Albums() {
 
         {searchType ? <input type="text" name={searchType} onChange={event => searchAlbums(event)} /> : <></>}
 
-        <h2><ins>albums list</ins></h2>
+        <h1><ins>albums list</ins></h1>
         {albums.length == 0 ? <h2>No albums found</h2>
             : albums.map((album, i) => {
                 return (album.id > -1 ?

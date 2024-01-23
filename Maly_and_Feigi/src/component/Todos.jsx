@@ -191,7 +191,7 @@ function Todos() {
                 <input type="radio" name="searchBycompleted" value="false" onChange={event => searchTodos(event)} />
             </> : <input type="text" name={searchType} onChange={event => searchTodos(event)} />)
             : <></>}
-        <h2> <ins>todos list</ins></h2>
+        <h1> <ins>todos list</ins></h1>
 
         {/* <div className="todosContainer"> */}
         {todos.length == 0 ? <h2>No todos found</h2>

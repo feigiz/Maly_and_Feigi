@@ -117,7 +117,7 @@ function Posts() {
 
         {searchType ? <input type="text" name={searchType} onChange={event => searchPosts(event)} /> : <></>}
 
-        <h2><ins>posts list</ins></h2><div className="postsContainer" >
+        <h1><ins>posts list</ins></h1><div className="postsContainer" >
         {posts.length == 0 ? <h2>No posts found</h2>
             : posts.map((post, i) => {
                 return (post.id > -1 ?
