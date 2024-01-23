@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useNavigate, } from 'react-router-dom';
+import { Link, useNavigate, } from 'react-router-dom';
 import { AppContext } from "../App";
 import useNextId from "./useNextId";
 
@@ -97,10 +97,18 @@ function Albums() {
             : albums.map((album, i) => {
                 return (album.id > -1 ?
                     // <div key={i}>
-                    <form className="albumContainer" onClick={() => navigate(`./${album.id}/photos`, { state: { i } })} key={i} >
+                    // <form className="albumContainer" onClick={() => navigate(`./${album.id}/photos`, { state: { i } })} key={i} >
+                    //     <span>{album.id}: </span>
+                    //     <span>{album.title} </span>
+                    // </form>
+                    //     <form className="albumContainer" onClick={() => navigate(`./${album.id}/photos`, { state: { i } })} key={i} >
+                    //     <span>{album.id}: </span>
+                    //     <span>{album.title} </span>
+                    // </form>
+                    <Link key={i} className="albumContainer" to={`./${album.id}/photos`} state={{i}} >
                         <span>{album.id}: </span>
                         <span>{album.title} </span>
-                    </form>
+                    </Link >
                     // </div>
                     : <h2>No albums found</h2>
                 )

@@ -7,7 +7,7 @@ import Photos from "./Photos";
 function SingleAlbum() {
     const { userDetails, albums, setAlbums, setUserAlbums } = useContext(AppContext)
     const { state } = useLocation();
-    const { i } = state;
+    const  {i}  = state;
 
     useEffect(() => {
         if (albums.length == 0)
