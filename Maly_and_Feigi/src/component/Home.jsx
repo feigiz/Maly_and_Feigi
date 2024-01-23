@@ -6,7 +6,7 @@ import { AppContext } from "../App";
 function Home() {
         const { userDetails, setUserDetails } = useContext(AppContext)
         const navigate = useNavigate();
-        const { id } = useParams();
+        // const { id } = useParams();
 
 
         function logout() {
@@ -16,15 +16,16 @@ function Home() {
 
         useEffect(() => {
                 if (userDetails == null)
-                        fetch(`http://localhost:3000/users/${id}`)
-                                .then(response => {
-                                        if (!response.ok)
-                                                throw 'Error' + response.status + ': ' + response.statusText;
-                                        return response.json();
-                                })
-                                .then(data => {
-                                        setUserDetails(data);
-                                }).catch(ex => alert(ex))
+                        setUserDetails(JSON.parse(localStorage.getItem('currentUser')))
+                // fetch(`http://localhost:3000/users/${id}`)
+                //         .then(response => {
+                //                 if (!response.ok)
+                //                         throw 'Error' + response.status + ': ' + response.statusText;
+                //                 return response.json();
+                //         })
+                //         .then(data => {
+                //                 setUserDetails(data);
+                //         }).catch(ex => alert(ex))
 
         }, [])
 

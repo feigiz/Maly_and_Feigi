@@ -32,7 +32,8 @@ function Login() {
             if (!user[0])
                 alert("incorrect data, you have to signup");
             else {
-                console.log(user[0])
+                // console.log(user[0])
+                delete user[0].website
                 localStorage.setItem('currentUser', JSON.stringify(user[0]));
                 navigate(`/home/users/${user[0].id}`);
                 setUserDetails(user[0])
