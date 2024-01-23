@@ -14,7 +14,7 @@ function Photos() {
     const { i } = state;
 
     useEffect(() => {
-        fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_limit=12`)
+        fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_limit=8`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -43,7 +43,7 @@ function Photos() {
 
     function addPhotos() {
         const length = photos.length
-        fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_start=${length}&_end=${length + 12}`)
+        fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_start=${length}&_end=${length + 8}`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
