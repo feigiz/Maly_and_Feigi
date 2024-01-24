@@ -196,6 +196,14 @@ padding: 0 auto;
   width: 400px;
 }
 
+.nameInput{
+  width: 300px;
+}
+
+.bodyInput{
+  width: 500px;
+}
+
 .singlePostContainer {
   width: 600px;
   margin: 30px auto;

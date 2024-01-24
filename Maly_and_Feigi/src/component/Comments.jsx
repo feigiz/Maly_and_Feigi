@@ -93,8 +93,9 @@ function Comments() {
         {showAdditionForm && <form onSubmit={addComment}>
             <label htmlFor='name' >name</label>
             <input name='name' type='text' required></input>
+            <br />
             <label htmlFor='body' >body</label>
-            <input name='body' type='text' required></input>
+            <input name='body' className="bodyInput" type='text' required></input>
             <button type="submit">Add</button>
         </form>}
         <br />
@@ -104,11 +105,11 @@ function Comments() {
             : comments.map((comment, i) => {
                 return (
                     <form key={i} onSubmit={(event) => updateComment(event, i, comment.id)}>
-                        <span style={{ marginRight: 10 }}>{comment.id}: </span>
+                        <span>{comment.id}: </span>
                         {comment.editable ? <>
-                            name: <input name="name" type="text" defaultValue={comment.name} style={{ width: 300 }} />
+                            name: <input name="name" type="text" defaultValue={comment.name} className="nameInput" />
                             <br />
-                            body: <input name="body" type="text" defaultValue={comment.body} style={{ width: 500 }} /></>
+                            body: <input name="body" type="text" defaultValue={comment.body} className="bodyInput" /></>
                             : <><span><b>name: </b> {comment.name} </span>
                                 <br />
                                 <span><b>body: </b> {comment.body} </span> </>}

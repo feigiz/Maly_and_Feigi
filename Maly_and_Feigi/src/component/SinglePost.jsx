@@ -46,9 +46,9 @@ function SinglePost() {
         <h3>id: {post.id}</h3>
         {isEditable ?
             <form onSubmit={handleSubmit(updatePost)}>
-                title: <input name="title" type="text" defaultValue={post.title} style={{ width: 300 }} {...register('title')} />
+                title: <input name="title" type="text" defaultValue={post.title} className="nameInput" {...register('title')} />
                 <br />
-                <b>body: </b> <input name="body" type="text" defaultValue={post.body} style={{ width: 500 }} {...register('body')} />
+                <b>body: </b> <input name="body" type="text" defaultValue={post.body} className="bodyInput" {...register('body')} />
                 <button type="submit" >Update</button>
             </form>
             : <div >

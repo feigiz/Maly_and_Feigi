@@ -132,12 +132,12 @@ function Photos() {
                 : photos.map((photo, i) => {
                     return (
                         <form key={i} onSubmit={(event) => updatePhoto(event, i, photo.id)}>
-                            <span style={{ marginRight: 10 }}>{photo.id}: </span>
+                            <span>{photo.id}: </span>
                             {<img src={edit} onClick={() => changeEditable(i)} />}
                             <img onClick={() => deletePhoto(i, photo.id)} src={trash} />
                             {photo.editable ?
                                 <>
-                                    <input name="title" type="text" defaultValue={photo.title} style={{ width: 300 }} />
+                                    <input name="title" type="text" defaultValue={photo.title} className="nameInput" />
                                     <br />
                                     <input name="url" type="url" defaultValue={photo.url} />
                                     <br />
