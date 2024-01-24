@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import trash from "../icons/trash.png"
 import edit from "../icons/edit.png"
 import { AppContext } from "../App";
@@ -11,10 +11,10 @@ function Photos() {
     const [photos, setPhotos] = useState([]);
     const [nextId, setNextId] = useNextId(6);
     const { albums } = useContext(AppContext)
-    const { i } = state;
+    const { album } = state;
 
     useEffect(() => {
-        fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_limit=8`)
+        fetch(`http://localhost:3000/photos?albumId=${album.id}&_limit=8`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -30,7 +30,7 @@ function Photos() {
 
     function onScroll() {
         const wrappedElement = document.getElementById('header');
-        if (wrappedElement.getBoundingClientRect().bottom < window.innerHeight-130) {
+        if (wrappedElement.getBoundingClientRect().bottom < window.innerHeight - 130) {
             document.removeEventListener('scroll', onScroll);
             addPhotosToScreen()
         }
@@ -42,7 +42,7 @@ function Photos() {
 
     function addPhotosToScreen() {
         const length = photos.length
-        fetch(`http://localhost:3000/photos?albumId=${albums[i].id}&_start=${length}&_end=${length + 8}`)
+        fetch(`http://localhost:3000/photos?albumId=${album.id}&_start=${length}&_end=${length + 8}`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -59,7 +59,7 @@ function Photos() {
     function addPhoto(event) {
         event.preventDefault();
         const { title, url, thumbnailUrl } = event.target
-        const newPhoto = { albumId: albums[i].id, id: `${nextId}`, title: title.value, url: url.value, thumbnailUrl: thumbnailUrl.value }
+        const newPhoto = { albumId: album.id, id: `${nextId}`, title: title.value, url: url.value, thumbnailUrl: thumbnailUrl.value }
         fetch('http://localhost:3000/photos', {
             method: 'POST',
             body: JSON.stringify(newPhoto),
@@ -111,6 +111,10 @@ function Photos() {
     }
 
     return (<>
+        <Link onClick={() => document.removeEventListener('scroll', onScroll)} to="../.." relative="path"> <span>Back to all albums</span> </Link>
+        <h3>id: {album.id}</h3>
+        <h3>title: {album.title} </h3>
+
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add photo</button>
         <br />
         {showAdditionForm && <form onSubmit={addPhoto}>
@@ -122,7 +126,6 @@ function Photos() {
             <input name='thumbnailUrl' type="url" required></input>
             <button type="submit">Add</button>
         </form>}
-
 
         <br />
         <h2> <ins>Photos list</ins></h2>

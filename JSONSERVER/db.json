@@ -23,12 +23,12 @@
     {
       "id": "5",
       "type": "albums",
-      "nextId": 104
+      "nextId": 105
     },
     {
       "id": "6",
       "type": "photos",
-      "nextId": 5012
+      "nextId": 5013
     }
   ],
   "users": [
@@ -2061,6 +2061,11 @@
       "id": "103",
       "userId": "1",
       "title": "avraam frid"
+    },
+    {
+      "id": "104",
+      "userId": "1",
+      "title": "aaaaaa"
     }
   ],
   "photos": [
@@ -2241,15 +2246,8 @@
     },
     {
       "albumId": "1",
-      "id": "32",
-      "title": "ad enim dignissimos voluptatem similique",
-      "url": "https://via.placeholder.com/600/c70a4d",
-      "thumbnailUrl": "https://via.placeholder.com/150/c70a4d"
-    },
-    {
-      "albumId": "1",
       "id": "33",
-      "title": "culpa ipsam nobis qui fuga magni et mollitia",
+      "title": "a",
       "url": "https://via.placeholder.com/600/501fe1",
       "thumbnailUrl": "https://via.placeholder.com/150/501fe1"
     },
@@ -37063,6 +37061,13 @@
       "title": "h",
       "url": "lo://hg",
       "thumbnailUrl": "lo://hga"
+    },
+    {
+      "id": "5012",
+      "albumId": "1",
+      "title": "aaaa",
+      "url": "https://via.placeholder.com/600/771796",
+      "thumbnailUrl": "https://via.placeholder.com/600/771796"
     }
   ],
   "posts": [

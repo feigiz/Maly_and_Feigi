@@ -11,7 +11,7 @@ import Posts from './component/Posts';
 import Todos from './component/Todos';
 import SinglePost from './component/SinglePost';
 import Comments from './component/Comments';
-import SingleAlbum from './component/SingleAlbum';
+import Photos from './component/Photos';
 
 export const AppContext = createContext();
 
@@ -19,15 +19,10 @@ function App() {
   const [userDetails, setUserDetails] = useState();
   const [posts, setPosts] = useState([]);
   const [originalPosts, setOriginalPosts] = useState([]);
-  const [albums, setAlbums] = useState([]);
-  const [originalAlbums, setOriginalAlbums] = useState([]);
 
   return (
     <div className='App'>
-      <AppContext.Provider value={{
-        userDetails, setUserDetails, posts, setPosts, originalPosts,
-        setOriginalPosts, albums, setAlbums, originalAlbums, setOriginalAlbums
-      }}>
+      <AppContext.Provider value={{ userDetails, setUserDetails, posts, setPosts, originalPosts, setOriginalPosts }}>
         <Router>
           <Routes>
             <Route path="/" element={<Header />} >
@@ -46,7 +41,7 @@ function App() {
               <Route path="albums" >
                 <Route index element={<Albums />} />
                 <Route path=":id">
-                  <Route path="photos" element={<SingleAlbum />} />
+                  <Route path="photos" element={<Photos />} />
                 </Route>
               </Route>
             </Route>

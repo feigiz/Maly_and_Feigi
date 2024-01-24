@@ -7,7 +7,9 @@ function Albums() {
     const [showAdditionForm, setShowAdditionForm] = useState(false);
     const [nextId, setNextId] = useNextId(5);
     const [searchType, setSearchType] = useState();
-    const { userDetails, albums, setAlbums, originalAlbums, setOriginalAlbums } = useContext(AppContext)
+    const [albums, setAlbums] = useState([])
+    const [originalAlbums, setOriginalAlbums] = useState([])
+    const { userDetails } = useContext(AppContext)
 
     useEffect(() => {
         fetch(`http://localhost:3000/albums?userId=${userDetails.id}`)
@@ -92,7 +94,7 @@ function Albums() {
         {albums.length == 0 ? <h2>No albums found</h2>
             : albums.map((album, i) => {
                 return (album.id > -1 ?
-                    <Link key={i} className="albumContainer" to={`./${album.id}/photos`} state={{ i }} >
+                    <Link key={i} className="albumContainer" to={`./${album.id}/photos`} state={{ album }} >
                         <span>{album.id}: </span>
                         <span>{album.title} </span>
                     </Link >
