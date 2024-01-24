@@ -11,12 +11,12 @@ function Comments() {
     const [showAdditionForm, setShowAdditionForm] = useState(false);
     const [comments, setComments] = useState([]);
     const [nextId, setNextId] = useNextId(4);
-    const { userDetails, posts } = useContext(AppContext)
+    const { userDetails } = useContext(AppContext)
     const navigate = useNavigate();
-    const { i } = state;
+    const { post } = state;
 
     useEffect(() => {
-        fetch(`http://localhost:3000/comments?postId=${posts[i].id}`)
+        fetch(`http://localhost:3000/comments?postId=${post.id}`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -33,7 +33,7 @@ function Comments() {
     function addComment(event) {
         event.preventDefault();
         const { name, body } = event.target
-        const newComment = { postId: posts[i].id, id: `${nextId}`, name: name.value, email: userDetails.email, body: body.value }
+        const newComment = { postId: post.id, id: `${nextId}`, name: name.value, email: userDetails.email, body: body.value }
         fetch('http://localhost:3000/comments', {
             method: 'POST',
             body: JSON.stringify(newComment),

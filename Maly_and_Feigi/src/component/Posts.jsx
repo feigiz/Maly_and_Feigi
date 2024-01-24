@@ -8,8 +8,10 @@ function Posts() {
     const navigate = useNavigate();
     const [showAdditionForm, setShowAdditionForm] = useState(false);
     const [nextId, setNextId] = useNextId(3);
-    const [searchType, setSearchType] = useState();
-    const { userDetails, posts, setPosts, originalPosts, setOriginalPosts } = useContext(AppContext)
+    const [searchType, setSearchType] = useState()
+    const [posts, setPosts] = useState([])
+    const [originalPosts, setOriginalPosts] = useState([])
+    const { userDetails } = useContext(AppContext)
 
     useEffect(() => {
         fetch(`http://localhost:3000/posts?userId=${userDetails.id}`)
@@ -114,7 +116,7 @@ function Posts() {
                     return (post.id > -1 ?
                         <div className="post" key={i}>
                             <span>{post.id}: </span>
-                            <span onClick={() => navigate(`./${post.id}`, { state: { i } })}>{post.title} </span>
+                            <span onClick={() => navigate(`./${post.id}`, { state: { post } })}>{post.title} </span>
                             <img onClick={() => deletePost(post.originalIndex, i, post.id)} src={trash} />
                         </div>
                         : <h2>No posts found</h2>)

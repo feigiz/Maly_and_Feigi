@@ -17,12 +17,10 @@ export const AppContext = createContext();
 
 function App() {
   const [userDetails, setUserDetails] = useState();
-  const [posts, setPosts] = useState([]);
-  const [originalPosts, setOriginalPosts] = useState([]);
 
   return (
     <div className='App'>
-      <AppContext.Provider value={{ userDetails, setUserDetails, posts, setPosts, originalPosts, setOriginalPosts }}>
+      <AppContext.Provider value={{ userDetails, setUserDetails }}>
         <Router>
           <Routes>
             <Route path="/" element={<Header />} >

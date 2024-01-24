@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import trash from "../icons/trash.png"
 import edit from "../icons/edit.png"
-import { AppContext } from "../App";
 import useNextId from "./useNextId";
 
 function Photos() {
@@ -10,7 +9,6 @@ function Photos() {
     const [showAdditionForm, setShowAdditionForm] = useState(false);
     const [photos, setPhotos] = useState([]);
     const [nextId, setNextId] = useNextId(6);
-    const { albums } = useContext(AppContext)
     const { album } = state;
 
     useEffect(() => {
