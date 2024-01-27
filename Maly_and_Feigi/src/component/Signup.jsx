@@ -26,7 +26,7 @@ function Signup() {
             if (!user[0])
                 setIsRegisterDetails(true);
             else
-                alert("existing user, please login");
+                throw 'existing user, please login'
         } catch (ex) { alert(ex) }
     }
 

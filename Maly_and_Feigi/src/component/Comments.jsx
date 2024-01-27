@@ -86,7 +86,7 @@ function Comments() {
     }
 
     return (<>
-        <button onClick={() => navigate("..", { state: { i } })}>Close</button>
+        <button onClick={() => navigate("..", { state: { post } })}>Close</button>
         <br /><br />
         <button onClick={() => (setShowAdditionForm(prev => !prev))}>Add comment</button>
         <br />

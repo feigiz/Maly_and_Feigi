@@ -17,9 +17,7 @@ function Info() {
     }
 
     return (<>
-        <div>
-            {print(userDetails)}
-        </div>
+        {print(userDetails)}
     </>);
 }
 

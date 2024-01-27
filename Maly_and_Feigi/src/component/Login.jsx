@@ -24,7 +24,7 @@ function Login() {
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
             if (!user)
-                alert("incorrect data, you have to signup");
+                throw 'incorrect data, you have to signup'
             else {
                 delete user.website;
                 setUserDetails(user);

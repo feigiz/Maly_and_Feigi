@@ -18,7 +18,7 @@ function Todos() {
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
-                return response.json();
+                return response.json();//איך?
             })
             .then(data => {
                 setOriginalTodos(data);
