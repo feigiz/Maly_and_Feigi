@@ -18,7 +18,14 @@ function Login() {
 
     async function loginUser(name, password) {
         try {
-            const response = await fetch(`http://localhost:3000/users?username=${name}&&website=${password}`);
+            //  const response = await fetch(`http://localhost:8080/users?username=${name}&&website=${password}`);
+
+
+            const response = await fetch(`http://localhost:8080/users/${name}`,{
+                method: 'POST',
+                body: JSON.stringify(password),
+                headers: { 'Content-type': 'application/json; charset=UTF-8' },
+            });
             const json = await response.json();
             const user = await json[0];
             if (!response.ok)
