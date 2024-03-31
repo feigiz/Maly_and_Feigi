@@ -16,17 +16,37 @@ function Login() {
         }
     }, [])
 
-    async function loginUser(name, password) {
+    function loginUser(name, password) {
         try {
             //  const response = await fetch(`http://localhost:8080/users?username=${name}&&website=${password}`);
 
+            // function addTodo(event) {
+            //     event.preventDefault();
+            //     const newTodo = { userId: userDetails.id, id: `${nextId}`, title: event.target[0].value, completed: false }
+            //     fetch('http://localhost:3000/todos', {
+            //         method: 'POST',
+            //         body: JSON.stringify(newTodo),
+            //         headers: { 'Content-type': 'application/json; charset=UTF-8' },
+            //     }).then(response => {
+            //         if (!response.ok)
+            //             throw 'Error' + response.status + ': ' + response.statusText;
+            //     }).then(() => {
+            //         setOriginalTodos(prev => [...prev, newTodo])
+            //         setTodos(prev => [...prev, { ...newTodo, originalIndex: originalTodos.length, editable: false }])
+            //         setShowAdditionForm(false)
+            //         setNextId(prevId => prevId + 1)
+            //     }).catch((ex) => alert(ex));
+            // }
 
-            const response = await fetch(`http://localhost:8080/users/${name}`,{
+            fetch(`http://localhost:8080/users/${name}`, {
                 method: 'POST',
                 body: JSON.stringify(password),
                 headers: { 'Content-type': 'application/json; charset=UTF-8' },
-            });
-            const json = await response.json();
+            }).then(response => {
+                if (!response.ok)
+                    throw 'Error' + response.status + ': ' + response.statusText;
+            })
+            // const json = response.json();
             const user = await json[0];
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
