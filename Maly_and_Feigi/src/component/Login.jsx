@@ -16,9 +16,11 @@ function Login() {
         }
     }, [])
 
-  async  function  loginUser(name, password) {
+
+    async function loginUser(name, password) {
         try {
             //  const response = await fetch(`http://localhost:8080/users?username=${name}&&website=${password}`);
+
 
             // function addTodo(event) {
             //     event.preventDefault();
@@ -38,20 +40,21 @@ function Login() {
             //     }).catch((ex) => alert(ex));
             // }
 
+
             const response = await fetch(`http://localhost:3000/users?username=${name}&&website=${password}`);
             const json = await response.json();
             const user = await json[0];
-            if (!response.ok)
-                throw 'Error' + response.status + ': ' + response.statusText;
             if (!user)
                 throw 'incorrect data, you have to signup'
             else {
-                delete user.website;
                 setUserDetails(user);
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 navigate(`/home/users/${user.id}`);
             }
-        } catch (ex) { alert(ex) }
+        }
+        catch (ex) {
+
+        }
     }
 
     return (<>
