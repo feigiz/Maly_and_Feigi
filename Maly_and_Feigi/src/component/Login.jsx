@@ -16,7 +16,7 @@ function Login() {
         }
     }, [])
 
-    function loginUser(name, password) {
+  async  function  loginUser(name, password) {
         try {
             //  const response = await fetch(`http://localhost:8080/users?username=${name}&&website=${password}`);
 
@@ -38,15 +38,8 @@ function Login() {
             //     }).catch((ex) => alert(ex));
             // }
 
-            fetch(`http://localhost:8080/users/${name}`, {
-                method: 'POST',
-                body: JSON.stringify(password),
-                headers: { 'Content-type': 'application/json; charset=UTF-8' },
-            }).then(response => {
-                if (!response.ok)
-                    throw 'Error' + response.status + ': ' + response.statusText;
-            })
-            // const json = response.json();
+            const response = await fetch(`http://localhost:3000/users?username=${name}&&website=${password}`);
+            const json = await response.json();
             const user = await json[0];
             if (!response.ok)
                 throw 'Error' + response.status + ': ' + response.statusText;
