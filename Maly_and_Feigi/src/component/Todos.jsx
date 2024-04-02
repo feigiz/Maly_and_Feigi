@@ -14,8 +14,7 @@ function Todos() {
     const [searchType, setSearchType] = useState();
 
     useEffect(() => {
-        // fetch(`http://localhost:3000/todos?userId=${userDetails.id}`)
-        fetch(`http://localhost:8080/todos?userId=${userDetails.id}`)
+        fetch(`http://localhost:3000/todos?userId=${userDetails.id}`)
             .then(response => {
                 if (!response.ok)
                     throw 'Error' + response.status + ': ' + response.statusText;
@@ -50,8 +49,7 @@ function Todos() {
 
     function deleteTodo(originalIndex, i, id) {
         if (confirm('Are you sure you want to delete this todo from the database?')) {
-            // fetch(`http://localhost:3000/todos/${id}`, {
-            fetch(`http://localhost:8080/todos/${id}`, {
+            fetch(`http://localhost:3000/todos/${id}`, {
                 method: 'DELETE'
             }).then(response => {
                 if (!response.ok)
